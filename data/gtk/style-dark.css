@@ -1,6 +1,6 @@
 :root {
-  --accent-color: var(--purple-1);
-  --accent-bg-color: var(--purple-4);
+  --accent-color: #29cf34; /* Основной цвет */
+  --accent-bg-color: #3d9943; /* Фоновый цвет */
 }
 
 #details_view {

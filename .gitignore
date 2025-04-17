@@ -7,3 +7,4 @@ build-aux/flatpak/org.badkiko.sofl.json
 /.vscode
 .DS_Store
 .prettierignore
+.last_build_timestamp
