@@ -20,7 +20,7 @@
 import json
 import logging
 import re
-from hashlib import md5
+from hashlib import sha256
 from json import JSONDecodeError
 from pathlib import Path
 from shlex import quote as shell_quote
@@ -93,9 +93,8 @@ class RetroarchSourceIterable(SourceIterable):
                     logging.warning("Cannot find core for: %s", str(item["path"]))
                     bad_playlists.add(playlist_file.stem)
                     continue
-
-                # Build game
-                game_id = md5(item["path"].encode("utf-8")).hexdigest()
+                # Используем безопасный алгоритм хеширования
+                game_id = sha256(item["path"].encode("utf-8")).hexdigest()
 
                 values = {
                     "source": self.source.source_id,
