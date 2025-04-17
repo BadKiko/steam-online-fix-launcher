@@ -62,6 +62,7 @@ class DetailsDialog(Adw.Dialog):
     cover_changed: bool = False
 
     is_open: bool = False
+    install_mode: bool = False
 
     def __init__(self, game: Optional[Game] = None, **kwargs: Any):
         super().__init__(**kwargs)
@@ -87,6 +88,9 @@ class DetailsDialog(Adw.Dialog):
         else:
             self.set_title(_("Add New Game"))
             self.apply_button.set_label(_("Add"))
+
+        if self.install_mode:
+            self.set_title(_("Install Game"))
 
         image_filter = Gtk.FileFilter(name=_("Images"))
 

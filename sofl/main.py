@@ -57,6 +57,7 @@ from sofl.store.managers.steam_api_manager import SteamAPIManager
 from sofl.store.store import Store
 from sofl.utils.run_executable import run_executable
 from sofl.window import SOFLWindow
+from sofl.install_game_dialog import InstallDialog
 
 if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
@@ -158,6 +159,7 @@ class SOFLApplication(Adw.Application):
                 ("hide_game",),
                 ("edit_game",),
                 ("add_game", ("<primary>n",)),
+                ("install_game",),
                 ("import", ("<primary>i",)),
                 ("remove_game_details_view", ("Delete",)),
                 ("remove_game",),
@@ -332,6 +334,13 @@ class SOFLApplication(Adw.Application):
             return
 
         DetailsDialog().present(shared.win)
+
+    def on_install_game_action(self, *_args: Any) -> None:
+        if InstallDialog.is_open:
+            return
+        
+        dialog = InstallDialog()
+        dialog.present(shared.win)
 
     def on_import_action(self, *_args: Any) -> None:
         shared.importer = Importer()
