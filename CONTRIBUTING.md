@@ -5,19 +5,19 @@
 Be sure to follow the [code style](#code-style) of the project.
 
 ### Adding a feature
-[Create an issue](https://github.com/kra-mo/cartridges/issues/new) or join the [Discord](https://discord.gg/4KSFh3AmQR)/[Matrix](https://matrix.to/#/#cartridges:matrix.org) to discuss it with the maintainers. We will provide additional guidance.
+[Create an issue](https://github.com/BadKiko/steam-online-fix-launcher/issues/new) or join the [Discord](https://discord.gg/4KSFh3AmQR)/[Matrix](https://matrix.to/#/#sofl:matrix.org) to discuss it with the maintainers. We will provide additional guidance.
 
 ### Fixing a bug
 Fork the repository, make your changes, then create a pull request. Be sure to mention the GitHub issue you're fixing if one was already open.
 
 ## Translations
 ### Weblate
-The project can be translated on [Weblate](https://hosted.weblate.org/engage/cartridges/).
+The project can be translated on [Weblate](https://hosted.weblate.org/engage/sofl/).
 
 ### Manually
 1. Clone the repository.
 2. If it isn't already there, add your language to `/po/LINGUAS`.
-3. Create a new translation from the `/po/cartridges.pot` file with a translation editor such as [Poedit](https://poedit.net/).
+3. Create a new translation from the `/po/sofl.pot` file with a translation editor such as [Poedit](https://poedit.net/).
 4. Save the file as `[YOUR LANGUAGE CODE].po` to `/po/`.
 5. Create a pull request with your translations.
 
@@ -25,23 +25,23 @@ The project can be translated on [Weblate](https://hosted.weblate.org/engage/car
 
 ## GNOME Builder
 1. Install [GNOME Builder](https://flathub.org/apps/org.gnome.Builder).
-2. Click "Clone Repository" with `https://github.com/kra-mo/cartridges.git` as the URL.
+2. Click "Clone Repository" with `https://github.com/BadKiko/steam-online-fix-launcher.git` as the URL.
 3. Click on the build button (hammer) at the top.
 
 ## For Windows
 1. Install [MSYS2](https://www.msys2.org/).
-2. From the MSYS2 shell, install the required dependencies listed [here](https://github.com/kra-mo/cartridges/blob/main/.github/workflows/ci.yml).
+2. From the MSYS2 shell, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
 3. Build it via Meson.
 
 ## For macOS
 1. Install [Homebrew](https://brew.sh/).
-2. Using `brew` and `pip3`, install the required dependencies listed [here](https://github.com/kra-mo/cartridges/blob/main/.github/workflows/ci.yml).
+2. Using `brew` and `pip3`, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
 3. Build it via Meson.
 
 ## Meson
 ```bash
-git clone https://github.com/kra-mo/cartridges.git
-cd cartridges
+git clone https://github.com/BadKiko/steam-online-fix-launcher.git
+cd sofl
 meson setup build
 ninja -C build install
 ```

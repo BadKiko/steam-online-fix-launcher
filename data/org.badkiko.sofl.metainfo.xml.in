@@ -2,27 +2,27 @@
 <component type="desktop-application">
   <id>@APP_ID@</id>
   <replaces>
-    <id>hu.badkiko.Cartridges</id>
+    <id>hu.badkiko.SOFL</id>
     <id>org.badkiko.sofl</id>
   </replaces>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <name>Cartridges</name>
+  <name>SOFL</name>
   <summary>Launch all your games</summary>
   <description>
-    <p>Cartridges is a simple game launcher for all of your games. It has support for importing games from Steam, Lutris, Heroic and more with no login necessary. You can sort and hide games or download cover art from SteamGridDB.</p>
+    <p>SOFL is a simple game launcher for all of your games. It has support for importing games from Steam, Lutris, Heroic and more with no login necessary. You can sort and hide games or download cover art from SteamGridDB.</p>
   </description>
-  <url type="homepage">https://github.com/kra-mo/cartridges</url>
-  <url type="bugtracker">https://github.com/kra-mo/cartridges/issues</url>
-  <url type="translate">https://hosted.weblate.org/engage/cartridges/</url>
+  <url type="homepage">https://github.com/BadKiko/steam-online-fix-launcher</url>
+  <url type="bugtracker">https://github.com/BadKiko/steam-online-fix-launcher/issues</url>
+  <url type="translate">https://hosted.weblate.org/engage/sofl/</url>
   <url type="contact">https://www.badkiko.page/about/</url>
-  <url type="vcs-browser">https://github.com/kra-mo/cartridges</url>
-  <url type="contribute">https://github.com/kra-mo/cartridges/blob/main/CONTRIBUTING.md</url>
+  <url type="vcs-browser">https://github.com/BadKiko/steam-online-fix-launcher</url>
+  <url type="contribute">https://github.com/BadKiko/steam-online-fix-launcher/blob/main/CONTRIBUTING.md</url>
   <developer id="page.badkiko">
     <name translate="no">badkiko</name>
   </developer>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
-  <translation type="gettext">cartridges</translation>
+  <translation type="gettext">sofl</translation>
   <branding>
     <color type="primary" scheme_preference="light">#29cf34</color>
     <color type="primary" scheme_preference="dark">#374F39</color>
@@ -37,19 +37,19 @@
   </requires>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/kra-mo/cartridges/main/data/screenshots/1.png</image>
-      <caption>Cartridges</caption>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/1.png</image>
+      <caption>SOFL</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/kra-mo/cartridges/main/data/screenshots/2.png</image>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/2.png</image>
       <caption>Game Details</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/kra-mo/cartridges/main/data/screenshots/3.png</image>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/3.png</image>
       <caption>Edit Game Details</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/kra-mo/cartridges/main/data/screenshots/4.png</image>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/4.png</image>
       <caption>Preferences</caption>
     </screenshot>
   </screenshots>
@@ -83,7 +83,7 @@
     <release version="2.9" date="2024-07-10">
       <description translate="no">
         <ul>
-          <li>Cartridges is now available on macOS! You can download it from GitHub.</li>
+          <li>SOFL is now available on macOS! You can download it from GitHub.</li>
           <li>Updated translations</li>
         </ul>
       </description>
@@ -104,8 +104,8 @@
     </release>
     <release version="2.6" date="2023-10-11">
       <description translate="no">
-        <p>You can now search your Cartridges library from GNOME!</p>
-        <p>To enable the functionality, go to "Search" in the Settings app and toggle "Cartridges" on.</p>
+        <p>You can now search your SOFL library from GNOME!</p>
+        <p>To enable the functionality, go to "Search" in the Settings app and toggle "SOFL" on.</p>
       </description>
     </release>
     <release version="2.5" date="2023-10-06">
@@ -121,7 +121,7 @@
     <release version="2.4" date="2023-09-21">
       <description translate="no">
         <ul>
-          <li>Cartridges now adapts to smaller screen sizes</li>
+          <li>SOFL now adapts to smaller screen sizes</li>
           <li>You can now filter games by import source</li>
           <li>Ported to Libadwaita 1.4</li>
           <li>Translations since 2.3</li>
@@ -159,7 +159,7 @@
     </release>
     <release version="2.0" date="2023-07-05">
       <description translate="no">
-        <p>After months of work, Cartridges 2.0 is here:</p>
+        <p>After months of work, SOFL 2.0 is here:</p>
         <ul>
           <li>New import source: Legendary</li>
           <li>New import source: Flatpak</li>
@@ -174,7 +174,7 @@
     <release version="1.5" date="2023-05-23">
       <description translate="no">
         <ul>
-          <li>Cartridges is now part of GNOME Circle!</li>
+          <li>SOFL is now part of GNOME Circle!</li>
           <li>Extra Steam libraries are now detected automatically</li>
           <li>Executables are now passed directly to the shell</li>
           <li>Various UX improvements</li>

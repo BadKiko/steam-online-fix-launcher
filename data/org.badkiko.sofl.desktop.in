@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Cartridges
+Name=SOFL
 GenericName=Game Launcher
 Comment=Launch all your games
-Exec=cartridges
+Exec=sofl
 Icon=@APP_ID@
 Terminal=false
 Type=Application

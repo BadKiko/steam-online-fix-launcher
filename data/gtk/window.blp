@@ -43,8 +43,8 @@ Adw.StatusPage hidden_notice_empty {
   valign: center;
 }
 
-template $CartridgesWindow: Adw.ApplicationWindow {
-  title: _("Cartridges");
+template $SOFLWindow: Adw.ApplicationWindow {
+  title: _("SOFL");
   width-request: 360;
   height-request: 100;
 
@@ -80,7 +80,7 @@ template $CartridgesWindow: Adw.ApplicationWindow {
 
           [sidebar]
           Adw.NavigationPage sidebar_navigation_page {
-            title: _("Cartridges");
+            title: _("SOFL");
 
             Adw.ToolbarView {
               [top]
@@ -542,7 +542,7 @@ menu primary_menu {
   section {
     item (_("Preferences"), "app.preferences")
     item (_("Keyboard Shortcuts"), "win.show-help-overlay")
-    item (_("About Cartridges"), "app.about")
+    item (_("About SOFL"), "app.about")
   }
 }
 

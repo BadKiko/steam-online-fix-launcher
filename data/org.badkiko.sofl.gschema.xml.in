@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="cartridges">
+<schemalist gettext-domain="sofl">
 
   <schema id="@APP_ID@" path="@PREFIX@/">
     <key name="auto-import" type="b">
