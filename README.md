@@ -1,7 +1,8 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/refs/heads/main/banner.svg" alt="banner" height="150" />
 </p>
-<h3 align="center">SOFL </h3>
+
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/BadKiko/steam-online-fix-launcher?utm_source=oss&utm_medium=github&utm_campaign=BadKiko%2Fsteam-online-fix-launcher&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 🎮 Big News! 🎮
 
