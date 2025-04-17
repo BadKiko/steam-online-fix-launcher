@@ -28,7 +28,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
 msgid "SOFL"
-msgstr "Картриджи"
+msgstr "SOFL"
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"
@@ -53,7 +53,7 @@ msgid ""
 "necessary. You can sort and hide games or download cover art from "
 "SteamGridDB."
 msgstr ""
-"Картриджи - это простое приложение для запуска ваших игр. Оно поддерживает "
+"SOFL - это простое приложение для запуска ваших игр. Оно поддерживает "
 "импорт игр из Steam, Lutris, Heroic и других без необходимости входа в "
 "систему. Вы можете сортировать и скрывать игры или загружать обложки из "
 "SteamGridDB."

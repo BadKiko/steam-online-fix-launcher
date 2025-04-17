@@ -27,7 +27,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
 msgid "SOFL"
-msgstr "Cartucce"
+msgstr "SOFL"
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"
@@ -487,7 +487,7 @@ msgstr "programma"
 #. Translate this string as you would translate "path to {}"
 #: sofl/details_dialog.py:124 sofl/details_dialog.py:126
 msgid "C:\\path\\to\\{}"
-msgstr "C:\\path\\to{}"
+msgstr "C:\\path\\to\\{}"
 
 #. Translate this string as you would translate "path to {}"
 #: sofl/details_dialog.py:130 sofl/details_dialog.py:132

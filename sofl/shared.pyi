@@ -74,5 +74,5 @@ image_size: int
 win: Optional[SOFLWindow]
 importer: Optional[Importer]
 import_time: Optional[int]
-store = Optional[Store]
+store: Optional[Store]
 log_files: list[Path]

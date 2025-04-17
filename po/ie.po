@@ -176,11 +176,11 @@ msgstr "Surtir pos que lansar un lude"
 
 #: data/gtk/preferences.blp:20
 msgid "Cover Image Launches Game"
-msgstr ""
+msgstr "Li image de covriment lansar li lude"
 
 #: data/gtk/preferences.blp:21
 msgid "Swaps the behavior of the cover image and the play button"
-msgstr ""
+msgstr "Interchangear li conduida del image de covriment e li buton de reproduction"
 
 #: data/gtk/preferences.blp:26 sofl/details_dialog.py:91
 msgid "Images"
@@ -188,15 +188,15 @@ msgstr "Images"
 
 #: data/gtk/preferences.blp:29
 msgid "High Quality Images"
-msgstr ""
+msgstr "Images de alt qualitá"
 
 #: data/gtk/preferences.blp:30
 msgid "Save game covers losslessly at the cost of storage"
-msgstr ""
+msgstr "Gardar covriments de ludes sin perde con plu memorie"
 
 #: data/gtk/preferences.blp:35
 msgid "Danger Zone"
-msgstr ""
+msgstr "Zone periculosi"
 
 #: data/gtk/preferences.blp:39
 msgid "Remove All Games"
@@ -204,7 +204,7 @@ msgstr "Remover omni ludes"
 
 #: data/gtk/preferences.blp:65
 msgid "Import Games Automatically"
-msgstr ""
+msgstr "Importar ludes automaticmen"
 
 #: data/gtk/preferences.blp:69
 msgid "Remove Uninstalled Games"

@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
 msgid "SOFL"
-msgstr "カートリッジズ"
+msgstr "SOFL"
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"

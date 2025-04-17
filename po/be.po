@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
 msgid "SOFL"
-msgstr "Картрыджы"
+msgstr "SOFL"
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"
@@ -631,7 +631,7 @@ msgstr "Новыя гульні не знойдзены"
 #: sofl/importer/importer.py:379
 #, fuzzy
 msgid "{} game imported"
-msgid_plural "{} games imported"
+id_plural "{} games imported"
 msgstr[0] "{} гульняў імпартавана"
 msgstr[1] "{} гульняў імпартавана"
 msgstr[2] "{} гульняў імпартавана"

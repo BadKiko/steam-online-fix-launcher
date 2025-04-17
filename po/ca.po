@@ -563,7 +563,7 @@ msgstr "Cobertes actualitzades"
 
 #: sofl/preferences.py:370
 msgid "Installation Not Found"
-msgstr "No s'ha trobat l'instal·lacióó"
+msgstr "No s'ha trobat l'instal·lació"
 
 #: sofl/preferences.py:371
 msgid "Select a valid directory"
@@ -614,7 +614,7 @@ msgid "Importing Games…"
 msgstr "Important jocs…"
 
 #: sofl/importer/importer.py:337
-msgid "The following errors occured during import:"
+msgid "The following errors occurred during import:"
 msgstr "Han succeït els següents errors al importar:"
 
 #: sofl/importer/importer.py:366
