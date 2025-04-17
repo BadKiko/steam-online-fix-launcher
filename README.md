@@ -9,7 +9,7 @@
 
 🎮 Big News! 🎮
 
-I'm excited to announce that I'm merging my two projects - SOFL and Dark SOFL! This is a huge step forward, and I couldn't be more thrilled about what this means for all users.
+I'm excited to announce that I'm merging my two projects - SOFL and Dark Cartridges! This is a huge step forward, and I couldn't be more thrilled about what this means for all users.
 
 🔄 What's Happening? 🔄
 
