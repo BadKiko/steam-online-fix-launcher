@@ -18,10 +18,10 @@ blueprints = custom_target(
 )
 
 gnome.compile_resources(
-  'cartridges',
+  'sofl',
   configure_file(
-    input: 'cartridges.gresource.xml.in',
-    output: 'cartridges.gresource.xml',
+    input: 'sofl.gresource.xml.in',
+    output: 'sofl.gresource.xml',
     configuration: conf,
   ),
   gresource_bundle: true,

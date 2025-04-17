@@ -5,11 +5,11 @@
 
 🎮 Big News! 🎮
 
-I'm excited to announce that I'm merging my two projects - SOFL and Dark Cartridges! This is a huge step forward, and I couldn't be more thrilled about what this means for all users.
+I'm excited to announce that I'm merging my two projects - SOFL and Dark SOFL! This is a huge step forward, and I couldn't be more thrilled about what this means for all users.
 
 🔄 What's Happening? 🔄
 
-I'm combining my SOFL and Dark Cartridges projects into a single, powerful solution for launching online-fix games on Linux. This unified project under the SOFL name will create a seamless experience for everyone.
+I'm combining my SOFL and Dark SOFL projects into a single, powerful solution for launching online-fix games on Linux. This unified project under the SOFL name will create a seamless experience for everyone.
 
 ⚙️ Legacy Instructions ⚙️
 
@@ -42,7 +42,7 @@ I know there are already many guides on launching online-fix games with classic 
 4. Copy the SpaceWar prefix folder somewhere. For native Steam, it's \`\~/.local/share/Steam/steamapps/compatdata/480\`, and for flatpak, it's \`\~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/480\`. For example, for me, it will be \`\~/SteamPrefixes/480\`.
 5. Next, you need to download \`umu-launcher\`. I use the AUR package https://aur.archlinux.org/packages/umu-launcher. For other distributions different from Arch, they have a flatpak version, nix, and a build from source [https://github.com/Open-Wine-Components/umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
 6. After downloading everything, just launch Steam and execute the command (command paths for me, yours will likely differ, \`protonpath\` is the path to your Proton):`WINEPREFIX='\~/SteamPrefixes/480' WINEDLLOVERRIDES="OnlineFix64=n;SteamOverlay64=n;winmm=n,b;dnet=n;steam\_api64=n" GAMEID=480 PROTONPATH=\~/.local/share/Steam/compatibilitytools.d/GE-Proton9-5 umu-run '\~/pathtogame/game.exe'`
-7. Thanks to this bundle, you can create a library for pirated games, for example, with the help of [cartridges](https://github.com/kra-mo/cartridges), a very handy tool. If you're looking to gather all your games in one place, in the program, just create a new game, and in the executable file, insert the command from point 7
+7. Thanks to this bundle, you can create a library for pirated games, for example, with the help of [sofl](https://github.com/BadKiko/steam-online-fix-launcher), a very handy tool. If you're looking to gather all your games in one place, in the program, just create a new game, and in the executable file, insert the command from point 7
 
 # steam_appid.txt fix
 

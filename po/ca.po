@@ -1,17 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR badkiko
-# This file is distributed under the same license as the Cartridges package.
+# This file is distributed under the same license as the SOFL package.
 # jolupa <jolupameister@gmail.com>, 2023.
 # Moreno <hibarioath@proton.me>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Cartridges\n"
+"Project-Id-Version: SOFL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-05 14:01+0100\n"
 "PO-Revision-Date: 2025-03-15 04:51+0000\n"
 "Last-Translator: Moreno <hibarioath@proton.me>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/cartridges/"
-"cartridges/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/sofl/"
+"sofl/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,8 +23,8 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:9
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
-msgid "Cartridges"
-msgstr "Cartridges"
+msgid "SOFL"
+msgstr "SOFL"
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"
@@ -43,18 +43,18 @@ msgstr ""
 
 #: data/org.badkiko.sofl.metainfo.xml.in:12
 msgid ""
-"Cartridges is a simple game launcher for all of your games. It has support "
+"SOFL is a simple game launcher for all of your games. It has support "
 "for importing games from Steam, Lutris, Heroic and more with no login "
 "necessary. You can sort and hide games or download cover art from "
 "SteamGridDB."
 msgstr ""
-"Cartridges es un llançador de jocs senzill per tots els teus jocs. Suporta "
+"SOFL es un llançador de jocs senzill per tots els teus jocs. Suporta "
 "la importació de jocs des de Steam, Lutris, Heroic i molts més sense la "
 "necessitat de iniciar sessió. Pots ordenar i amagar els jocs o descarregar "
 "l'art de la coberta de SteamGridDB."
 
 #: data/org.badkiko.sofl.metainfo.xml.in:44 data/gtk/window.blp:320
-#: cartridges/details_dialog.py:77
+#: sofl/details_dialog.py:77
 msgid "Game Details"
 msgstr "Detalls del joc"
 
@@ -63,8 +63,8 @@ msgid "Edit Game Details"
 msgstr "Editar els detalls del joc"
 
 #: data/org.badkiko.sofl.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
-#: data/gtk/window.blp:543 cartridges/details_dialog.py:279
-#: cartridges/importer/importer.py:319 cartridges/importer/importer.py:369
+#: data/gtk/window.blp:543 sofl/details_dialog.py:279
+#: sofl/importer/importer.py:319 sofl/importer/importer.py:369
 msgid "Preferences"
 msgstr "Preferències"
 
@@ -104,7 +104,7 @@ msgstr "Més informació"
 msgid "Edit"
 msgstr "Editar"
 
-#: data/gtk/game.blp:102 cartridges/window.py:359
+#: data/gtk/game.blp:102 sofl/window.py:359
 msgid "Hide"
 msgstr "Amagar"
 
@@ -112,7 +112,7 @@ msgstr "Amagar"
 msgid "Remove"
 msgstr "Esborrar"
 
-#: data/gtk/game.blp:110 cartridges/window.py:361
+#: data/gtk/game.blp:110 sofl/window.py:361
 msgid "Unhide"
 msgstr "Mostrar"
 
@@ -129,8 +129,8 @@ msgstr "Cercar"
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres de teclat"
 
-#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
-#: cartridges/preferences.py:137 cartridges/importer/importer.py:386
+#: data/gtk/help-overlay.blp:29 sofl/game.py:103
+#: sofl/preferences.py:137 sofl/importer/importer.py:386
 msgid "Undo"
 msgstr "Desfés"
 
@@ -184,7 +184,7 @@ msgstr "La imatge de la coberta llança el joc"
 msgid "Swaps the behavior of the cover image and the play button"
 msgstr "Canvia el comportament de la imatge de la coberta i el botó de jugar"
 
-#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:91
+#: data/gtk/preferences.blp:26 sofl/details_dialog.py:91
 msgid "Images"
 msgstr "Imatges"
 
@@ -216,7 +216,7 @@ msgstr "Esborrar jocs desinstal·lats"
 msgid "Sources"
 msgstr "Fonts"
 
-#: data/gtk/preferences.blp:78 cartridges/importer/steam_source.py:114
+#: data/gtk/preferences.blp:78 sofl/importer/steam_source.py:114
 msgid "Steam"
 msgstr "Steam"
 
@@ -228,7 +228,7 @@ msgid "Install Location"
 msgstr "Ubicació de la instal·lació"
 
 #: data/gtk/preferences.blp:105 data/gtk/window.blp:565
-#: cartridges/importer/lutris_source.py:107
+#: sofl/importer/lutris_source.py:107
 msgid "Lutris"
 msgstr "Lutris"
 
@@ -240,7 +240,7 @@ msgstr "Importar jocs de Steam"
 msgid "Import Flatpak Games"
 msgstr "Importar jocs de Flatpak"
 
-#: data/gtk/preferences.blp:140 cartridges/importer/heroic_source.py:355
+#: data/gtk/preferences.blp:140 sofl/importer/heroic_source.py:355
 msgid "Heroic"
 msgstr "Heroic"
 
@@ -260,23 +260,23 @@ msgstr "Importar jocs de Amazon"
 msgid "Import Sideloaded Games"
 msgstr "Importar jocs no aprovats"
 
-#: data/gtk/preferences.blp:183 cartridges/importer/bottles_source.py:86
+#: data/gtk/preferences.blp:183 sofl/importer/bottles_source.py:86
 msgid "Bottles"
 msgstr "Bottles"
 
-#: data/gtk/preferences.blp:210 cartridges/importer/itch_source.py:81
+#: data/gtk/preferences.blp:210 sofl/importer/itch_source.py:81
 msgid "itch"
 msgstr "itch"
 
-#: data/gtk/preferences.blp:237 cartridges/importer/legendary_source.py:97
+#: data/gtk/preferences.blp:237 sofl/importer/legendary_source.py:97
 msgid "Legendary"
 msgstr "Legendary"
 
-#: data/gtk/preferences.blp:264 cartridges/importer/retroarch_source.py:142
+#: data/gtk/preferences.blp:264 sofl/importer/retroarch_source.py:142
 msgid "RetroArch"
 msgstr "RetroArch"
 
-#: data/gtk/preferences.blp:291 cartridges/importer/flatpak_source.py:143
+#: data/gtk/preferences.blp:291 sofl/importer/flatpak_source.py:143
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -294,7 +294,7 @@ msgstr "Ubicació de l'usuari"
 msgid "Import Game Launchers"
 msgstr "Importar llançadors de jocs"
 
-#: data/gtk/preferences.blp:341 cartridges/importer/desktop_source.py:215
+#: data/gtk/preferences.blp:341 sofl/importer/desktop_source.py:215
 msgid "Desktop Entries"
 msgstr "Entrades d'escriptori"
 
@@ -362,11 +362,11 @@ msgstr "No hi han jocs amagats"
 msgid "Games you hide will appear here"
 msgstr "Els jocs que amaguis sortiran aquí"
 
-#: data/gtk/window.blp:76 data/gtk/window.blp:113 cartridges/main.py:249
+#: data/gtk/window.blp:76 data/gtk/window.blp:113 sofl/main.py:249
 msgid "All Games"
 msgstr "Tots els jocs"
 
-#: data/gtk/window.blp:140 cartridges/main.py:251
+#: data/gtk/window.blp:140 sofl/main.py:251
 msgid "Added"
 msgstr "Afegit"
 
@@ -415,8 +415,8 @@ msgid "Show Hidden"
 msgstr "Mostrar els amagats"
 
 #: data/gtk/window.blp:545
-msgid "About Cartridges"
-msgstr "Sobre Cartridges"
+msgid "About SOFL"
+msgstr "Sobre SOFL"
 
 #: data/gtk/window.blp:562
 msgid "IGDB"
@@ -431,66 +431,66 @@ msgid "HowLongToBeat"
 msgstr "HowLongToBeat"
 
 #. The variable is the title of the game
-#: cartridges/main.py:226 cartridges/game.py:125
+#: sofl/main.py:226 sofl/game.py:125
 msgid "{} launched"
 msgstr "{} llançat"
 
 #. Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
-#: cartridges/main.py:291
+#: sofl/main.py:291
 msgid "translator-credits"
 msgstr "jolupa <jolupameister@gmail.com>"
 
 #. The variable is the date when the game was added
-#: cartridges/window.py:382
+#: sofl/window.py:382
 msgid "Added: {}"
 msgstr "Afegit: {}"
 
-#: cartridges/window.py:385
+#: sofl/window.py:385
 msgid "Never"
 msgstr "Mai"
 
 #. The variable is the date when the game was last played
-#: cartridges/window.py:389
+#: sofl/window.py:389
 msgid "Last played: {}"
 msgstr "Últim jugat: {}"
 
-#: cartridges/details_dialog.py:82
+#: sofl/details_dialog.py:82
 msgid "Apply"
 msgstr "Aplicar"
 
-#: cartridges/details_dialog.py:88
+#: sofl/details_dialog.py:88
 msgid "Add New Game"
 msgstr "Afegeix joc nou"
 
-#: cartridges/details_dialog.py:89
+#: sofl/details_dialog.py:89
 msgid "Add"
 msgstr "Afegir"
 
-#: cartridges/details_dialog.py:102
+#: sofl/details_dialog.py:102
 msgid "Executables"
 msgstr "Executables"
 
 #. Translate this string as you would translate "file"
-#: cartridges/details_dialog.py:117
+#: sofl/details_dialog.py:117
 msgid "file.txt"
 msgstr "fitxer.txt"
 
 #. As in software
-#: cartridges/details_dialog.py:119
+#: sofl/details_dialog.py:119
 msgid "program"
 msgstr "programa"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:124 cartridges/details_dialog.py:126
+#: sofl/details_dialog.py:124 sofl/details_dialog.py:126
 msgid "C:\\path\\to\\{}"
 msgstr "C:\\camí\\a\\{}"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:130 cartridges/details_dialog.py:132
+#: sofl/details_dialog.py:130 sofl/details_dialog.py:132
 msgid "/path/to/{}"
 msgstr "/camí/a/{}"
 
-#: cartridges/details_dialog.py:137
+#: sofl/details_dialog.py:137
 msgid ""
 "To launch the executable \"{}\", use the command:\n"
 "\n"
@@ -512,162 +512,162 @@ msgstr ""
 "\n"
 "Si el camí conté espais, assegurat d'envoltar-lo amb cometes dobles!"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:185
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:185
 msgid "Couldn't Add Game"
 msgstr "No es pot afegir el joc"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:221
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:221
 msgid "Game title cannot be empty."
 msgstr "El títol del joc no pot estar buit."
 
-#: cartridges/details_dialog.py:185 cartridges/details_dialog.py:229
+#: sofl/details_dialog.py:185 sofl/details_dialog.py:229
 msgid "Executable cannot be empty."
 msgstr "El executable no pot estar buit."
 
-#: cartridges/details_dialog.py:220 cartridges/details_dialog.py:228
+#: sofl/details_dialog.py:220 sofl/details_dialog.py:228
 msgid "Couldn't Apply Preferences"
 msgstr "No s'han pogut aplicar les preferències"
 
 #. The variable is the title of the game
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} hidden"
 msgstr "{} amagat"
 
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} unhidden"
 msgstr "{} mostrar"
 
 #. The variable is the title of the game
-#: cartridges/game.py:153
+#: sofl/game.py:153
 msgid "{} removed"
 msgstr "{} eliminat"
 
-#: cartridges/preferences.py:136
+#: sofl/preferences.py:136
 msgid "All games removed"
 msgstr "Tots els jocs eliminats"
 
-#: cartridges/preferences.py:188
+#: sofl/preferences.py:188
 msgid ""
 "An API key is required to use SteamGridDB. You can generate one {}here{}."
 msgstr ""
 "Es necessita una clau API per poder fer servir SteamGridDB. Pots generar una "
 "{}aquí{}."
 
-#: cartridges/preferences.py:203
+#: sofl/preferences.py:203
 msgid "Downloading covers…"
 msgstr "Descarregant cobertes…"
 
-#: cartridges/preferences.py:222
+#: sofl/preferences.py:222
 msgid "Covers updated"
 msgstr "Cobertes actualitzades"
 
-#: cartridges/preferences.py:370
+#: sofl/preferences.py:370
 msgid "Installation Not Found"
 msgstr "No s'ha trobat l'instal·lacióó"
 
-#: cartridges/preferences.py:371
+#: sofl/preferences.py:371
 msgid "Select a valid directory"
 msgstr "Selecciona un directori vàlid"
 
-#: cartridges/preferences.py:407 cartridges/importer/importer.py:317
+#: sofl/preferences.py:407 sofl/importer/importer.py:317
 msgid "Warning"
 msgstr "Avis"
 
-#: cartridges/preferences.py:441
+#: sofl/preferences.py:441
 msgid "Invalid Directory"
 msgstr "Directori no vàlid"
 
-#: cartridges/preferences.py:447
+#: sofl/preferences.py:447
 msgid "Set Location"
 msgstr "Escull una ubicació"
 
-#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:318
+#: sofl/utils/create_dialog.py:33 sofl/importer/importer.py:318
 msgid "Dismiss"
 msgstr "Descartar"
 
-#: cartridges/utils/relative_date.py:30
+#: sofl/utils/relative_date.py:30
 msgid "Today"
 msgstr "Avui"
 
-#: cartridges/utils/relative_date.py:32
+#: sofl/utils/relative_date.py:32
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: cartridges/utils/relative_date.py:36
+#: sofl/utils/relative_date.py:36
 msgid "Last Week"
 msgstr "Última setmana"
 
-#: cartridges/utils/relative_date.py:38
+#: sofl/utils/relative_date.py:38
 msgid "This Month"
 msgstr "Aquest mes"
 
-#: cartridges/utils/relative_date.py:40
+#: sofl/utils/relative_date.py:40
 msgid "Last Month"
 msgstr "Últim mes"
 
-#: cartridges/utils/relative_date.py:44
+#: sofl/utils/relative_date.py:44
 msgid "Last Year"
 msgstr "Any passat"
 
-#: cartridges/importer/importer.py:144
+#: sofl/importer/importer.py:144
 msgid "Importing Games…"
 msgstr "Important jocs…"
 
-#: cartridges/importer/importer.py:337
+#: sofl/importer/importer.py:337
 msgid "The following errors occured during import:"
 msgstr "Han succeït els següents errors al importar:"
 
-#: cartridges/importer/importer.py:366
+#: sofl/importer/importer.py:366
 msgid "No new games found"
 msgstr "No s'han trobat jocs nous"
 
 #. The variable is the number of games.
-#: cartridges/importer/importer.py:379
+#: sofl/importer/importer.py:379
 msgid "{} game imported"
 msgid_plural "{} games imported"
 msgstr[0] "{} joc importat"
 msgstr[1] "{} jocs importats"
 
 #. The variable is the number of games. This text comes after "{0} games imported".
-#: cartridges/importer/importer.py:383
+#: sofl/importer/importer.py:383
 msgid ", {} removed"
 msgid_plural ", {} removed"
 msgstr[0] "{} eliminat"
 msgstr[1] "{} eliminats"
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:34
+#: sofl/importer/location.py:34
 msgid "Select the {} cache directory."
 msgstr "Selecciona el directori per la memòria cau {}."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:36
+#: sofl/importer/location.py:36
 msgid "Select the {} configuration directory."
 msgstr "Selecciona el directori de configuració {}."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:38
+#: sofl/importer/location.py:38
 msgid "Select the {} data directory."
 msgstr "Selecciona el directori de dades {}."
 
-#: cartridges/importer/retroarch_source.py:129
+#: sofl/importer/retroarch_source.py:129
 msgid "No RetroArch Core Selected"
 msgstr "No s'ha seleccionat cap nucli de RetroArch"
 
 #. The variable is a newline separated list of playlists
-#: cartridges/importer/retroarch_source.py:131
+#: sofl/importer/retroarch_source.py:131
 msgid "The following playlists have no default core:"
 msgstr "La següent llista de reproducció no te cap nucli:"
 
-#: cartridges/importer/retroarch_source.py:133
+#: sofl/importer/retroarch_source.py:133
 msgid "Games with no core selected were not imported"
 msgstr "Els jocs sense cap nucli seleccionat no seran importats"
 
-#: cartridges/store/managers/sgdb_manager.py:46
+#: sofl/store/managers/sgdb_manager.py:46
 msgid "Couldn't Authenticate SteamGridDB"
 msgstr "No es pot Autenticar a SteamGridDB"
 
-#: cartridges/store/managers/sgdb_manager.py:47
+#: sofl/store/managers/sgdb_manager.py:47
 msgid "Verify your API key in preferences"
 msgstr "Verifica la teva clau API en les preferències"
 

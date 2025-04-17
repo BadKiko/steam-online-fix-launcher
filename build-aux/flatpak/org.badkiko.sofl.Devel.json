@@ -3,7 +3,7 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "48",
   "sdk": "org.gnome.Sdk",
-  "command": "cartridges",
+  "command": "sofl",
   "finish-args": [
     "--share=network",
     "--share=ipc",
@@ -118,7 +118,7 @@
       "cleanup": ["*"]
     },
     {
-      "name": "cartridges",
+      "name": "sofl",
       "builddir": true,
       "buildsystem": "meson",
       "run-tests": true,

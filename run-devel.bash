@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 # Конфигурация
 BUILD_DIR="build-dir"
 MANIFEST="build-aux/flatpak/org.badkiko.sofl.Devel.json"
-APP_COMMAND="cartridges"
+APP_COMMAND="sofl"
 LAST_BUILD_TIMESTAMP_FILE=".last_build_timestamp"
 
 # Функция для вывода сообщений

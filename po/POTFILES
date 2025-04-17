@@ -8,27 +8,27 @@ data/gtk/help-overlay.blp
 data/gtk/preferences.blp
 data/gtk/window.blp
 
-cartridges/main.py
-cartridges/window.py
-cartridges/details_dialog.py
-cartridges/game.py
-cartridges/preferences.py
+sofl/main.py
+sofl/window.py
+sofl/details_dialog.py
+sofl/game.py
+sofl/preferences.py
 
-cartridges/utils/create_dialog.py
-cartridges/utils/relative_date.py
+sofl/utils/create_dialog.py
+sofl/utils/relative_date.py
 
-cartridges/importer/importer.py
-cartridges/importer/source.py
-cartridges/importer/location.py
-cartridges/importer/location.py
-cartridges/importer/bottles_source.py
-cartridges/importer/desktop_source.py
-cartridges/importer/flatpak_source.py
-cartridges/importer/heroic_source.py
-cartridges/importer/itch_source.py
-cartridges/importer/legendary_source.py
-cartridges/importer/lutris_source.py
-cartridges/importer/retroarch_source.py
-cartridges/importer/steam_source.py
+sofl/importer/importer.py
+sofl/importer/source.py
+sofl/importer/location.py
+sofl/importer/location.py
+sofl/importer/bottles_source.py
+sofl/importer/desktop_source.py
+sofl/importer/flatpak_source.py
+sofl/importer/heroic_source.py
+sofl/importer/itch_source.py
+sofl/importer/legendary_source.py
+sofl/importer/lutris_source.py
+sofl/importer/retroarch_source.py
+sofl/importer/steam_source.py
 
-cartridges/store/managers/sgdb_manager.py
+sofl/store/managers/sgdb_manager.py

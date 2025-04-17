@@ -10,7 +10,7 @@ conf_data.set('APP_ID', app_id)
 conf_data.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 
 search_provider_executable = configure_file(
-    input: 'cartridges-search-provider.in',
+    input: 'sofl-search-provider.in',
     output: app_id + '-search-provider',
     configuration: conf_data,
     install: true,

@@ -1,7 +1,7 @@
-#define MyAppName "Cartridges"
+#define MyAppName "SOFL"
 #define MyAppVersion "@VERSION@"
 #define MyAppPublisher "badkiko"
-#define MyAppURL "https://github.com/kra-mo/cartridges"
+#define MyAppURL "https://github.com/BadKiko/steam-online-fix-launcher"
 #define MyAppExeName "pythonw.exe"
 
 [Setup]
@@ -11,13 +11,13 @@ AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
-AppSupportURL=https://github.com/kra-mo/cartridges/issues
+AppSupportURL=https://github.com/BadKiko/steam-online-fix-launcher/issues
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf64}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=..\..\..\LICENSE
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=Cartridges Windows
+OutputBaseFilename=SOFL Windows
 SetupIconFile=..\..\..\build-aux\windows\icon.ico
 Compression=lzma
 SolidCompression=yes
@@ -30,7 +30,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\a\_temp\msys64\ucrt64\bin\cartridges"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "D:\a\_temp\msys64\ucrt64\bin\sofl"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\bin\pythonw.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\bin\python.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\bin\gdbus.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -44,7 +44,7 @@ Source: "D:\a\_temp\msys64\ucrt64\lib\gdk-pixbuf-2.0\*"; DestDir: "{app}\lib\gdk
 Source: "D:\a\_temp\msys64\ucrt64\lib\girepository-1.0\*"; DestDir: "{app}\lib\girepository-1.0"; Flags: recursesubdirs ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\lib\python@PYTHON_VERSION@\*"; DestDir: "{app}\lib\python@PYTHON_VERSION@"; Excludes: "__pycache__"; Flags: recursesubdirs ignoreversion
 
-Source: "D:\a\_temp\msys64\ucrt64\share\cartridges\*"; DestDir: "{app}\share\cartridges"; Excludes: "__pycache__"; Flags: recursesubdirs ignoreversion
+Source: "D:\a\_temp\msys64\ucrt64\share\sofl\*"; DestDir: "{app}\share\sofl"; Excludes: "__pycache__"; Flags: recursesubdirs ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\share\icons\*"; DestDir: "{app}\share\icons"; Excludes: "*.png,cursors\*"; Flags: recursesubdirs ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\share\glib-2.0\*"; DestDir: "{app}\share\glib-2.0"; Flags: recursesubdirs ignoreversion
 Source: "D:\a\_temp\msys64\ucrt64\share\gtk-4.0\*"; DestDir: "{app}\share\gtk-4.0"; Flags: recursesubdirs ignoreversion
@@ -52,8 +52,8 @@ Source: "D:\a\_temp\msys64\ucrt64\share\gtk-4.0\*"; DestDir: "{app}\share\gtk-4.
 Source: "..\..\..\build-aux\windows\icon.ico"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\cartridges"""; IconFilename: "{app}\icon.ico"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\cartridges"""; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\sofl"""; IconFilename: "{app}\icon.ico"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\sofl"""; IconFilename: "{app}\icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\cartridges"""; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
+Filename: "{app}\bin\{#MyAppExeName}"; Parameters: """{app}\bin\sofl"""; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall

@@ -1,17 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR badkiko
-# This file is distributed under the same license as the Cartridges package.
+# This file is distributed under the same license as the SOFL package.
 # MJKim <kmj10727@gmail.com>, 2023.
 # Seong-ho Cho <darkcircle.0426@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Cartridges\n"
+"Project-Id-Version: SOFL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-05 14:01+0100\n"
 "PO-Revision-Date: 2025-02-24 14:34+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/cartridges/"
-"cartridges/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/sofl/"
+"sofl/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:9
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
-msgid "Cartridges"
+msgid "SOFL"
 msgstr "카트리지"
 
 #: data/org.badkiko.sofl.desktop.in:4
@@ -45,7 +45,7 @@ msgstr ""
 
 #: data/org.badkiko.sofl.metainfo.xml.in:12
 msgid ""
-"Cartridges is a simple game launcher for all of your games. It has support "
+"SOFL is a simple game launcher for all of your games. It has support "
 "for importing games from Steam, Lutris, Heroic and more with no login "
 "necessary. You can sort and hide games or download cover art from "
 "SteamGridDB."
@@ -55,7 +55,7 @@ msgstr ""
 "나, SteamGridDB에서 표지를 다운로드할 수 있습니다."
 
 #: data/org.badkiko.sofl.metainfo.xml.in:44 data/gtk/window.blp:320
-#: cartridges/details_dialog.py:77
+#: sofl/details_dialog.py:77
 msgid "Game Details"
 msgstr "게임 세부 정보"
 
@@ -64,8 +64,8 @@ msgid "Edit Game Details"
 msgstr "게임 세부 정보 편집"
 
 #: data/org.badkiko.sofl.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
-#: data/gtk/window.blp:543 cartridges/details_dialog.py:279
-#: cartridges/importer/importer.py:319 cartridges/importer/importer.py:369
+#: data/gtk/window.blp:543 sofl/details_dialog.py:279
+#: sofl/importer/importer.py:319 sofl/importer/importer.py:369
 msgid "Preferences"
 msgstr "기본 설정"
 
@@ -105,7 +105,7 @@ msgstr "추가 정보"
 msgid "Edit"
 msgstr "편집"
 
-#: data/gtk/game.blp:102 cartridges/window.py:359
+#: data/gtk/game.blp:102 sofl/window.py:359
 msgid "Hide"
 msgstr "숨기기"
 
@@ -113,7 +113,7 @@ msgstr "숨기기"
 msgid "Remove"
 msgstr "제거"
 
-#: data/gtk/game.blp:110 cartridges/window.py:361
+#: data/gtk/game.blp:110 sofl/window.py:361
 msgid "Unhide"
 msgstr "숨기기 취소"
 
@@ -130,8 +130,8 @@ msgstr "검색"
 msgid "Keyboard Shortcuts"
 msgstr "키보드 바로 가기 키"
 
-#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
-#: cartridges/preferences.py:137 cartridges/importer/importer.py:386
+#: data/gtk/help-overlay.blp:29 sofl/game.py:103
+#: sofl/preferences.py:137 sofl/importer/importer.py:386
 msgid "Undo"
 msgstr "실행 취소"
 
@@ -185,7 +185,7 @@ msgstr "표지 그림 선택시 게임 실행"
 msgid "Swaps the behavior of the cover image and the play button"
 msgstr "표지 그림과 게임하기 단추 동작 바꾸기"
 
-#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:91
+#: data/gtk/preferences.blp:26 sofl/details_dialog.py:91
 msgid "Images"
 msgstr "그림"
 
@@ -217,7 +217,7 @@ msgstr "설치 취소한 게임 제거"
 msgid "Sources"
 msgstr "공급원"
 
-#: data/gtk/preferences.blp:78 cartridges/importer/steam_source.py:114
+#: data/gtk/preferences.blp:78 sofl/importer/steam_source.py:114
 msgid "Steam"
 msgstr "스팀"
 
@@ -229,7 +229,7 @@ msgid "Install Location"
 msgstr "설치 위치"
 
 #: data/gtk/preferences.blp:105 data/gtk/window.blp:565
-#: cartridges/importer/lutris_source.py:107
+#: sofl/importer/lutris_source.py:107
 msgid "Lutris"
 msgstr "루트리스"
 
@@ -241,7 +241,7 @@ msgstr "스팀 게임 가져오기"
 msgid "Import Flatpak Games"
 msgstr "플랫팩 게임 가져오기"
 
-#: data/gtk/preferences.blp:140 cartridges/importer/heroic_source.py:355
+#: data/gtk/preferences.blp:140 sofl/importer/heroic_source.py:355
 msgid "Heroic"
 msgstr "히어로익"
 
@@ -261,23 +261,23 @@ msgstr "아마존 게임 가져오기"
 msgid "Import Sideloaded Games"
 msgstr "사이드로디드 게임 가져오기"
 
-#: data/gtk/preferences.blp:183 cartridges/importer/bottles_source.py:86
+#: data/gtk/preferences.blp:183 sofl/importer/bottles_source.py:86
 msgid "Bottles"
 msgstr "보틀즈"
 
-#: data/gtk/preferences.blp:210 cartridges/importer/itch_source.py:81
+#: data/gtk/preferences.blp:210 sofl/importer/itch_source.py:81
 msgid "itch"
 msgstr "잇치"
 
-#: data/gtk/preferences.blp:237 cartridges/importer/legendary_source.py:97
+#: data/gtk/preferences.blp:237 sofl/importer/legendary_source.py:97
 msgid "Legendary"
 msgstr "레젠더리"
 
-#: data/gtk/preferences.blp:264 cartridges/importer/retroarch_source.py:142
+#: data/gtk/preferences.blp:264 sofl/importer/retroarch_source.py:142
 msgid "RetroArch"
 msgstr "레트로아키"
 
-#: data/gtk/preferences.blp:291 cartridges/importer/flatpak_source.py:143
+#: data/gtk/preferences.blp:291 sofl/importer/flatpak_source.py:143
 msgid "Flatpak"
 msgstr "플랫팩"
 
@@ -295,7 +295,7 @@ msgstr "사용자 위치"
 msgid "Import Game Launchers"
 msgstr "게임 실행 프로그램 가져오기"
 
-#: data/gtk/preferences.blp:341 cartridges/importer/desktop_source.py:215
+#: data/gtk/preferences.blp:341 sofl/importer/desktop_source.py:215
 msgid "Desktop Entries"
 msgstr "데스크톱 항목"
 
@@ -363,11 +363,11 @@ msgstr "숨긴 게임 없음"
 msgid "Games you hide will appear here"
 msgstr "숨긴 게임은 이곳에 나타납니다"
 
-#: data/gtk/window.blp:76 data/gtk/window.blp:113 cartridges/main.py:249
+#: data/gtk/window.blp:76 data/gtk/window.blp:113 sofl/main.py:249
 msgid "All Games"
 msgstr "모든 게임"
 
-#: data/gtk/window.blp:140 cartridges/main.py:251
+#: data/gtk/window.blp:140 sofl/main.py:251
 msgid "Added"
 msgstr "추가함"
 
@@ -416,7 +416,7 @@ msgid "Show Hidden"
 msgstr "숨긴 게임 표시"
 
 #: data/gtk/window.blp:545
-msgid "About Cartridges"
+msgid "About SOFL"
 msgstr "카트리지 정보"
 
 #: data/gtk/window.blp:562
@@ -432,66 +432,66 @@ msgid "HowLongToBeat"
 msgstr "HowLongToBeat"
 
 #. The variable is the title of the game
-#: cartridges/main.py:226 cartridges/game.py:125
+#: sofl/main.py:226 sofl/game.py:125
 msgid "{} launched"
 msgstr "{} 실행함"
 
 #. Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
-#: cartridges/main.py:291
+#: sofl/main.py:291
 msgid "translator-credits"
 msgstr "조성호 <shcho@gnome.org>"
 
 #. The variable is the date when the game was added
-#: cartridges/window.py:382
+#: sofl/window.py:382
 msgid "Added: {}"
 msgstr "추가: {}"
 
-#: cartridges/window.py:385
+#: sofl/window.py:385
 msgid "Never"
 msgstr "안함"
 
 #. The variable is the date when the game was last played
-#: cartridges/window.py:389
+#: sofl/window.py:389
 msgid "Last played: {}"
 msgstr "최근 플레이: {}"
 
-#: cartridges/details_dialog.py:82
+#: sofl/details_dialog.py:82
 msgid "Apply"
 msgstr "적용"
 
-#: cartridges/details_dialog.py:88
+#: sofl/details_dialog.py:88
 msgid "Add New Game"
 msgstr "새 게임 추가"
 
-#: cartridges/details_dialog.py:89
+#: sofl/details_dialog.py:89
 msgid "Add"
 msgstr "추가"
 
-#: cartridges/details_dialog.py:102
+#: sofl/details_dialog.py:102
 msgid "Executables"
 msgstr "실행 파일"
 
 #. Translate this string as you would translate "file"
-#: cartridges/details_dialog.py:117
+#: sofl/details_dialog.py:117
 msgid "file.txt"
 msgstr "file.txt"
 
 #. As in software
-#: cartridges/details_dialog.py:119
+#: sofl/details_dialog.py:119
 msgid "program"
 msgstr "프로그램"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:124 cartridges/details_dialog.py:126
+#: sofl/details_dialog.py:124 sofl/details_dialog.py:126
 msgid "C:\\path\\to\\{}"
 msgstr "C:\\디렉터리\\경로\\{}"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:130 cartridges/details_dialog.py:132
+#: sofl/details_dialog.py:130 sofl/details_dialog.py:132
 msgid "/path/to/{}"
 msgstr "/디렉터리/경로/{}"
 
-#: cartridges/details_dialog.py:137
+#: sofl/details_dialog.py:137
 msgid ""
 "To launch the executable \"{}\", use the command:\n"
 "\n"
@@ -514,159 +514,159 @@ msgstr ""
 "경로 이름에 공백 문자가 들어가 있을 경우, 경로 이름을 큰 따옴표로 감쌌는지 확"
 "인하십시오!"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:185
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:185
 msgid "Couldn't Add Game"
 msgstr "게임을 추가할 수 없습니다"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:221
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:221
 msgid "Game title cannot be empty."
 msgstr "게임 제목은 비워둘 수 없습니다."
 
-#: cartridges/details_dialog.py:185 cartridges/details_dialog.py:229
+#: sofl/details_dialog.py:185 sofl/details_dialog.py:229
 msgid "Executable cannot be empty."
 msgstr "실행 파일을 비워둘 수 없습니다."
 
-#: cartridges/details_dialog.py:220 cartridges/details_dialog.py:228
+#: sofl/details_dialog.py:220 sofl/details_dialog.py:228
 msgid "Couldn't Apply Preferences"
 msgstr "기본 설정을 적용할 수 없습니다"
 
 #. The variable is the title of the game
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} hidden"
 msgstr "{} 숨김"
 
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} unhidden"
 msgstr "{} 숨김 해제함"
 
 #. The variable is the title of the game
-#: cartridges/game.py:153
+#: sofl/game.py:153
 msgid "{} removed"
 msgstr "{} 제거함"
 
-#: cartridges/preferences.py:136
+#: sofl/preferences.py:136
 msgid "All games removed"
 msgstr "모든 게임을 제거했습니다"
 
-#: cartridges/preferences.py:188
+#: sofl/preferences.py:188
 msgid ""
 "An API key is required to use SteamGridDB. You can generate one {}here{}."
 msgstr ""
 "SteamGridDB를 활용하려면 API 키가 필요합니다. {}여기{}에서 만들 수 있습니다."
 
-#: cartridges/preferences.py:203
+#: sofl/preferences.py:203
 msgid "Downloading covers…"
 msgstr "표지 그림 다운로드 중…"
 
-#: cartridges/preferences.py:222
+#: sofl/preferences.py:222
 msgid "Covers updated"
 msgstr "표지 그림을 업데이트했습니다"
 
-#: cartridges/preferences.py:370
+#: sofl/preferences.py:370
 msgid "Installation Not Found"
 msgstr "설치한 항목이 없습니다"
 
-#: cartridges/preferences.py:371
+#: sofl/preferences.py:371
 msgid "Select a valid directory"
 msgstr "올바른 디렉터리를 선택하십시오"
 
-#: cartridges/preferences.py:407 cartridges/importer/importer.py:317
+#: sofl/preferences.py:407 sofl/importer/importer.py:317
 msgid "Warning"
 msgstr "경고"
 
-#: cartridges/preferences.py:441
+#: sofl/preferences.py:441
 msgid "Invalid Directory"
 msgstr "부적절한 디렉터리"
 
-#: cartridges/preferences.py:447
+#: sofl/preferences.py:447
 msgid "Set Location"
 msgstr "위치 설정"
 
-#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:318
+#: sofl/utils/create_dialog.py:33 sofl/importer/importer.py:318
 msgid "Dismiss"
 msgstr "버리기"
 
-#: cartridges/utils/relative_date.py:30
+#: sofl/utils/relative_date.py:30
 msgid "Today"
 msgstr "오늘"
 
-#: cartridges/utils/relative_date.py:32
+#: sofl/utils/relative_date.py:32
 msgid "Yesterday"
 msgstr "어제"
 
-#: cartridges/utils/relative_date.py:36
+#: sofl/utils/relative_date.py:36
 msgid "Last Week"
 msgstr "지난 주"
 
-#: cartridges/utils/relative_date.py:38
+#: sofl/utils/relative_date.py:38
 msgid "This Month"
 msgstr "이번 달"
 
-#: cartridges/utils/relative_date.py:40
+#: sofl/utils/relative_date.py:40
 msgid "Last Month"
 msgstr "지난 달"
 
-#: cartridges/utils/relative_date.py:44
+#: sofl/utils/relative_date.py:44
 msgid "Last Year"
 msgstr "작년"
 
-#: cartridges/importer/importer.py:144
+#: sofl/importer/importer.py:144
 msgid "Importing Games…"
 msgstr "게임 가져오는 중…"
 
-#: cartridges/importer/importer.py:337
+#: sofl/importer/importer.py:337
 msgid "The following errors occured during import:"
 msgstr "가져오는 동안 다음 오류가 나타났습니다:"
 
-#: cartridges/importer/importer.py:366
+#: sofl/importer/importer.py:366
 msgid "No new games found"
 msgstr "새 게임이 없습니다"
 
 #. The variable is the number of games.
-#: cartridges/importer/importer.py:379
+#: sofl/importer/importer.py:379
 msgid "{} game imported"
 msgid_plural "{} games imported"
 msgstr[0] "게임 {}건을 가져왔습니다"
 
 #. The variable is the number of games. This text comes after "{0} games imported".
-#: cartridges/importer/importer.py:383
+#: sofl/importer/importer.py:383
 msgid ", {} removed"
 msgid_plural ", {} removed"
 msgstr[0] ", {} 제거함"
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:34
+#: sofl/importer/location.py:34
 msgid "Select the {} cache directory."
 msgstr "{} 캐시 디렉터리를 선택하십시오."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:36
+#: sofl/importer/location.py:36
 msgid "Select the {} configuration directory."
 msgstr "{} 설정 디렉터리를 선택하십시오."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:38
+#: sofl/importer/location.py:38
 msgid "Select the {} data directory."
 msgstr "{} 데이터 디렉터리를 선택하십시오."
 
-#: cartridges/importer/retroarch_source.py:129
+#: sofl/importer/retroarch_source.py:129
 msgid "No RetroArch Core Selected"
 msgstr "선택한 레트로아키 코어가 없습니다"
 
 #. The variable is a newline separated list of playlists
-#: cartridges/importer/retroarch_source.py:131
+#: sofl/importer/retroarch_source.py:131
 msgid "The following playlists have no default core:"
 msgstr "다음 플레이 목록에 기본 코어가 없습니다:"
 
-#: cartridges/importer/retroarch_source.py:133
+#: sofl/importer/retroarch_source.py:133
 msgid "Games with no core selected were not imported"
 msgstr "코어를 선택하지 않은 게임을 가져오지 않았습니다"
 
-#: cartridges/store/managers/sgdb_manager.py:46
+#: sofl/store/managers/sgdb_manager.py:46
 msgid "Couldn't Authenticate SteamGridDB"
 msgstr "SteamGridDB를 인증할 수 없습니다"
 
-#: cartridges/store/managers/sgdb_manager.py:47
+#: sofl/store/managers/sgdb_manager.py:47
 msgid "Verify your API key in preferences"
 msgstr "기본 설정에서 API 키를 검증하십시오"
 

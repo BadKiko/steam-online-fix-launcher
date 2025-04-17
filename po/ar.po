@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the cartridges package.
+# This file is distributed under the same license as the sofl package.
 # Ali Aljishi <ahj696@hotmail.com>, 2023.
 # badkiko <contact@badkiko.hu>, 2023.
 # Ali-98 <ahj696@hotmail.com>, 2023.
@@ -8,13 +8,13 @@
 # "Jadiir M. Aal Jaidaan" <ashrafquatre@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: cartridges\n"
+"Project-Id-Version: sofl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-05 14:01+0100\n"
 "PO-Revision-Date: 2024-11-27 20:00+0000\n"
 "Last-Translator: \"Jadiir M. Aal Jaidaan\" <ashrafquatre@gmail.com>\n"
-"Language-Team: Arabic <https://hosted.weblate.org/projects/cartridges/"
-"cartridges/ar/>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/sofl/"
+"sofl/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: data/org.badkiko.sofl.metainfo.xml.in:9
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
-msgid "Cartridges"
+msgid "SOFL"
 msgstr "خراطيش"
 
 #: data/org.badkiko.sofl.desktop.in:4
@@ -47,7 +47,7 @@ msgstr ""
 
 #: data/org.badkiko.sofl.metainfo.xml.in:12
 msgid ""
-"Cartridges is a simple game launcher for all of your games. It has support "
+"SOFL is a simple game launcher for all of your games. It has support "
 "for importing games from Steam, Lutris, Heroic and more with no login "
 "necessary. You can sort and hide games or download cover art from "
 "SteamGridDB."
@@ -57,7 +57,7 @@ msgstr ""
 "وكذلك تستطيع منه تنزيل غُلُف الألعاب من SteamGridDB."
 
 #: data/org.badkiko.sofl.metainfo.xml.in:44 data/gtk/window.blp:320
-#: cartridges/details_dialog.py:77
+#: sofl/details_dialog.py:77
 msgid "Game Details"
 msgstr "تفاصيل اللعبة"
 
@@ -66,8 +66,8 @@ msgid "Edit Game Details"
 msgstr "حرِّر تفاصيل اللعبة"
 
 #: data/org.badkiko.sofl.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
-#: data/gtk/window.blp:543 cartridges/details_dialog.py:279
-#: cartridges/importer/importer.py:319 cartridges/importer/importer.py:369
+#: data/gtk/window.blp:543 sofl/details_dialog.py:279
+#: sofl/importer/importer.py:319 sofl/importer/importer.py:369
 msgid "Preferences"
 msgstr "التفضيلات"
 
@@ -107,7 +107,7 @@ msgstr "معلومات أكثر"
 msgid "Edit"
 msgstr "حرِّر"
 
-#: data/gtk/game.blp:102 cartridges/window.py:359
+#: data/gtk/game.blp:102 sofl/window.py:359
 msgid "Hide"
 msgstr "أخفِ"
 
@@ -115,7 +115,7 @@ msgstr "أخفِ"
 msgid "Remove"
 msgstr "أزل"
 
-#: data/gtk/game.blp:110 cartridges/window.py:361
+#: data/gtk/game.blp:110 sofl/window.py:361
 msgid "Unhide"
 msgstr "اكشف"
 
@@ -132,8 +132,8 @@ msgstr "ابحث"
 msgid "Keyboard Shortcuts"
 msgstr "اختصارات لوحة المفاتيح"
 
-#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
-#: cartridges/preferences.py:137 cartridges/importer/importer.py:386
+#: data/gtk/help-overlay.blp:29 sofl/game.py:103
+#: sofl/preferences.py:137 sofl/importer/importer.py:386
 msgid "Undo"
 msgstr "تراجع"
 
@@ -187,7 +187,7 @@ msgstr "تبدأ صورة الغلاف اللعبة"
 msgid "Swaps the behavior of the cover image and the play button"
 msgstr "يبدِّل سلوك صورة الغلاف وزرِّ «العب»"
 
-#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:91
+#: data/gtk/preferences.blp:26 sofl/details_dialog.py:91
 msgid "Images"
 msgstr "الصور"
 
@@ -219,7 +219,7 @@ msgstr "أزل الألعاب المحذوفة"
 msgid "Sources"
 msgstr "المصادر"
 
-#: data/gtk/preferences.blp:78 cartridges/importer/steam_source.py:114
+#: data/gtk/preferences.blp:78 sofl/importer/steam_source.py:114
 msgid "Steam"
 msgstr "ستيم"
 
@@ -231,7 +231,7 @@ msgid "Install Location"
 msgstr "موضع التثبيت"
 
 #: data/gtk/preferences.blp:105 data/gtk/window.blp:565
-#: cartridges/importer/lutris_source.py:107
+#: sofl/importer/lutris_source.py:107
 msgid "Lutris"
 msgstr "لوترس"
 
@@ -243,7 +243,7 @@ msgstr "استورد ألعابًا من ستيم"
 msgid "Import Flatpak Games"
 msgstr "استورد ألعاب فلاتباك"
 
-#: data/gtk/preferences.blp:140 cartridges/importer/heroic_source.py:355
+#: data/gtk/preferences.blp:140 sofl/importer/heroic_source.py:355
 msgid "Heroic"
 msgstr "هِرُوِك"
 
@@ -263,23 +263,23 @@ msgstr "استورد ألعابًا من أمازون"
 msgid "Import Sideloaded Games"
 msgstr "استورد ألعابًا مثبَّتةً بغير متجر"
 
-#: data/gtk/preferences.blp:183 cartridges/importer/bottles_source.py:86
+#: data/gtk/preferences.blp:183 sofl/importer/bottles_source.py:86
 msgid "Bottles"
 msgstr "قوارير"
 
-#: data/gtk/preferences.blp:210 cartridges/importer/itch_source.py:81
+#: data/gtk/preferences.blp:210 sofl/importer/itch_source.py:81
 msgid "itch"
 msgstr "إتش"
 
-#: data/gtk/preferences.blp:237 cartridges/importer/legendary_source.py:97
+#: data/gtk/preferences.blp:237 sofl/importer/legendary_source.py:97
 msgid "Legendary"
 msgstr "لجندري"
 
-#: data/gtk/preferences.blp:264 cartridges/importer/retroarch_source.py:142
+#: data/gtk/preferences.blp:264 sofl/importer/retroarch_source.py:142
 msgid "RetroArch"
 msgstr "رتروآرتش"
 
-#: data/gtk/preferences.blp:291 cartridges/importer/flatpak_source.py:143
+#: data/gtk/preferences.blp:291 sofl/importer/flatpak_source.py:143
 msgid "Flatpak"
 msgstr "فلاتباك"
 
@@ -297,7 +297,7 @@ msgstr "موضع المستخدم"
 msgid "Import Game Launchers"
 msgstr "استورد مشغِّلات ألعاب"
 
-#: data/gtk/preferences.blp:341 cartridges/importer/desktop_source.py:215
+#: data/gtk/preferences.blp:341 sofl/importer/desktop_source.py:215
 msgid "Desktop Entries"
 msgstr "مدخلات سطح المكتب"
 
@@ -365,11 +365,11 @@ msgstr "لا توجد ألعاب مخفية"
 msgid "Games you hide will appear here"
 msgstr "هنا يظهر ما أخفيت من ألعاب"
 
-#: data/gtk/window.blp:76 data/gtk/window.blp:113 cartridges/main.py:249
+#: data/gtk/window.blp:76 data/gtk/window.blp:113 sofl/main.py:249
 msgid "All Games"
 msgstr "كلُّ الألعاب"
 
-#: data/gtk/window.blp:140 cartridges/main.py:251
+#: data/gtk/window.blp:140 sofl/main.py:251
 msgid "Added"
 msgstr "أُضيفَت"
 
@@ -418,7 +418,7 @@ msgid "Show Hidden"
 msgstr "أظهر ما أخفي"
 
 #: data/gtk/window.blp:545
-msgid "About Cartridges"
+msgid "About SOFL"
 msgstr "عن «خراطيش»"
 
 #: data/gtk/window.blp:562
@@ -434,66 +434,66 @@ msgid "HowLongToBeat"
 msgstr "HowLongToBeat"
 
 #. The variable is the title of the game
-#: cartridges/main.py:226 cartridges/game.py:125
+#: sofl/main.py:226 sofl/game.py:125
 msgid "{} launched"
 msgstr "بُدئت {}"
 
 #. Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
-#: cartridges/main.py:291
+#: sofl/main.py:291
 msgid "translator-credits"
 msgstr "Ali Aljishi <ahj696@hotmail.com>"
 
 #. The variable is the date when the game was added
-#: cartridges/window.py:382
+#: sofl/window.py:382
 msgid "Added: {}"
 msgstr "أضيفت في: {}"
 
-#: cartridges/window.py:385
+#: sofl/window.py:385
 msgid "Never"
 msgstr "أبدًا"
 
 #. The variable is the date when the game was last played
-#: cartridges/window.py:389
+#: sofl/window.py:389
 msgid "Last played: {}"
 msgstr "لُعبت آخر مرَّة في: {}"
 
-#: cartridges/details_dialog.py:82
+#: sofl/details_dialog.py:82
 msgid "Apply"
 msgstr "طبِّق"
 
-#: cartridges/details_dialog.py:88
+#: sofl/details_dialog.py:88
 msgid "Add New Game"
 msgstr "أضف لعبةً جديدةً"
 
-#: cartridges/details_dialog.py:89
+#: sofl/details_dialog.py:89
 msgid "Add"
 msgstr "أضف"
 
-#: cartridges/details_dialog.py:102
+#: sofl/details_dialog.py:102
 msgid "Executables"
 msgstr "ملفات التنفيذ"
 
 #. Translate this string as you would translate "file"
-#: cartridges/details_dialog.py:117
+#: sofl/details_dialog.py:117
 msgid "file.txt"
 msgstr "ملف.txt"
 
 #. As in software
-#: cartridges/details_dialog.py:119
+#: sofl/details_dialog.py:119
 msgid "program"
 msgstr "البرنامج"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:124 cartridges/details_dialog.py:126
+#: sofl/details_dialog.py:124 sofl/details_dialog.py:126
 msgid "C:\\path\\to\\{}"
 msgstr "C:\\المسار\\إلى\\{}"
 
 #. Translate this string as you would translate "path to {}"
-#: cartridges/details_dialog.py:130 cartridges/details_dialog.py:132
+#: sofl/details_dialog.py:130 sofl/details_dialog.py:132
 msgid "/path/to/{}"
 msgstr "/المسار/إلى/{}"
 
-#: cartridges/details_dialog.py:137
+#: sofl/details_dialog.py:137
 msgid ""
 "To launch the executable \"{}\", use the command:\n"
 "\n"
@@ -515,117 +515,117 @@ msgstr ""
 "\n"
 "ولا تنسَ إحاطة المسار بعلامتي تنصيص مزدوجتين حالما تضمَّن مسافات!"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:185
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:185
 msgid "Couldn't Add Game"
 msgstr "تعذَّرت إضافة اللعبة"
 
-#: cartridges/details_dialog.py:179 cartridges/details_dialog.py:221
+#: sofl/details_dialog.py:179 sofl/details_dialog.py:221
 msgid "Game title cannot be empty."
 msgstr "لا يجوز كون عنوان اللعبة فارغًا."
 
-#: cartridges/details_dialog.py:185 cartridges/details_dialog.py:229
+#: sofl/details_dialog.py:185 sofl/details_dialog.py:229
 msgid "Executable cannot be empty."
 msgstr "لا يجوز كون ملفِّ التنفيذ فارغًا."
 
-#: cartridges/details_dialog.py:220 cartridges/details_dialog.py:228
+#: sofl/details_dialog.py:220 sofl/details_dialog.py:228
 msgid "Couldn't Apply Preferences"
 msgstr "تعذَّر تطبيق التفضيلات"
 
 #. The variable is the title of the game
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} hidden"
 msgstr "أٌخفيت {}"
 
-#: cartridges/game.py:139
+#: sofl/game.py:139
 msgid "{} unhidden"
 msgstr "أٌظهرت {}"
 
 #. The variable is the title of the game
-#: cartridges/game.py:153
+#: sofl/game.py:153
 msgid "{} removed"
 msgstr "أزيلت {}"
 
-#: cartridges/preferences.py:136
+#: sofl/preferences.py:136
 msgid "All games removed"
 msgstr "أُزيلت كلُّ الألعاب"
 
-#: cartridges/preferences.py:188
+#: sofl/preferences.py:188
 msgid ""
 "An API key is required to use SteamGridDB. You can generate one {}here{}."
 msgstr ""
 "تحتاج مفتاح واجهة برمجة حال ما أردت استخدام SteamGridDB، {}هنا تولِّده{}."
 
-#: cartridges/preferences.py:203
+#: sofl/preferences.py:203
 msgid "Downloading covers…"
 msgstr "تُنزَّل الغُلُف…"
 
-#: cartridges/preferences.py:222
+#: sofl/preferences.py:222
 msgid "Covers updated"
 msgstr "حُدِّثت الغُلُف"
 
-#: cartridges/preferences.py:370
+#: sofl/preferences.py:370
 msgid "Installation Not Found"
 msgstr "لم يُعثر على التثبيت"
 
-#: cartridges/preferences.py:371
+#: sofl/preferences.py:371
 msgid "Select a valid directory"
 msgstr "حدِّد مجلَّدًا صالحًا"
 
-#: cartridges/preferences.py:407 cartridges/importer/importer.py:317
+#: sofl/preferences.py:407 sofl/importer/importer.py:317
 msgid "Warning"
 msgstr "تحذير"
 
-#: cartridges/preferences.py:441
+#: sofl/preferences.py:441
 msgid "Invalid Directory"
 msgstr "مجلَّد غير صالح"
 
-#: cartridges/preferences.py:447
+#: sofl/preferences.py:447
 msgid "Set Location"
 msgstr "عيِّن الموضع"
 
-#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:318
+#: sofl/utils/create_dialog.py:33 sofl/importer/importer.py:318
 msgid "Dismiss"
 msgstr "تجاهل"
 
-#: cartridges/utils/relative_date.py:30
+#: sofl/utils/relative_date.py:30
 msgid "Today"
 msgstr "اليوم"
 
-#: cartridges/utils/relative_date.py:32
+#: sofl/utils/relative_date.py:32
 msgid "Yesterday"
 msgstr "أمس"
 
-#: cartridges/utils/relative_date.py:36
+#: sofl/utils/relative_date.py:36
 #, fuzzy
 msgid "Last Week"
 msgstr "لُعبت آخر مرَّة"
 
-#: cartridges/utils/relative_date.py:38
+#: sofl/utils/relative_date.py:38
 msgid "This Month"
 msgstr "هذا الشهر"
 
-#: cartridges/utils/relative_date.py:40
+#: sofl/utils/relative_date.py:40
 msgid "Last Month"
 msgstr "الشهر الماضي"
 
-#: cartridges/utils/relative_date.py:44
+#: sofl/utils/relative_date.py:44
 msgid "Last Year"
 msgstr "العام الماضي"
 
-#: cartridges/importer/importer.py:144
+#: sofl/importer/importer.py:144
 msgid "Importing Games…"
 msgstr "تُستورد الألعاب…"
 
-#: cartridges/importer/importer.py:337
+#: sofl/importer/importer.py:337
 msgid "The following errors occured during import:"
 msgstr "طرأ هذا الخطأ أثناء الاستيراد:"
 
-#: cartridges/importer/importer.py:366
+#: sofl/importer/importer.py:366
 msgid "No new games found"
 msgstr "لم يُعثر على ألعاب جديدة"
 
 #. The variable is the number of games.
-#: cartridges/importer/importer.py:379
+#: sofl/importer/importer.py:379
 #, fuzzy
 msgid "{} game imported"
 msgid_plural "{} games imported"
@@ -637,7 +637,7 @@ msgstr[4] "اُستوردت {} لعبة"
 msgstr[5] "اُستوردت {} لعبة"
 
 #. The variable is the number of games. This text comes after "{0} games imported".
-#: cartridges/importer/importer.py:383
+#: sofl/importer/importer.py:383
 #, fuzzy
 msgid ", {} removed"
 msgid_plural ", {} removed"
@@ -649,38 +649,38 @@ msgstr[4] "أزيلت {}"
 msgstr[5] "أزيلت {}"
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:34
+#: sofl/importer/location.py:34
 msgid "Select the {} cache directory."
 msgstr "حدِّد مجلَّد ذاكرة {} المؤقتة."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:36
+#: sofl/importer/location.py:36
 msgid "Select the {} configuration directory."
 msgstr "حدِّد مجلَّد ضبط {}."
 
 #. The variable is the name of the source
-#: cartridges/importer/location.py:38
+#: sofl/importer/location.py:38
 msgid "Select the {} data directory."
 msgstr "حدِّد مجلَّد بيانات {}."
 
-#: cartridges/importer/retroarch_source.py:129
+#: sofl/importer/retroarch_source.py:129
 msgid "No RetroArch Core Selected"
 msgstr "لم تختر نواة رتروآرتش"
 
 #. The variable is a newline separated list of playlists
-#: cartridges/importer/retroarch_source.py:131
+#: sofl/importer/retroarch_source.py:131
 msgid "The following playlists have no default core:"
 msgstr "ليس للقوائم التالية نواة مبدئية:"
 
-#: cartridges/importer/retroarch_source.py:133
+#: sofl/importer/retroarch_source.py:133
 msgid "Games with no core selected were not imported"
 msgstr "لم نستورد الألعاب التي لم تختر لها أنويةً"
 
-#: cartridges/store/managers/sgdb_manager.py:46
+#: sofl/store/managers/sgdb_manager.py:46
 msgid "Couldn't Authenticate SteamGridDB"
 msgstr "تعذَّر استيثاق SteamGridDB"
 
-#: cartridges/store/managers/sgdb_manager.py:47
+#: sofl/store/managers/sgdb_manager.py:47
 msgid "Verify your API key in preferences"
 msgstr "أكِّد مفتاح واجهة البرمجة في التفضيلات"
 

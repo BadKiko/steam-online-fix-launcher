@@ -1,5 +1,5 @@
 project(
-  'cartridges',
+  'sofl',
   version: '2.12.1',
   meson_version: '>= 0.59.0',
   default_options: [
@@ -48,7 +48,7 @@ conf.set('pkgdatadir', pkgdatadir)
 conf.set('libexecdir', libexecdir)
 
 subdir('data')
-subdir('cartridges')
+subdir('sofl')
 
 if host_machine.system() == 'windows'
   subdir('build-aux/windows')
