@@ -57,6 +57,7 @@ from sofl.store.managers.steam_api_manager import SteamAPIManager
 from sofl.store.store import Store
 from sofl.utils.run_executable import run_executable
 from sofl.window import SOFLWindow
+from sofl.dialogs.install_dialog import InstallDialog
 
 if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
@@ -338,8 +339,7 @@ class SOFLApplication(Adw.Application):
         if InstallDialog.is_open:
             return
         
-        dialog = InstallDialog()
-        dialog.present(shared.win)
+        InstallDialog().present(shared.win)
 
     def on_import_action(self, *_args: Any) -> None:
         shared.importer = Importer()

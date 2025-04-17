@@ -4,6 +4,7 @@ blueprints = custom_target(
     'gtk/details-dialog.blp',
     'gtk/game.blp',
     'gtk/help-overlay.blp',
+    'gtk/install-dialog.blp',
     'gtk/preferences.blp',
     'gtk/window.blp',
   ),

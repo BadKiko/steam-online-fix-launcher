@@ -1,0 +1,38 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $InstallDialog: Adw.Dialog {
+  content-width: 480;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar HeaderBar {
+      show-start-title-buttons: false;
+      show-end-title-buttons: false;
+
+      [start]
+      Button cancel_button {
+        label: _("Cancel");
+        action-name: "window.close";
+      }
+
+      [end]
+      Button apply_button {
+        styles [
+          "suggested-action"
+        ]
+      }
+    }
+
+    Adw.PreferencesPage {
+      Adw.PreferencesGroup {
+        Label test_label {
+          label: "Текст для теста";
+          halign: center;
+          margin-top: 24;
+          margin-bottom: 24;
+        }
+      }
+    }
+  }
+}
