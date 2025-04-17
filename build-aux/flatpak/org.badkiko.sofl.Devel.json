@@ -1,0 +1,134 @@
+{
+  "id": "org.badkiko.sofl.Devel",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "48",
+  "sdk": "org.gnome.Sdk",
+  "command": "cartridges",
+  "finish-args": [
+    "--share=network",
+    "--share=ipc",
+    "--socket=fallback-x11",
+    "--device=dri",
+    "--socket=wayland",
+    "--talk-name=org.freedesktop.Flatpak",
+    "--filesystem=host",
+    "--filesystem=~/.var/app/com.valvesoftware.Steam/data/Steam/:ro",
+    "--filesystem=~/.var/app/net.lutris.Lutris/:ro",
+    "--filesystem=~/.var/app/com.heroicgameslauncher.hgl/config/heroic/:ro",
+    "--filesystem=~/.var/app/com.heroicgameslauncher.hgl/config/legendary/:ro",
+    "--filesystem=~/.var/app/com.usebottles.bottles/data/bottles/:ro",
+    "--filesystem=~/.var/app/io.itch.itch/config/itch/:ro",
+    "--filesystem=~/.var/app/org.libretro.RetroArch/config/retroarch/:ro",
+    "--filesystem=/var/lib/flatpak/app:ro",
+    "--filesystem=/var/lib/flatpak/exports:ro",
+    "--filesystem=xdg-data/flatpak/app:ro",
+    "--filesystem=xdg-data/flatpak/exports:ro"
+  ],
+  "cleanup": [
+    "/include",
+    "/lib/pkgconfig",
+    "/man",
+    "/share/doc",
+    "/share/gtk-doc",
+    "/share/man",
+    "/share/pkgconfig",
+    "*.la",
+    "*.a"
+  ],
+  "modules": [
+    {
+      "name": "python3-modules",
+      "buildsystem": "simple",
+      "build-commands": [],
+      "modules": [
+        {
+          "name": "python3-pyyaml",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pyyaml\" --no-build-isolation"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/54/ed/79a089b6be93607fa5cdaedf301d7dfb23af5f25c398d5ead2525b063e17/pyyaml-6.0.2.tar.gz",
+              "sha256": "d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e"
+            }
+          ]
+        },
+        {
+          "name": "python3-pillow",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pillow\" --no-build-isolation"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/cd/74/ad3d526f3bf7b6d3f408b73fde271ec69dfac8b81341a318ce825f2b3812/pillow-10.4.0.tar.gz",
+              "sha256": "166c1cd4d24309b30d61f79f4a9114b7b2313d7450912277855ff5dfd7cd4a06"
+            }
+          ]
+        },
+        {
+          "name": "python3-requests",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"requests\" --no-build-isolation"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/12/90/3c9ff0512038035f59d279fddeb79f5f1eccd8859f06d6163c58798b9487/certifi-2024.8.30-py3-none-any.whl",
+              "sha256": "922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8"
+            },
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/63/09/c1bc53dab74b1816a00d8d030de5bf98f724c52c1635e07681d312f20be8/charset-normalizer-3.3.2.tar.gz",
+              "sha256": "f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5"
+            },
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl",
+              "sha256": "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+            },
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/f9/9b/335f9764261e915ed497fcdeb11df5dfd6f7bf257d4a6a2a686d80da4d54/requests-2.32.3-py3-none-any.whl",
+              "sha256": "70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"
+            },
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl",
+              "sha256": "ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blueprint-compiler",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
+          "tag": "v0.16.0"
+        }
+      ],
+      "cleanup": ["*"]
+    },
+    {
+      "name": "cartridges",
+      "builddir": true,
+      "buildsystem": "meson",
+      "run-tests": true,
+      "config-opts": ["-Dprofile=development"],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../.."
+        }
+      ]
+    }
+  ]
+} 

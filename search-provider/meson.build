@@ -3,23 +3,32 @@
 service_dir = join_paths(get_option('datadir'), 'dbus-1', 'services')
 serarch_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
 
-configure_file(
-  input: 'cartridges-search-provider.in',
-  output: 'cartridges-search-provider',
-  configuration: conf,
-  install_dir: libexecdir,
+search_provider_id = app_id + '.SearchProvider'
+
+conf_data = configuration_data()
+conf_data.set('APP_ID', app_id)
+conf_data.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
+
+search_provider_executable = configure_file(
+    input: 'cartridges-search-provider.in',
+    output: app_id + '-search-provider',
+    configuration: conf_data,
+    install: true,
+    install_dir: get_option('bindir')
 )
 
-configure_file(
-  input: 'page.kramo.Cartridges.SearchProvider.service.in',
-  output: app_id + '.SearchProvider.service',
-  configuration: conf,
-  install_dir: service_dir,
+service_file = configure_file(
+    input: 'org.badkiko.sofl.SearchProvider.service.in',
+    output: app_id + '.SearchProvider.service',
+    configuration: conf_data,
+    install: true,
+    install_dir: join_paths(get_option('datadir'), 'dbus-1/services')
 )
 
-configure_file(
-  input: 'page.kramo.Cartridges.SearchProvider.ini',
-  output: app_id + '.SearchProvider.ini',
-  configuration: conf,
-  install_dir: serarch_provider_dir,
+search_provider_file = configure_file(
+    input: 'org.badkiko.sofl.SearchProvider.ini',
+    output: search_provider_id + '.ini',
+    configuration: conf_data,
+    install: true,
+    install_dir: join_paths(get_option('datadir'), 'gnome-shell/search-providers')
 )

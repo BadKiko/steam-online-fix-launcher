@@ -1,6 +1,6 @@
 # steam_source.py
 #
-# Copyright 2022-2023 kramo
+# Copyright 2022-2023 badkiko
 # Copyright 2023 Geoffrey Coulaud
 #
 # This program is free software: you can redistribute it and/or modify
@@ -98,7 +98,8 @@ class SteamSourceIterable(SourceIterable):
             # Add official cover image
             image_path = (
                 self.source.locations.data["librarycache"]
-                / f"{appid}_library_600x900.jpg"
+                / appid
+                / "library_600x900.jpg"
             )
             additional_data = {"local_image_path": image_path, "steam_appid": appid}
 

@@ -1,6 +1,6 @@
 # main.py
 #
-# Copyright 2022-2024 kramo
+# Copyright 2022-2024 badkiko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ from cartridges.store.store import Store
 from cartridges.utils.run_executable import run_executable
 from cartridges.window import CartridgesWindow
 
-if sys.platform == "darwin":
+if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
     from PyObjCTools import AppHelper
 
@@ -94,7 +94,7 @@ class CartridgesApplication(Adw.Application):
 
         self.add_main_option_entries((search, launch))
 
-        if sys.platform == "darwin":
+        if sys.platform.startswith("darwin"):
             if settings := Gtk.Settings.get_default():
                 settings.props.gtk_decoration_layout = "close,minimize,maximize:"
 
@@ -117,9 +117,6 @@ class CartridgesApplication(Adw.Application):
             pass
 
         log_system_info()
-
-        # Set fallback icon-name
-        Gtk.Window.set_default_icon_name(shared.APP_ID)
 
         # Create the main window
         win = self.props.active_window  # pylint: disable=no-member
@@ -195,6 +192,9 @@ class CartridgesApplication(Adw.Application):
             shared.win.search_entry.set_position(-1)
 
         shared.win.present()
+
+        if shared.schema.get_boolean("auto-import"):
+            self.on_import_action()
 
     def do_handle_local_options(self, options: GLib.VariantDict) -> int:
         if search := options.lookup_value("search"):
@@ -274,7 +274,7 @@ class CartridgesApplication(Adw.Application):
         )
         about.set_developers(
             (
-                "kramo https://kramo.page",
+                "badkiko https://badkiko.page",
                 "Geoffrey Coulaud https://geoffrey-coulaud.fr",
                 "Rilic https://rilic.red",
                 "Arcitec https://github.com/Arcitec",
@@ -285,10 +285,10 @@ class CartridgesApplication(Adw.Application):
                 "Sabri Ünal https://github.com/sabriunal",
             )
         )
-        about.set_designers(("kramo https://kramo.page",))
-        about.set_copyright("© 2022-2024 kramo")
-        # Translators: Replace this with your name for it to show up in the about window
-        about.set_translator_credits = (_("translator_credits"),)
+        about.set_designers(("badkiko https://badkiko.page",))
+        about.set_copyright("© 2022-2024 badkiko")
+        # Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
+        about.set_translator_credits(_("translator-credits"))
         about.set_debug_info(debug_str)
         about.set_debug_info_filename("cartridges.log")
         about.add_legal_section(
@@ -405,7 +405,7 @@ class CartridgesApplication(Adw.Application):
                     f"app.{action[0]}" if scope == self else f"win.{action[0]}",
                     (
                         tuple(s.replace("<primary>", "<meta>") for s in action[1])
-                        if sys.platform == "darwin"
+                        if sys.platform.startswith("darwin")
                         else action[1]
                     ),
                 )

@@ -1,6 +1,6 @@
 # application_delegate.py
 #
-# Copyright 2024 kramo
+# Copyright 2024 badkiko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

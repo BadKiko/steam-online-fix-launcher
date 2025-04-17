@@ -1,47 +1,41 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR badkiko
 # This file is distributed under the same license as the Cartridges package.
-# سید حسین موسوی فرد <shmf1385@protonmail.com>, 2023.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2023, 2024.
-# آوید <avds+git@disroot.org>, 2024.
+# "Emilio S." <emism.translations@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Cartridges\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-05 14:01+0100\n"
-"PO-Revision-Date: 2024-11-06 19:00+0000\n"
-"Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
-"Language-Team: Persian <https://hosted.weblate.org/projects/cartridges/"
-"cartridges/fa/>\n"
-"Language: fa\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: data/org.badkiko.sofl.desktop.in:3
 #: data/org.badkiko.sofl.metainfo.xml.in:9
 #: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
 #: data/gtk/window.blp:83
 msgid "Cartridges"
-msgstr "کارتریج‌ها"
+msgstr ""
 
 #: data/org.badkiko.sofl.desktop.in:4
 msgid "Game Launcher"
-msgstr "اجراگر بازی"
+msgstr ""
 
 #: data/org.badkiko.sofl.desktop.in:5
 #: data/org.badkiko.sofl.metainfo.xml.in:10
 msgid "Launch all your games"
-msgstr "اجرای همهٔ بازی‌هایتان"
+msgstr ""
 
 #: data/org.badkiko.sofl.desktop.in:11
 msgid ""
 "gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
 msgstr ""
-"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
-"بازی;استیم;لوتریس;هروییک;بطری‌ها;باتلز;ایچ;فلت‌پک;لجندری;رتروآرچ;"
 
 #: data/org.badkiko.sofl.metainfo.xml.in:12
 msgid ""
@@ -50,446 +44,443 @@ msgid ""
 "necessary. You can sort and hide games or download cover art from "
 "SteamGridDB."
 msgstr ""
-"کارتریج یک اجراگر سادهٔ بازی برای همهٔ بازی‌هایتان است. کارتریج می‌تواند بدون "
-"نیاز به ورود، بازی‌هایتان را از استیم، لوتریس، هروییک و… وارد کند. می‌توانید "
-"بازی‌هایتان را نهفته یا طرح جلدشان را از SteamGridDB بگیرید."
 
 #: data/org.badkiko.sofl.metainfo.xml.in:44 data/gtk/window.blp:320
 #: cartridges/details_dialog.py:77
 msgid "Game Details"
-msgstr "جزییات بازی"
+msgstr ""
 
 #: data/org.badkiko.sofl.metainfo.xml.in:48
 msgid "Edit Game Details"
-msgstr "ویرایش جزییات بازی"
+msgstr ""
 
 #: data/org.badkiko.sofl.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
 #: data/gtk/window.blp:543 cartridges/details_dialog.py:279
 #: cartridges/importer/importer.py:319 cartridges/importer/importer.py:369
 msgid "Preferences"
-msgstr "ترجیحات"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:15
 msgid "Cancel"
-msgstr "لغو"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:45
 msgid "New Cover"
-msgstr "طرح جلد جدید"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:64
 msgid "Delete Cover"
-msgstr "حذف طرح جلد"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:92 data/gtk/game.blp:80
 msgid "Title"
-msgstr "عنوان"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:96
 msgid "Developer (optional)"
-msgstr "توسعه‌دهنده (اختیاری)"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:102
 msgid "Executable"
-msgstr "اجرایی"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:108
 msgid "Select File"
-msgstr "گزینش پرونده"
+msgstr ""
 
 #: data/gtk/details-dialog.blp:119
 msgid "More Info"
-msgstr "اطلاعات بیشتر"
+msgstr ""
 
 #: data/gtk/game.blp:101 data/gtk/game.blp:109 data/gtk/window.blp:444
 msgid "Edit"
-msgstr "ویرایش"
+msgstr ""
 
 #: data/gtk/game.blp:102 cartridges/window.py:359
 msgid "Hide"
-msgstr "نهفتن"
+msgstr ""
 
 #: data/gtk/game.blp:103 data/gtk/game.blp:111 data/gtk/window.blp:464
 msgid "Remove"
-msgstr "برداشتن"
+msgstr ""
 
 #: data/gtk/game.blp:110 cartridges/window.py:361
 msgid "Unhide"
-msgstr "نانهفتن"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
 msgid "General"
-msgstr "عمومی"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:14 data/gtk/window.blp:207 data/gtk/window.blp:223
 #: data/gtk/window.blp:274 data/gtk/window.blp:290 data/gtk/window.blp:475
 msgid "Search"
-msgstr "جست‌وجو"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:24 data/gtk/window.blp:544
 msgid "Keyboard Shortcuts"
-msgstr "میان‌برهای صفحه‌کلید"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:29 cartridges/game.py:103
 #: cartridges/preferences.py:137 cartridges/importer/importer.py:386
 msgid "Undo"
-msgstr "برگردان"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:34
 msgid "Quit"
-msgstr "خروج"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:187
 msgid "Toggle Sidebar"
-msgstr "تغییر وضعیت نوار کناری"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:44 data/gtk/window.blp:200 data/gtk/window.blp:267
 msgid "Main Menu"
-msgstr "فهرست اصلی"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:50
 msgid "Games"
-msgstr "بازی‌ها"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:53 data/gtk/window.blp:193 data/gtk/window.blp:551
 msgid "Add Game"
-msgstr "افزودن بازی"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:58
 #: data/gtk/window.blp:27 data/gtk/window.blp:555
 msgid "Import"
-msgstr "درون‌ریزی"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:63
 msgid "Show Hidden Games"
-msgstr "نمایش بازی‌های نهفته"
+msgstr ""
 
 #: data/gtk/help-overlay.blp:68
 msgid "Remove Game"
-msgstr "برداشتن بازی"
+msgstr ""
 
 #: data/gtk/preferences.blp:13 data/gtk/preferences.blp:62
 #: data/gtk/preferences.blp:365
 msgid "Behavior"
-msgstr "رفتار"
+msgstr ""
 
 #: data/gtk/preferences.blp:16
 msgid "Exit After Launching Games"
-msgstr "خروج پس از اجرا کردن بازی"
+msgstr ""
 
 #: data/gtk/preferences.blp:20
 msgid "Cover Image Launches Game"
-msgstr "طرح جلد بازی را اجرا می‌کند"
+msgstr ""
 
 #: data/gtk/preferences.blp:21
 msgid "Swaps the behavior of the cover image and the play button"
-msgstr "تغییر رفتار تصویر جلد و دکمهٔ بازی کردن"
+msgstr ""
 
 #: data/gtk/preferences.blp:26 cartridges/details_dialog.py:91
 msgid "Images"
-msgstr "عکس‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:29
 msgid "High Quality Images"
-msgstr "عکس‌های با کیفیت بالا"
+msgstr ""
 
 #: data/gtk/preferences.blp:30
 msgid "Save game covers losslessly at the cost of storage"
-msgstr "ذخیرهٔ طرح جلدهای بدون اتلاف به قیمت ذخیره‌سازی"
+msgstr ""
 
 #: data/gtk/preferences.blp:35
 msgid "Danger Zone"
-msgstr "منطقهٔ خطر"
+msgstr ""
 
 #: data/gtk/preferences.blp:39
 msgid "Remove All Games"
-msgstr "حذف کردن همهٔ بازی‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:65
 msgid "Import Games Automatically"
-msgstr "درون‌ریزی خودکار بازی‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:69
 msgid "Remove Uninstalled Games"
-msgstr "برداشتن بازی‌های نصب‌نشده"
+msgstr ""
 
 #: data/gtk/preferences.blp:74
 msgid "Sources"
-msgstr "منبع‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:78 cartridges/importer/steam_source.py:114
 msgid "Steam"
-msgstr "استیم"
+msgstr ""
 
 #: data/gtk/preferences.blp:87 data/gtk/preferences.blp:114
 #: data/gtk/preferences.blp:149 data/gtk/preferences.blp:192
 #: data/gtk/preferences.blp:219 data/gtk/preferences.blp:246
 #: data/gtk/preferences.blp:273
 msgid "Install Location"
-msgstr "مکان نصب"
+msgstr ""
 
 #: data/gtk/preferences.blp:105 data/gtk/window.blp:565
 #: cartridges/importer/lutris_source.py:107
 msgid "Lutris"
-msgstr "لوتریس"
+msgstr ""
 
 #: data/gtk/preferences.blp:131
 msgid "Import Steam Games"
-msgstr "درون‌ریزی بازی‌های استیم"
+msgstr ""
 
 #: data/gtk/preferences.blp:135
 msgid "Import Flatpak Games"
-msgstr "درون‌ریزی بازی‌های فلت‌پک"
+msgstr ""
 
 #: data/gtk/preferences.blp:140 cartridges/importer/heroic_source.py:355
 msgid "Heroic"
-msgstr "هروییک"
+msgstr ""
 
 #: data/gtk/preferences.blp:166
 msgid "Import Epic Games"
-msgstr "درون‌ریزی بازی‌های اپیک"
+msgstr ""
 
 #: data/gtk/preferences.blp:170
 msgid "Import GOG Games"
-msgstr "درون‌ریزی بازی‌های گوگ"
+msgstr ""
 
 #: data/gtk/preferences.blp:174
 msgid "Import Amazon Games"
-msgstr "درون‌ریزی بازی‌های آمازون"
+msgstr ""
 
 #: data/gtk/preferences.blp:178
 msgid "Import Sideloaded Games"
-msgstr "درون‌ریزی بازی‌های نصب‌شده"
+msgstr ""
 
 #: data/gtk/preferences.blp:183 cartridges/importer/bottles_source.py:86
 msgid "Bottles"
-msgstr "بطری‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:210 cartridges/importer/itch_source.py:81
 msgid "itch"
-msgstr "ایچ"
+msgstr ""
 
 #: data/gtk/preferences.blp:237 cartridges/importer/legendary_source.py:97
 msgid "Legendary"
-msgstr "لجندری"
+msgstr ""
 
 #: data/gtk/preferences.blp:264 cartridges/importer/retroarch_source.py:142
 msgid "RetroArch"
-msgstr "رتروآرچ"
+msgstr ""
 
 #: data/gtk/preferences.blp:291 cartridges/importer/flatpak_source.py:143
 msgid "Flatpak"
-msgstr "فلت‌پک"
+msgstr ""
 
 #. The location of the system-wide data directory
 #: data/gtk/preferences.blp:301
 msgid "System Location"
-msgstr "مکان سامانه"
+msgstr ""
 
 #. The location of the user-specific data directory
 #: data/gtk/preferences.blp:319
 msgid "User Location"
-msgstr "مکان کاربر"
+msgstr ""
 
 #: data/gtk/preferences.blp:336
 msgid "Import Game Launchers"
-msgstr "درون‌ریزی اجراگرهای بازی"
+msgstr ""
 
 #: data/gtk/preferences.blp:341 cartridges/importer/desktop_source.py:215
 msgid "Desktop Entries"
-msgstr "ورودی‌های میزکار"
+msgstr ""
 
 #: data/gtk/preferences.blp:353 data/gtk/window.blp:563
 msgid "SteamGridDB"
-msgstr "SteamGridDB"
+msgstr ""
 
 #: data/gtk/preferences.blp:357
 msgid "Authentication"
-msgstr "هویت‌سنجی"
+msgstr ""
 
 #: data/gtk/preferences.blp:360
 msgid "API Key"
-msgstr "کلید API"
+msgstr ""
 
 #: data/gtk/preferences.blp:368
 msgid "Use SteamGridDB"
-msgstr "استفاده از SteamGridDB"
+msgstr ""
 
 #: data/gtk/preferences.blp:369
 msgid "Download images when adding or importing games"
-msgstr "بارگیری تصویرها هنگام افزودن یا درون‌ریزی بازی‌ها"
+msgstr ""
 
 #: data/gtk/preferences.blp:373
 msgid "Prefer Over Official Images"
-msgstr "ترجیح به تصویرهای رسمی"
+msgstr ""
 
 #: data/gtk/preferences.blp:377
 msgid "Prefer Animated Images"
-msgstr "ترجیح تصویرهای پویا"
+msgstr ""
 
 #: data/gtk/preferences.blp:383
 msgid "Update Covers"
-msgstr "به‌روزرسانی طرح جلد"
+msgstr ""
 
 #: data/gtk/preferences.blp:384
 msgid "Fetch covers for games already in your library"
-msgstr "دریافت طرح جلد بازی‌های کنونی کتاب‌خانه‌تان"
+msgstr ""
 
 #: data/gtk/preferences.blp:389
 msgid "Update"
-msgstr "به‌روزرسانی"
+msgstr ""
 
 #: data/gtk/window.blp:6 data/gtk/window.blp:14
 msgid "No Games Found"
-msgstr "هیچ بازی‌ای پیدا نشد"
+msgstr ""
 
 #: data/gtk/window.blp:7 data/gtk/window.blp:15
 msgid "Try a different search"
-msgstr "آزمودن جست‌وجویی دیگر"
+msgstr ""
 
 #: data/gtk/window.blp:21
 msgid "No Games"
-msgstr "بدون بازی"
+msgstr ""
 
 #: data/gtk/window.blp:22
 msgid "Use the + button to add games"
-msgstr "استفاده از دکمهٔ + برای افزودن بازی‌ها"
+msgstr ""
 
 #: data/gtk/window.blp:40
 msgid "No Hidden Games"
-msgstr "بدون بازی نهفته"
+msgstr ""
 
 #: data/gtk/window.blp:41
 msgid "Games you hide will appear here"
-msgstr "بازی‌هایی که پنهان می‌کنید، این‌جا نمایان خواهند شد"
+msgstr ""
 
 #: data/gtk/window.blp:76 data/gtk/window.blp:113 cartridges/main.py:249
 msgid "All Games"
-msgstr "همهٔ بازی‌ها"
+msgstr ""
 
 #: data/gtk/window.blp:140 cartridges/main.py:251
 msgid "Added"
-msgstr "افزوده"
+msgstr ""
 
 #: data/gtk/window.blp:162
 msgid "Imported"
-msgstr "درون‌ریخته"
+msgstr ""
 
 #: data/gtk/window.blp:260
 msgid "Hidden Games"
-msgstr "بازی‌های نهفته"
+msgstr ""
 
 #: data/gtk/window.blp:368
 msgid "Game Title"
-msgstr "عنوان بازی"
+msgstr ""
 
 #: data/gtk/window.blp:425
 msgid "Play"
-msgstr "بازی کردن"
+msgstr ""
 
 #: data/gtk/window.blp:502
 msgid "Sort"
-msgstr "ترتیب"
+msgstr ""
 
 #: data/gtk/window.blp:505
 msgid "A-Z"
-msgstr "آ-ی"
+msgstr ""
 
 #: data/gtk/window.blp:511
 msgid "Z-A"
-msgstr "ی-آ"
+msgstr ""
 
 #: data/gtk/window.blp:517
 msgid "Newest"
-msgstr "جدیدترین"
+msgstr ""
 
 #: data/gtk/window.blp:523
 msgid "Oldest"
-msgstr "قدیمی‌ترین"
+msgstr ""
 
 #: data/gtk/window.blp:529
 msgid "Last Played"
-msgstr "آخرین بازی‌شده"
+msgstr ""
 
 #: data/gtk/window.blp:536
 msgid "Show Hidden"
-msgstr "نمایش نهفته"
+msgstr ""
 
 #: data/gtk/window.blp:545
 msgid "About Cartridges"
-msgstr "دربارهٔ کارتریج‌ها"
+msgstr ""
 
 #: data/gtk/window.blp:562
 msgid "IGDB"
-msgstr "IGDB"
+msgstr ""
 
 #: data/gtk/window.blp:564
 msgid "ProtonDB"
-msgstr "ProtonDB"
+msgstr ""
 
 #: data/gtk/window.blp:566
 msgid "HowLongToBeat"
-msgstr "HowLongToBeat"
+msgstr ""
 
 #. The variable is the title of the game
 #: cartridges/main.py:226 cartridges/game.py:125
 msgid "{} launched"
-msgstr "{} اجرا شد"
+msgstr ""
 
 #. Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
 #: cartridges/main.py:291
 msgid "translator-credits"
-msgstr "دانیال بهزادی <dani.behzi@ubuntu.com>"
+msgstr ""
 
 #. The variable is the date when the game was added
 #: cartridges/window.py:382
 msgid "Added: {}"
-msgstr "افزوده: {}"
+msgstr ""
 
 #: cartridges/window.py:385
 msgid "Never"
-msgstr "هرگز"
+msgstr ""
 
 #. The variable is the date when the game was last played
 #: cartridges/window.py:389
 msgid "Last played: {}"
-msgstr "آخرین بازی‌شده: {}"
+msgstr ""
 
 #: cartridges/details_dialog.py:82
 msgid "Apply"
-msgstr "اعمال"
+msgstr ""
 
 #: cartridges/details_dialog.py:88
 msgid "Add New Game"
-msgstr "افزودن بازی جدید"
+msgstr ""
 
 #: cartridges/details_dialog.py:89
 msgid "Add"
-msgstr "افزودن"
+msgstr ""
 
 #: cartridges/details_dialog.py:102
 msgid "Executables"
-msgstr "اجرایی‌ها"
+msgstr ""
 
 #. Translate this string as you would translate "file"
 #: cartridges/details_dialog.py:117
 msgid "file.txt"
-msgstr "پرونده.txt"
+msgstr ""
 
 #. As in software
 #: cartridges/details_dialog.py:119
 msgid "program"
-msgstr "برنامه"
+msgstr ""
 
 #. Translate this string as you would translate "path to {}"
 #: cartridges/details_dialog.py:124 cartridges/details_dialog.py:126
 msgid "C:\\path\\to\\{}"
-msgstr "C:\\Path\\to\\{}"
+msgstr ""
 
 #. Translate this string as you would translate "path to {}"
 #: cartridges/details_dialog.py:130 cartridges/details_dialog.py:132
 msgid "/path/to/{}"
-msgstr "/path/to/{}"
+msgstr ""
 
 #: cartridges/details_dialog.py:137
 msgid ""
@@ -503,213 +494,160 @@ msgid ""
 "\n"
 "If the path contains spaces, make sure to wrap it in double quotes!"
 msgstr ""
-"استفاده از این دستور برای اجرای پروندهٔ اجرایی {}:\n"
-"\n"
-"<tt>\"{}\"</tt>\n"
-"\n"
-"برای گشودن پروندهٔ {}‌ با برنامهٔ پیش‌گزیده:\n"
-"\n"
-"<tt>{} \"{}\"</tt>\n"
-"\n"
-"اگر مسیر فاصله داشت، مطمئن شوید در نقل‌قول گذاشته‌ایدش!"
 
 #: cartridges/details_dialog.py:179 cartridges/details_dialog.py:185
 msgid "Couldn't Add Game"
-msgstr "نتوانست بازی بیفزاید"
+msgstr ""
 
 #: cartridges/details_dialog.py:179 cartridges/details_dialog.py:221
 msgid "Game title cannot be empty."
-msgstr "عنوان بازی نمی‌تواند خالی باشد."
+msgstr ""
 
 #: cartridges/details_dialog.py:185 cartridges/details_dialog.py:229
 msgid "Executable cannot be empty."
-msgstr "اجرایی نمی‌تواند خالی باشد."
+msgstr ""
 
 #: cartridges/details_dialog.py:220 cartridges/details_dialog.py:228
 msgid "Couldn't Apply Preferences"
-msgstr "نتوانست ترجیحات را اعمال کند"
+msgstr ""
 
 #. The variable is the title of the game
 #: cartridges/game.py:139
 msgid "{} hidden"
-msgstr "{}‌ نهفته"
+msgstr ""
 
 #: cartridges/game.py:139
 msgid "{} unhidden"
-msgstr "{} نانهفته"
+msgstr ""
 
 #. The variable is the title of the game
 #: cartridges/game.py:153
 msgid "{} removed"
-msgstr "{} برداشته شد"
+msgstr ""
 
 #: cartridges/preferences.py:136
 msgid "All games removed"
-msgstr "همهٔ بازی‌ها برداشته شدند"
+msgstr ""
 
 #: cartridges/preferences.py:188
 msgid ""
 "An API key is required to use SteamGridDB. You can generate one {}here{}."
 msgstr ""
-"برای استفاده از SteamGridDB نیاز به یک کلید API است. می‌توانید {}این‌جا{} یکی "
-"بسازید."
 
 #: cartridges/preferences.py:203
 msgid "Downloading covers…"
-msgstr "در حال دریافت طرح‌های جلد…"
+msgstr ""
 
 #: cartridges/preferences.py:222
 msgid "Covers updated"
-msgstr "طرح‌های جلد به‌روزرسانی شد"
+msgstr ""
 
 #: cartridges/preferences.py:370
 msgid "Installation Not Found"
-msgstr "نصب پیدا نشد"
+msgstr ""
 
 #: cartridges/preferences.py:371
 msgid "Select a valid directory"
-msgstr "گزینش شاخه‌ای معتبر"
+msgstr ""
 
 #: cartridges/preferences.py:407 cartridges/importer/importer.py:317
 msgid "Warning"
-msgstr "هشدار"
+msgstr ""
 
 #: cartridges/preferences.py:441
 msgid "Invalid Directory"
-msgstr "شاخهٔ نامعتبر"
+msgstr ""
 
 #: cartridges/preferences.py:447
 msgid "Set Location"
-msgstr "تنظیم مکان"
+msgstr ""
 
 #: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:318
 msgid "Dismiss"
-msgstr "رد"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:30
 msgid "Today"
-msgstr "امروز"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:32
 msgid "Yesterday"
-msgstr "دیروز"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:36
 msgid "Last Week"
-msgstr "هفتهٔ گذشته"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:38
 msgid "This Month"
-msgstr "این ماه"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:40
 msgid "Last Month"
-msgstr "ماه گذشته"
+msgstr ""
 
 #: cartridges/utils/relative_date.py:44
 msgid "Last Year"
-msgstr "پارسال"
+msgstr ""
 
 #: cartridges/importer/importer.py:144
 msgid "Importing Games…"
-msgstr "درون‌ریزی بازی‌ها…"
+msgstr ""
 
 #: cartridges/importer/importer.py:337
 msgid "The following errors occured during import:"
-msgstr "هنگام درون‌ریزی خطاهای زیر رخ دادند:"
+msgstr ""
 
 #: cartridges/importer/importer.py:366
 msgid "No new games found"
-msgstr "هیچ بازی جدیدی پیدا نشد"
+msgstr ""
 
 #. The variable is the number of games.
 #: cartridges/importer/importer.py:379
 msgid "{} game imported"
 msgid_plural "{} games imported"
-msgstr[0] "{} بازی درون‌ریزی شد"
-msgstr[1] "{} بازی درون‌ریزی شدند"
+msgstr[0] ""
+msgstr[1] ""
 
 #. The variable is the number of games. This text comes after "{0} games imported".
 #: cartridges/importer/importer.py:383
 msgid ", {} removed"
 msgid_plural ", {} removed"
-msgstr[0] "، {} بازی برداشته شد"
-msgstr[1] "، {} بازی برداشته شدند"
+msgstr[0] ""
+msgstr[1] ""
 
 #. The variable is the name of the source
 #: cartridges/importer/location.py:34
 msgid "Select the {} cache directory."
-msgstr "گزینش شاخهٔ انبارهٔ {}."
+msgstr ""
 
 #. The variable is the name of the source
 #: cartridges/importer/location.py:36
 msgid "Select the {} configuration directory."
-msgstr "گزینش شاخهٔ پیکربندی {}."
+msgstr ""
 
 #. The variable is the name of the source
 #: cartridges/importer/location.py:38
 msgid "Select the {} data directory."
-msgstr "گزینش شاخهٔ دادهٔ {}."
+msgstr ""
 
 #: cartridges/importer/retroarch_source.py:129
 msgid "No RetroArch Core Selected"
-msgstr "هیچ هستهٔ رتروآرچی گزیده نشده"
+msgstr ""
 
 #. The variable is a newline separated list of playlists
 #: cartridges/importer/retroarch_source.py:131
 msgid "The following playlists have no default core:"
-msgstr "سیاهه‌های بازی کردن زیر هیچ هستهٔ پیش‌گزیده‌ای ندارند:"
+msgstr ""
 
 #: cartridges/importer/retroarch_source.py:133
 msgid "Games with no core selected were not imported"
-msgstr "بازی‌های بدون هسته درون‌ریزی نشدند"
+msgstr ""
 
 #: cartridges/store/managers/sgdb_manager.py:46
 msgid "Couldn't Authenticate SteamGridDB"
-msgstr "نتوانست در SteamGridDB هویت‌سنجی کند"
+msgstr ""
 
 #: cartridges/store/managers/sgdb_manager.py:47
 msgid "Verify your API key in preferences"
-msgstr "کلید APIتان را در ترجیحات تأیید کنید"
-
-#, fuzzy
-#~ msgid "1 game imported"
-#~ msgid_plural "{} games imported"
-#~ msgstr[0] "یک بازی درون‌ریخته شد"
-#~ msgstr[1] "{} بازی درون‌ریخته شدند"
-
-#, fuzzy
-#~ msgid "1 removed"
-#~ msgid_plural "{} removed"
-#~ msgstr[0] "یکی برداشته شد"
-#~ msgstr[1] "{} برداشته شد"
-
-#~ msgid "Cache Location"
-#~ msgstr "مکان انباره"
-
-#~ msgid "Library"
-#~ msgstr "کتابخانه"
-
-#~ msgid "Show preferences"
-#~ msgstr "نمایش ترجیحات"
-
-#~ msgid "Shortcuts"
-#~ msgstr "میان‌برها"
-
-#~ msgid "Open menu"
-#~ msgstr "گشودن فهرست"
-
-#~ msgid "Add new game"
-#~ msgstr "افزودن بازی جدید"
-
-#~ msgid "Import games"
-#~ msgstr "درون‌ریزی بازی‌ها"
-
-#~ msgid "Back"
-#~ msgstr "بازگشت"
-
-#~ msgid "Search games"
-#~ msgstr "جست‌وجوی بازی‌ها"
-
-#~ msgid "Search hidden games"
-#~ msgstr "جست‌وجوی بازی‌های نهفته"
+msgstr ""

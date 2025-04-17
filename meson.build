@@ -1,12 +1,15 @@
 project(
   'cartridges',
-  version: '2.9.3',
+  version: '2.12.1',
   meson_version: '>= 0.59.0',
   default_options: [
     'warning_level=2',
     'werror=false',
   ],
 )
+
+dependency('gtk4', version: '>= 4.15.0')
+dependency('libadwaita-1', version: '>= 1.6.beta')
 
 # Translations are broken on Windows for multiple reasons
 # gresources don't work and MSYS2 seems to have also broken the gettext package
@@ -25,11 +28,11 @@ libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
 
 profile = get_option('profile')
 if profile == 'development'
-  app_id = 'page.kramo.Cartridges.Devel'
-  prefix = '/page/kramo/Cartridges/Devel'
+  app_id = 'org.badkiko.sofl.Devel'
+  prefix = '/org/badkiko/sofl/Devel'
 elif profile == 'release'
-  app_id = 'page.kramo.Cartridges'
-  prefix = '/page/kramo/Cartridges'
+  app_id = 'org.badkiko.sofl'
+  prefix = '/org/badkiko/sofl'
 endif
 
 conf = configuration_data()

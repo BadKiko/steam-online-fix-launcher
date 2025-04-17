@@ -1,6 +1,6 @@
-data/page.kramo.Cartridges.desktop.in
-data/page.kramo.Cartridges.gschema.xml.in
-data/page.kramo.Cartridges.metainfo.xml.in
+data/org.badkiko.sofl.desktop.in
+data/org.badkiko.sofl.gschema.xml.in
+data/org.badkiko.sofl.metainfo.xml.in
 
 data/gtk/details-dialog.blp
 data/gtk/game.blp
@@ -15,6 +15,7 @@ cartridges/game.py
 cartridges/preferences.py
 
 cartridges/utils/create_dialog.py
+cartridges/utils/relative_date.py
 
 cartridges/importer/importer.py
 cartridges/importer/source.py

@@ -52,7 +52,7 @@ app = BUNDLE(
     coll,
     name="Cartridges.app",
     icon="./icon.icns",
-    bundle_identifier="page.kramo.Cartridges",
+    bundle_identifier="org.badkiko.sofl",
     info_plist={
         "LSApplicationCategoryType": "public.app-category.games",
     },

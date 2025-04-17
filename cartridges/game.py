@@ -1,6 +1,6 @@
 # game.py
 #
-# Copyright 2022-2023 kramo
+# Copyright 2022-2023 badkiko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ class Game(Gtk.Box):
         loading = self.loading > 0
 
         self.cover.set_opacity(int(not loading))
-        self.spinner.set_spinning(loading)
+        self.spinner.set_visible(loading)
 
     def get_cover_path(self) -> Optional[Path]:
         cover_path = shared.covers_dir / f"{self.game_id}.gif"

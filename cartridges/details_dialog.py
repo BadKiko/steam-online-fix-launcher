@@ -1,6 +1,6 @@
 # details_window.py
 #
-# Copyright 2022-2024 kramo
+# Copyright 2022-2024 badkiko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class DetailsDialog(Adw.Dialog):
     cover_button_edit: Gtk.Button = Gtk.Template.Child()
     cover_button_delete_revealer: Gtk.Revealer = Gtk.Template.Child()
     cover_button_delete: Gtk.Button = Gtk.Template.Child()
-    spinner: Gtk.Spinner = Gtk.Template.Child()
+    spinner: Adw.Spinner = Gtk.Template.Child()
 
     name: Adw.EntryRow = Gtk.Template.Child()
     developer: Adw.EntryRow = Gtk.Template.Child()
@@ -89,9 +89,12 @@ class DetailsDialog(Adw.Dialog):
             self.apply_button.set_label(_("Add"))
 
         image_filter = Gtk.FileFilter(name=_("Images"))
-        for extension in Image.registered_extensions():
+
+        # .palm and .pdf are write-only
+        for extension in set(Image.registered_extensions()) - {".palm", ".pdf"}:
             image_filter.add_suffix(extension[1:])
-            image_filter.add_suffix("svg")  # Gdk.Texture supports .svg but PIL doesn't
+
+        image_filter.add_suffix("svg")  # Gdk.Texture supports .svg but PIL doesn't
 
         image_filters = Gio.ListStore.new(Gtk.FileFilter)
         image_filters.append(image_filter)
@@ -285,7 +288,7 @@ class DetailsDialog(Adw.Dialog):
 
     def toggle_loading(self) -> None:
         self.apply_button.set_sensitive(not self.apply_button.get_sensitive())
-        self.spinner.set_spinning(not self.spinner.get_spinning())
+        self.spinner.set_visible(not self.spinner.get_visible())
         self.cover_overlay.set_opacity(not self.cover_overlay.get_opacity())
 
     def set_cover(self, _source: Any, result: Gio.Task, *_args: Any) -> None:

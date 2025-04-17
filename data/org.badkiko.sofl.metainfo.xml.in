@@ -2,7 +2,8 @@
 <component type="desktop-application">
   <id>@APP_ID@</id>
   <replaces>
-    <id>hu.kramo.Cartridges</id>
+    <id>hu.badkiko.Cartridges</id>
+    <id>org.badkiko.sofl</id>
   </replaces>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
@@ -14,26 +15,26 @@
   <url type="homepage">https://github.com/kra-mo/cartridges</url>
   <url type="bugtracker">https://github.com/kra-mo/cartridges/issues</url>
   <url type="translate">https://hosted.weblate.org/engage/cartridges/</url>
-  <url type="contact">https://www.kramo.page/about/</url>
+  <url type="contact">https://www.badkiko.page/about/</url>
   <url type="vcs-browser">https://github.com/kra-mo/cartridges</url>
   <url type="contribute">https://github.com/kra-mo/cartridges/blob/main/CONTRIBUTING.md</url>
-  <developer id="page.kramo">
-    <name translate="no">kramo</name>
+  <developer id="page.badkiko">
+    <name translate="no">badkiko</name>
   </developer>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
   <translation type="gettext">cartridges</translation>
   <branding>
-    <color type="primary" scheme_preference="light">#d5b0e7</color>
-    <color type="primary" scheme_preference="dark">#501a5c</color>
+    <color type="primary" scheme_preference="light">#29cf34</color>
+    <color type="primary" scheme_preference="dark">#374F39</color>
   </branding>
   <supports>
     <control>pointing</control>
     <control>keyboard</control>
     <control>touch</control>
   </supports>
-  <recommends>
+  <requires>
     <display_length compare="ge">360</display_length>
-  </recommends>
+  </requires>
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/kra-mo/cartridges/main/data/screenshots/1.png</image>
@@ -54,11 +55,29 @@
   </screenshots>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="2.9.3" date="2024-07-18">
+    <release version="2.12.1" date="2025-03-23">
+      <description translate="no">
+        <p>Removed an option used for debugging that would accidentally show up for all users.</p>
+      </description>
+    </release>
+    <release version="2.12" date="2025-03-19">
+      <description translate="no">
+        <p>Updated for GNOME 48</p>
+      </description>
+    </release>
+    <release version="2.11" date="2024-12-21">
       <description translate="no">
         <ul>
-          <li>Fixed incorrect modifiers being used for keyboard shortcuts</li>
+          <li>Added the option to import games automatically</li>
+          <li>Increased the number of games per row on wide screens</li>
+          <li>Fixed an issue where animated covers would not play</li>
+          <li>Fixed an issue where the import dialog would stay open</li>
         </ul>
+      </description>
+    </release>
+    <release version="2.10" date="2024-09-18">
+      <description translate="no">
+        <p>Updated for GNOME 47</p>
       </description>
     </release>
     <release version="2.9" date="2024-07-10">
@@ -209,4 +228,4 @@
       </description>
     </release>
   </releases>
-</component>
+</component> 

@@ -21,8 +21,8 @@ Cartridges is a simple game launcher for all of your games. It has support for i
 
   <maintainer>
     <foaf:Person>
-      <foaf:name>kramo</foaf:name>
-      <foaf:mbox rdf:resource="mailto:contact@kramo.page" />
+      <foaf:name>badkiko</foaf:name>
+      <foaf:mbox rdf:resource="mailto:contact@badkiko.page" />
       <foaf:account>
         <foaf:OnlineAccount>
           <foaf:accountServiceHomepage rdf:resource="https://github.com"/>
@@ -32,7 +32,7 @@ Cartridges is a simple game launcher for all of your games. It has support for i
       <foaf:account>
         <foaf:OnlineAccount>
           <foaf:accountServiceHomepage rdf:resource="https://gitlab.gnome.org"/>
-          <foaf:accountName>kramo</foaf:accountName>
+          <foaf:accountName>badkiko</foaf:accountName>
         </foaf:OnlineAccount>
       </foaf:account>
     </foaf:Person>

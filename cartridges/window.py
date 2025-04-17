@@ -1,6 +1,6 @@
 # window.py
 #
-# Copyright 2022-2023 kramo
+# Copyright 2022-2023 badkiko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,12 +22,11 @@
 from sys import platform
 from typing import Any, Optional
 
-from gi.repository import Adw, Gio, GLib, Gtk, Pango
-
 from cartridges import shared
 from cartridges.game import Game
 from cartridges.game_cover import GameCover
 from cartridges.utils.relative_date import relative_date
+from gi.repository import Adw, Gio, GLib, Gtk, Pango
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -60,7 +59,7 @@ class CartridgesWindow(Adw.ApplicationWindow):
     details_page: Adw.NavigationPage = Gtk.Template.Child()
     details_view_toolbar_view: Adw.ToolbarView = Gtk.Template.Child()
     details_view_cover: Gtk.Picture = Gtk.Template.Child()
-    details_view_spinner: Gtk.Spinner = Gtk.Template.Child()
+    details_view_spinner: Adw.Spinner = Gtk.Template.Child()
     details_view_title: Gtk.Label = Gtk.Template.Child()
     details_view_blurred_cover: Gtk.Picture = Gtk.Template.Child()
     details_view_play_button: Gtk.Button = Gtk.Template.Child()
@@ -278,6 +277,9 @@ class CartridgesWindow(Adw.ApplicationWindow):
                 "max-children-per-line",
                 Gio.SettingsBindFlags.DEFAULT,
             )
+        else:
+            self.library.set_max_children_per_line(10)
+            self.hidden_library.set_max_children_per_line(10)
 
     def search_changed(self, _widget: Any, hidden: bool) -> None:
         # Refresh search filter on keystroke in search box
@@ -351,7 +353,7 @@ class CartridgesWindow(Adw.ApplicationWindow):
         self.active_game = game
 
         self.details_view_cover.set_opacity(int(not game.loading))
-        self.details_view_spinner.set_spinning(game.loading)
+        self.details_view_spinner.set_visible(game.loading)
 
         self.details_view_developer.set_label(game.developer or "")
         self.details_view_developer.set_visible(bool(game.developer))
