@@ -57,7 +57,6 @@ from sofl.store.managers.steam_api_manager import SteamAPIManager
 from sofl.store.store import Store
 from sofl.utils.run_executable import run_executable
 from sofl.window import SOFLWindow
-from sofl.install_game_dialog import InstallDialog
 
 if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
