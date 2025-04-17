@@ -1,0 +1,18 @@
+option(
+  'profile',
+  type: 'combo',
+  choices: [
+    'release',
+    'development',
+  ],
+  value: 'release'
+)
+option(
+  'tiff_compression',
+  type: 'combo',
+  choices: [
+    'webp',
+    'jpeg',
+  ],
+  value: 'webp'
+)

@@ -1,0 +1,689 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR kramo
+# This file is distributed under the same license as the Cartridges package.
+# foo expert <deferred_water346@simplelogin.com>, 2023, 2024.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cartridges\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-14 12:48+0200\n"
+"PO-Revision-Date: 2024-06-28 07:09+0000\n"
+"Last-Translator: foo expert <deferred_water346@simplelogin.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/cartridges/"
+"cartridges/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.7-dev\n"
+
+#: data/page.kramo.Cartridges.desktop.in:3
+#: data/page.kramo.Cartridges.metainfo.xml.in:9
+#: data/page.kramo.Cartridges.metainfo.xml.in:40 data/gtk/window.blp:47
+#: data/gtk/window.blp:83
+msgid "Cartridges"
+msgstr "Kazety"
+
+#: data/page.kramo.Cartridges.desktop.in:4
+msgid "Game Launcher"
+msgstr "Spouštěč her"
+
+#: data/page.kramo.Cartridges.desktop.in:5
+#: data/page.kramo.Cartridges.metainfo.xml.in:10
+msgid "Launch all your games"
+msgstr "Spusťte všechny vaše hry"
+
+#: data/page.kramo.Cartridges.desktop.in:11
+msgid ""
+"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+msgstr ""
+"hraní;spouštěč;steam;lutris;heroic;láhve;itch;flatpak;legendary;retroarch;"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:12
+msgid ""
+"Cartridges is a simple game launcher for all of your games. It has support "
+"for importing games from Steam, Lutris, Heroic and more with no login "
+"necessary. You can sort and hide games or download cover art from "
+"SteamGridDB."
+msgstr ""
+"Kazety jsou jednoduchý spouštěč pro všechny vaše hry. Podporuje importovaní "
+"her ze služeb Steam, Lutris, Heroic a dalších bez nutnosti přihlášení. Hry "
+"můžete třídit a skrývat nebo stahovat obálky ze služby SteamGridDB."
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:44 data/gtk/window.blp:318
+#: cartridges/details_dialog.py:68
+msgid "Game Details"
+msgstr "Podrobnosti o hře"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:48
+msgid "Edit Game Details"
+msgstr "Upravit podrobnosti o hře"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
+#: data/gtk/window.blp:542 cartridges/details_dialog.py:267
+#: cartridges/importer/importer.py:320 cartridges/importer/importer.py:370
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: data/gtk/details-dialog.blp:15
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: data/gtk/details-dialog.blp:46
+msgid "New Cover"
+msgstr "Nový obal"
+
+#: data/gtk/details-dialog.blp:65
+msgid "Delete Cover"
+msgstr "Odstranit obal"
+
+#: data/gtk/details-dialog.blp:93 data/gtk/game.blp:81
+msgid "Title"
+msgstr "Název"
+
+#: data/gtk/details-dialog.blp:97
+msgid "Developer (optional)"
+msgstr "Vývojář (nepovinné)"
+
+#: data/gtk/details-dialog.blp:103
+msgid "Executable"
+msgstr "Spustitelný soubor"
+
+#: data/gtk/details-dialog.blp:109
+msgid "Select File"
+msgstr "Vybrat soubor"
+
+#: data/gtk/details-dialog.blp:120
+msgid "More Info"
+msgstr "Více informací"
+
+#: data/gtk/game.blp:102 data/gtk/game.blp:110 data/gtk/window.blp:443
+msgid "Edit"
+msgstr "Upravit"
+
+#: data/gtk/game.blp:103 cartridges/window.py:350
+msgid "Hide"
+msgstr "Skrýt"
+
+#: data/gtk/game.blp:104 data/gtk/game.blp:112 data/gtk/window.blp:463
+msgid "Remove"
+msgstr "Odstranit"
+
+#: data/gtk/game.blp:111 cartridges/window.py:352
+msgid "Unhide"
+msgstr "Odkrýt"
+
+#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
+msgid "General"
+msgstr "Obecné"
+
+#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:205 data/gtk/window.blp:221
+#: data/gtk/window.blp:272 data/gtk/window.blp:288 data/gtk/window.blp:474
+msgid "Search"
+msgstr "Vyhledávání"
+
+#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:543
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové zkratky"
+
+#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
+#: cartridges/preferences.py:134 cartridges/importer/importer.py:394
+msgid "Undo"
+msgstr "Zpět"
+
+#: data/gtk/help-overlay.blp:34
+msgid "Quit"
+msgstr "Ukončit"
+
+#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:185
+msgid "Toggle Sidebar"
+msgstr "Přepnout postranní panel"
+
+#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:198 data/gtk/window.blp:265
+msgid "Main Menu"
+msgstr "Hlavní nabídka"
+
+#: data/gtk/help-overlay.blp:50
+msgid "Games"
+msgstr "Hry"
+
+#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:191 data/gtk/window.blp:550
+msgid "Add Game"
+msgstr "Přidat hru"
+
+#: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:113
+#: data/gtk/window.blp:27 data/gtk/window.blp:554
+msgid "Import"
+msgstr "Import"
+
+#: data/gtk/help-overlay.blp:63
+msgid "Show Hidden Games"
+msgstr "Zobrazit skryté hry"
+
+#: data/gtk/help-overlay.blp:68
+msgid "Remove Game"
+msgstr "Odstranit hru"
+
+#: data/gtk/preferences.blp:13 data/gtk/preferences.blp:117
+#: data/gtk/preferences.blp:415
+msgid "Behavior"
+msgstr "Chování"
+
+#: data/gtk/preferences.blp:16
+msgid "Exit After Launching Games"
+msgstr "Ukončit po spuštění her"
+
+#: data/gtk/preferences.blp:20
+msgid "Cover Image Launches Game"
+msgstr "Obrázek na obálce spouští hru"
+
+#: data/gtk/preferences.blp:21
+msgid "Swaps the behavior of the cover image and the play button"
+msgstr "Vymění chování obrázku na obálce a tlačítka pro přehrávání"
+
+#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:82
+msgid "Images"
+msgstr "Obrázky"
+
+#: data/gtk/preferences.blp:29
+msgid "High Quality Images"
+msgstr "Vysoce kvalitní obrázky"
+
+#: data/gtk/preferences.blp:30
+msgid "Save game covers losslessly at the cost of storage"
+msgstr "Ukládat obaly her bezztrátově na úkor většího místa na disku"
+
+#: data/gtk/preferences.blp:35
+msgid "Danger Zone"
+msgstr "Nebezpečná zóna"
+
+#: data/gtk/preferences.blp:48
+msgid "Remove All Games"
+msgstr "Odstranit všechny hry"
+
+#: data/gtk/preferences.blp:120
+msgid "Remove Uninstalled Games"
+msgstr "Odstranit odinstalované hry"
+
+#: data/gtk/preferences.blp:125
+msgid "Sources"
+msgstr "Zdroje"
+
+#: data/gtk/preferences.blp:128 cartridges/importer/steam_source.py:114
+msgid "Steam"
+msgstr "Steam"
+
+#: data/gtk/preferences.blp:137 data/gtk/preferences.blp:164
+#: data/gtk/preferences.blp:199 data/gtk/preferences.blp:242
+#: data/gtk/preferences.blp:269 data/gtk/preferences.blp:296
+#: data/gtk/preferences.blp:323
+msgid "Install Location"
+msgstr "Umístění instalace"
+
+#: data/gtk/preferences.blp:155 data/gtk/window.blp:564
+#: cartridges/importer/lutris_source.py:96
+msgid "Lutris"
+msgstr "Lutris"
+
+#: data/gtk/preferences.blp:181
+msgid "Import Steam Games"
+msgstr "Importovat Steam hry"
+
+#: data/gtk/preferences.blp:185
+msgid "Import Flatpak Games"
+msgstr "Importovat Flatpak hry"
+
+#: data/gtk/preferences.blp:190 cartridges/importer/heroic_source.py:355
+msgid "Heroic"
+msgstr "Heroic"
+
+#: data/gtk/preferences.blp:216
+msgid "Import Epic Games"
+msgstr "Importovat Epic Games hry"
+
+#: data/gtk/preferences.blp:220
+msgid "Import GOG Games"
+msgstr "Importovat GOG hry"
+
+#: data/gtk/preferences.blp:224
+msgid "Import Amazon Games"
+msgstr "Importovat Amazon hry"
+
+#: data/gtk/preferences.blp:228
+msgid "Import Sideloaded Games"
+msgstr "Importovat ručně načtené hry"
+
+#: data/gtk/preferences.blp:233 cartridges/importer/bottles_source.py:86
+msgid "Bottles"
+msgstr "Láhve"
+
+#: data/gtk/preferences.blp:260 cartridges/importer/itch_source.py:81
+msgid "itch"
+msgstr "itch"
+
+#: data/gtk/preferences.blp:287 cartridges/importer/legendary_source.py:97
+msgid "Legendary"
+msgstr "Legendary"
+
+#: data/gtk/preferences.blp:314 cartridges/importer/retroarch_source.py:142
+msgid "RetroArch"
+msgstr "RetroArch"
+
+#: data/gtk/preferences.blp:341 cartridges/importer/flatpak_source.py:143
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#. The location of the system-wide data directory
+#: data/gtk/preferences.blp:351
+msgid "System Location"
+msgstr "Systémové umístění"
+
+#. The location of the user-specific data directory
+#: data/gtk/preferences.blp:369
+msgid "User Location"
+msgstr "Uživatelské umístění"
+
+#: data/gtk/preferences.blp:386
+msgid "Import Game Launchers"
+msgstr "Importovat spouštěče her"
+
+#: data/gtk/preferences.blp:391 cartridges/importer/desktop_source.py:215
+msgid "Desktop Entries"
+msgstr "Položky na ploše"
+
+#: data/gtk/preferences.blp:403 data/gtk/window.blp:562
+msgid "SteamGridDB"
+msgstr "SteamGridDB"
+
+#: data/gtk/preferences.blp:407
+msgid "Authentication"
+msgstr "Ověření"
+
+#: data/gtk/preferences.blp:410
+msgid "API Key"
+msgstr "Klíč API"
+
+#: data/gtk/preferences.blp:418
+msgid "Use SteamGridDB"
+msgstr "Používat SteamGridDB"
+
+#: data/gtk/preferences.blp:419
+msgid "Download images when adding or importing games"
+msgstr "Stahovat obrázky při přidávání nebo importování her"
+
+#: data/gtk/preferences.blp:423
+msgid "Prefer Over Official Images"
+msgstr "Upřednostnit před oficiálními obrázky"
+
+#: data/gtk/preferences.blp:427
+msgid "Prefer Animated Images"
+msgstr "Upřednostnit animované obrázky"
+
+#: data/gtk/preferences.blp:433
+msgid "Update Covers"
+msgstr "Aktualizovat obálky"
+
+#: data/gtk/preferences.blp:434
+msgid "Fetch covers for games already in your library"
+msgstr "Najít obálky pro hry ve vaší knihovně"
+
+#: data/gtk/preferences.blp:439
+msgid "Update"
+msgstr "Aktualizovat"
+
+#: data/gtk/window.blp:6 data/gtk/window.blp:14
+msgid "No Games Found"
+msgstr "Nebyly nalezeny žádné hry"
+
+#: data/gtk/window.blp:7 data/gtk/window.blp:15
+msgid "Try a different search"
+msgstr "Zkuste hledat něco jiného"
+
+#: data/gtk/window.blp:21
+msgid "No Games"
+msgstr "Žádné hry"
+
+#: data/gtk/window.blp:22
+msgid "Use the + button to add games"
+msgstr "Tlačítkem + můžete přidávat hry"
+
+#: data/gtk/window.blp:40
+msgid "No Hidden Games"
+msgstr "Žádné skryté hry"
+
+#: data/gtk/window.blp:41
+msgid "Games you hide will appear here"
+msgstr "Hry, které skryjete, se zobrazí zde"
+
+#: data/gtk/window.blp:76 data/gtk/window.blp:111 cartridges/main.py:228
+msgid "All Games"
+msgstr "Všechny hry"
+
+#: data/gtk/window.blp:136 cartridges/main.py:230
+msgid "Added"
+msgstr "Přidané"
+
+#: data/gtk/window.blp:156
+msgid "Imported"
+msgstr "Importované"
+
+#: data/gtk/window.blp:258
+msgid "Hidden Games"
+msgstr "Skryté hry"
+
+#: data/gtk/window.blp:367
+msgid "Game Title"
+msgstr "Název hry"
+
+#: data/gtk/window.blp:424
+msgid "Play"
+msgstr "Hrát"
+
+#: data/gtk/window.blp:501
+msgid "Sort"
+msgstr "Třídit"
+
+#: data/gtk/window.blp:504
+msgid "A-Z"
+msgstr "A-Ž"
+
+#: data/gtk/window.blp:510
+msgid "Z-A"
+msgstr "Ž-A"
+
+#: data/gtk/window.blp:516
+msgid "Newest"
+msgstr "Nejnovější"
+
+#: data/gtk/window.blp:522
+msgid "Oldest"
+msgstr "Nejstarší"
+
+#: data/gtk/window.blp:528
+msgid "Last Played"
+msgstr "Naposledy hráno"
+
+#: data/gtk/window.blp:535
+msgid "Show Hidden"
+msgstr "Zobrazit Skryté"
+
+#: data/gtk/window.blp:544
+msgid "About Cartridges"
+msgstr "O Kazetách"
+
+#: data/gtk/window.blp:561
+msgid "IGDB"
+msgstr "IGDB"
+
+#: data/gtk/window.blp:563
+msgid "ProtonDB"
+msgstr "ProtonDB"
+
+#: data/gtk/window.blp:565
+msgid "HowLongToBeat"
+msgstr "HowLongToBeat"
+
+#. The variable is the title of the game
+#: cartridges/main.py:205 cartridges/game.py:125
+msgid "{} launched"
+msgstr "{} spuštěno"
+
+#. Translators: Replace this with your name for it to show up in the about window
+#: cartridges/main.py:270
+msgid "translator_credits"
+msgstr "ooo.i.love.foo"
+
+#. The variable is the date when the game was added
+#: cartridges/window.py:373
+msgid "Added: {}"
+msgstr "Přidáno: {}"
+
+#: cartridges/window.py:376
+msgid "Never"
+msgstr "Nikdy"
+
+#. The variable is the date when the game was last played
+#: cartridges/window.py:380
+msgid "Last played: {}"
+msgstr "Naposledy hráno: {}"
+
+#: cartridges/details_dialog.py:73
+msgid "Apply"
+msgstr "Použít"
+
+#: cartridges/details_dialog.py:79
+msgid "Add New Game"
+msgstr "Přidat novou hru"
+
+#: cartridges/details_dialog.py:80
+msgid "Add"
+msgstr "Přidat"
+
+#: cartridges/details_dialog.py:90
+msgid "Executables"
+msgstr "Spustitelné soubory"
+
+#. Translate this string as you would translate "file"
+#: cartridges/details_dialog.py:105
+msgid "file.txt"
+msgstr "soubor.txt"
+
+#. As in software
+#: cartridges/details_dialog.py:107
+msgid "program"
+msgstr "program"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:112 cartridges/details_dialog.py:114
+msgid "C:\\path\\to\\{}"
+msgstr "C:\\cesta\\k\\{}"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:118 cartridges/details_dialog.py:120
+msgid "/path/to/{}"
+msgstr "/cesta/k/{}"
+
+#: cartridges/details_dialog.py:125
+msgid ""
+"To launch the executable \"{}\", use the command:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"To open the file \"{}\" with the default application, use:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"If the path contains spaces, make sure to wrap it in double quotes!"
+msgstr ""
+"Chcete-li spustit spustitelný soubor \"{}\", použijte příkaz:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"Chcete-li otevřít soubor \"{}\" pomocí výchozí aplikace, použijte příkaz:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"Pokud cesta obsahuje mezery, nezapomeňte ji zabalit do dvojitých uvozovek!"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:173
+msgid "Couldn't Add Game"
+msgstr "Nelze přidat hru"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:209
+msgid "Game title cannot be empty."
+msgstr "Název hry nemůže být prázdný."
+
+#: cartridges/details_dialog.py:173 cartridges/details_dialog.py:217
+msgid "Executable cannot be empty."
+msgstr "Spustitelný soubor nemůže být prázdný."
+
+#: cartridges/details_dialog.py:208 cartridges/details_dialog.py:216
+msgid "Couldn't Apply Preferences"
+msgstr "Nelze použít předvolby"
+
+#. The variable is the title of the game
+#: cartridges/game.py:139
+msgid "{} hidden"
+msgstr "{} skryto"
+
+#: cartridges/game.py:139
+msgid "{} unhidden"
+msgstr "{} odkryto"
+
+#. The variable is the title of the game
+#. The variable is the number of games removed
+#: cartridges/game.py:153 cartridges/importer/importer.py:391
+msgid "{} removed"
+msgstr "{} odstraněno"
+
+#: cartridges/preferences.py:133
+msgid "All games removed"
+msgstr "Všechny hry odstraněny"
+
+#: cartridges/preferences.py:181
+msgid ""
+"An API key is required to use SteamGridDB. You can generate one {}here{}."
+msgstr ""
+"K používání služby SteamGridDB je vyžadován klíč API. Můžete si ho "
+"vygenerovat {}zde{}."
+
+#: cartridges/preferences.py:196
+msgid "Downloading covers…"
+msgstr "Stahování obálek…"
+
+#: cartridges/preferences.py:215
+msgid "Covers updated"
+msgstr "Obálky aktualizovány"
+
+#: cartridges/preferences.py:360
+msgid "Installation Not Found"
+msgstr "Instalace nebyla nalezena"
+
+#: cartridges/preferences.py:361
+msgid "Select a valid directory"
+msgstr "Vyberte platný adresář"
+
+#: cartridges/preferences.py:397 cartridges/importer/importer.py:318
+msgid "Warning"
+msgstr "Pozor"
+
+#: cartridges/preferences.py:431
+msgid "Invalid Directory"
+msgstr "Neplatný adresář"
+
+#: cartridges/preferences.py:437
+msgid "Set Location"
+msgstr "Nastavit umístění"
+
+#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:319
+msgid "Dismiss"
+msgstr "Zahodit"
+
+#: cartridges/importer/importer.py:145
+msgid "Importing Games…"
+msgstr "Přidávání her…"
+
+#: cartridges/importer/importer.py:338
+msgid "The following errors occured during import:"
+msgstr "Tyto chyby se vyskytly při importu:"
+
+#: cartridges/importer/importer.py:367
+msgid "No new games found"
+msgstr "Nebyly nalezeny žádné nové hry"
+
+#: cartridges/importer/importer.py:379
+msgid "1 game imported"
+msgstr "Přidána 1 hra"
+
+#. The variable is the number of games
+#: cartridges/importer/importer.py:383
+msgid "{} games imported"
+msgstr "Přidány {} hry"
+
+#. A single game removed
+#: cartridges/importer/importer.py:387
+msgid "1 removed"
+msgstr "1 odstraněna"
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:34
+msgid "Select the {} cache directory."
+msgstr "Vyberte adresář {} mezipaměti."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:36
+msgid "Select the {} configuration directory."
+msgstr "Vyberte konfigurační adresář {}."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:38
+msgid "Select the {} data directory."
+msgstr "Vyberte datový adresář {}."
+
+#: cartridges/importer/retroarch_source.py:129
+msgid "No RetroArch Core Selected"
+msgstr "Žádné RetroArch jádro nevybráno"
+
+#. The variable is a newline separated list of playlists
+#: cartridges/importer/retroarch_source.py:131
+msgid "The following playlists have no default core:"
+msgstr "Tyto seznamy her nemají výchozí jádra:"
+
+#: cartridges/importer/retroarch_source.py:133
+msgid "Games with no core selected were not imported"
+msgstr "Hry bez vybraného jádra nebyly přidány"
+
+#: cartridges/store/managers/sgdb_manager.py:46
+msgid "Couldn't Authenticate SteamGridDB"
+msgstr "Nelze ověřit SteamGridDB"
+
+#: cartridges/store/managers/sgdb_manager.py:47
+msgid "Verify your API key in preferences"
+msgstr "Ověřte váš klíč API v předvolbách"
+
+#~ msgid "Cache Location"
+#~ msgstr "Umístění dočasných souborů"
+
+#~ msgid "Library"
+#~ msgstr "Knihovna"
+
+#~ msgid "Show preferences"
+#~ msgstr "Zobrazit předvolby"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Zkratky"
+
+#~ msgid "Open menu"
+#~ msgstr "Otevřít nabídku"
+
+#~ msgid "Add new game"
+#~ msgstr "Přidat novou hru"
+
+#~ msgid "Import games"
+#~ msgstr "Importovat hry"
+
+#~ msgid "Back"
+#~ msgstr "Zpět"
+
+#, fuzzy
+#~| msgid "Search"
+#~ msgid "Search games"
+#~ msgstr "Vyhledávání"
+
+#, fuzzy
+#~| msgid "Show hidden games"
+#~ msgid "Search hidden games"
+#~ msgstr "Zobrazit skryté hry"
+
+#~ msgid "The title of the game"
+#~ msgstr "Název hry"
+
+#~ msgid "Developer"
+#~ msgstr "Vývojář"
+
+#~ msgid "File to open or command to run when launching the game"
+#~ msgstr "Soubor nebo příkaz pro spuštění hry"
+
+#~ msgid "Confirm"
+#~ msgstr "Potvrdit"

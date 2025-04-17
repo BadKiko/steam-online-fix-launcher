@@ -1,0 +1,720 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR kramo
+# This file is distributed under the same license as the Cartridges package.
+# Sabri Ünal <libreajans@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cartridges\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-14 12:48+0200\n"
+"PO-Revision-Date: 2023-12-16 23:25+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/cartridges/"
+"cartridges/tr/>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3\n"
+
+#: data/page.kramo.Cartridges.desktop.in:3
+#: data/page.kramo.Cartridges.metainfo.xml.in:9
+#: data/page.kramo.Cartridges.metainfo.xml.in:40 data/gtk/window.blp:47
+#: data/gtk/window.blp:83
+msgid "Cartridges"
+msgstr "Kartuşlar"
+
+#: data/page.kramo.Cartridges.desktop.in:4
+msgid "Game Launcher"
+msgstr "Oyun Başlatıcı"
+
+#: data/page.kramo.Cartridges.desktop.in:5
+#: data/page.kramo.Cartridges.metainfo.xml.in:10
+msgid "Launch all your games"
+msgstr "Tüm oyunlarınızı başlatın"
+
+#: data/page.kramo.Cartridges.desktop.in:11
+msgid ""
+"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+msgstr ""
+"gaming;oyun;launcher;başlatıcı;steam;lutris;heroic;bottles;itch;flatpak;"
+"legendary;retroarch;"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:12
+msgid ""
+"Cartridges is a simple game launcher for all of your games. It has support "
+"for importing games from Steam, Lutris, Heroic and more with no login "
+"necessary. You can sort and hide games or download cover art from "
+"SteamGridDB."
+msgstr ""
+"Kartuşlar, tüm oyunlarınız için basit bir oyun başlatıcıdır. Oturum açmaya "
+"gerek kalmadan Steam, Lutris, Heroic ve daha fazla sağlayıcıdan oyun içe "
+"aktarma desteğine sahiptir. Oyunları sıralayabilir, gizleyebilir veya "
+"SteamGridDB'den kapak resmi indirebilirsiniz."
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:44 data/gtk/window.blp:318
+#: cartridges/details_dialog.py:68
+msgid "Game Details"
+msgstr "Oyun Ayrıntıları"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:48
+msgid "Edit Game Details"
+msgstr "Oyun Ayrıntılarını Düzenle"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
+#: data/gtk/window.blp:542 cartridges/details_dialog.py:267
+#: cartridges/importer/importer.py:320 cartridges/importer/importer.py:370
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: data/gtk/details-dialog.blp:15
+msgid "Cancel"
+msgstr "İptal"
+
+#: data/gtk/details-dialog.blp:46
+msgid "New Cover"
+msgstr "Yeni Kapak"
+
+#: data/gtk/details-dialog.blp:65
+msgid "Delete Cover"
+msgstr "Kapağı Sil"
+
+#: data/gtk/details-dialog.blp:93 data/gtk/game.blp:81
+msgid "Title"
+msgstr "Başlık"
+
+#: data/gtk/details-dialog.blp:97
+msgid "Developer (optional)"
+msgstr "Geliştirici (isteğe bağlı)"
+
+#: data/gtk/details-dialog.blp:103
+msgid "Executable"
+msgstr "Yürütülebilir"
+
+#: data/gtk/details-dialog.blp:109
+msgid "Select File"
+msgstr "Dosya Seç"
+
+#: data/gtk/details-dialog.blp:120
+msgid "More Info"
+msgstr "Daha Fazla Bilgi"
+
+#: data/gtk/game.blp:102 data/gtk/game.blp:110 data/gtk/window.blp:443
+msgid "Edit"
+msgstr "Düzenle"
+
+#: data/gtk/game.blp:103 cartridges/window.py:350
+msgid "Hide"
+msgstr "Gizle"
+
+#: data/gtk/game.blp:104 data/gtk/game.blp:112 data/gtk/window.blp:463
+msgid "Remove"
+msgstr "Kaldır"
+
+#: data/gtk/game.blp:111 cartridges/window.py:352
+msgid "Unhide"
+msgstr "Göster"
+
+#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
+msgid "General"
+msgstr "Genel"
+
+#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:205 data/gtk/window.blp:221
+#: data/gtk/window.blp:272 data/gtk/window.blp:288 data/gtk/window.blp:474
+msgid "Search"
+msgstr "Ara"
+
+#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:543
+msgid "Keyboard Shortcuts"
+msgstr "Klavye Kısayolları"
+
+#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
+#: cartridges/preferences.py:134 cartridges/importer/importer.py:394
+msgid "Undo"
+msgstr "Geri Al"
+
+#: data/gtk/help-overlay.blp:34
+msgid "Quit"
+msgstr "Çık"
+
+#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:185
+msgid "Toggle Sidebar"
+msgstr "Kenar Çubuğunu Aç/Kapat"
+
+#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:198 data/gtk/window.blp:265
+msgid "Main Menu"
+msgstr "Ana Menü"
+
+#: data/gtk/help-overlay.blp:50
+msgid "Games"
+msgstr "Oyunlar"
+
+#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:191 data/gtk/window.blp:550
+msgid "Add Game"
+msgstr "Oyun Ekle"
+
+#: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:113
+#: data/gtk/window.blp:27 data/gtk/window.blp:554
+msgid "Import"
+msgstr "İçe Aktar"
+
+#: data/gtk/help-overlay.blp:63
+msgid "Show Hidden Games"
+msgstr "Gizli Oyunları Göster"
+
+#: data/gtk/help-overlay.blp:68
+msgid "Remove Game"
+msgstr "Oyunu Kaldır"
+
+#: data/gtk/preferences.blp:13 data/gtk/preferences.blp:117
+#: data/gtk/preferences.blp:415
+msgid "Behavior"
+msgstr "Davranış"
+
+#: data/gtk/preferences.blp:16
+msgid "Exit After Launching Games"
+msgstr "Oyunları Başlattıktan Sonra Çık"
+
+#: data/gtk/preferences.blp:20
+msgid "Cover Image Launches Game"
+msgstr "Kapak Görüntüsü Oyunu Başlatır"
+
+#: data/gtk/preferences.blp:21
+msgid "Swaps the behavior of the cover image and the play button"
+msgstr "Kapak görüntüsünün ve oyna düğmesinin davranışını değiştirir"
+
+#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:82
+msgid "Images"
+msgstr "Görüntüler"
+
+#: data/gtk/preferences.blp:29
+msgid "High Quality Images"
+msgstr "Yüksek Kaliteli Görüntüler"
+
+#: data/gtk/preferences.blp:30
+msgid "Save game covers losslessly at the cost of storage"
+msgstr ""
+"Oyun kapaklarını, daha çok depolama alanı gerektirmesine rağmen, kayıpsız "
+"kaydet"
+
+#: data/gtk/preferences.blp:35
+msgid "Danger Zone"
+msgstr "Tehlikeli Bölge"
+
+#: data/gtk/preferences.blp:48
+msgid "Remove All Games"
+msgstr "Tüm Oyunları Kaldır"
+
+#: data/gtk/preferences.blp:120
+msgid "Remove Uninstalled Games"
+msgstr "Kaldırılmış Oyunları Sil"
+
+#: data/gtk/preferences.blp:125
+msgid "Sources"
+msgstr "Kaynaklar"
+
+#: data/gtk/preferences.blp:128 cartridges/importer/steam_source.py:114
+msgid "Steam"
+msgstr "Steam"
+
+#: data/gtk/preferences.blp:137 data/gtk/preferences.blp:164
+#: data/gtk/preferences.blp:199 data/gtk/preferences.blp:242
+#: data/gtk/preferences.blp:269 data/gtk/preferences.blp:296
+#: data/gtk/preferences.blp:323
+msgid "Install Location"
+msgstr "Kurulu Konumu"
+
+#: data/gtk/preferences.blp:155 data/gtk/window.blp:564
+#: cartridges/importer/lutris_source.py:96
+msgid "Lutris"
+msgstr "Lutris"
+
+#: data/gtk/preferences.blp:181
+msgid "Import Steam Games"
+msgstr "Steam Oyunlarını İçe Aktar"
+
+#: data/gtk/preferences.blp:185
+msgid "Import Flatpak Games"
+msgstr "Flatpak Oyunlarını İçe Aktarın"
+
+#: data/gtk/preferences.blp:190 cartridges/importer/heroic_source.py:355
+msgid "Heroic"
+msgstr "Heroic"
+
+#: data/gtk/preferences.blp:216
+msgid "Import Epic Games"
+msgstr "Epic Oyunlarını İçe Aktar"
+
+#: data/gtk/preferences.blp:220
+msgid "Import GOG Games"
+msgstr "GOG Oyunlarını İçe Aktar"
+
+#: data/gtk/preferences.blp:224
+msgid "Import Amazon Games"
+msgstr "Amazon Oyunlarını İçe Aktar"
+
+#: data/gtk/preferences.blp:228
+msgid "Import Sideloaded Games"
+msgstr "Yandan Yüklenmiş Oyunları İçe Aktar"
+
+#: data/gtk/preferences.blp:233 cartridges/importer/bottles_source.py:86
+msgid "Bottles"
+msgstr "Şişeler"
+
+#: data/gtk/preferences.blp:260 cartridges/importer/itch_source.py:81
+msgid "itch"
+msgstr "itch"
+
+#: data/gtk/preferences.blp:287 cartridges/importer/legendary_source.py:97
+msgid "Legendary"
+msgstr "Legendary"
+
+#: data/gtk/preferences.blp:314 cartridges/importer/retroarch_source.py:142
+msgid "RetroArch"
+msgstr "RetroArch"
+
+#: data/gtk/preferences.blp:341 cartridges/importer/flatpak_source.py:143
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#. The location of the system-wide data directory
+#: data/gtk/preferences.blp:351
+msgid "System Location"
+msgstr "Sistem Konumu"
+
+#. The location of the user-specific data directory
+#: data/gtk/preferences.blp:369
+msgid "User Location"
+msgstr "Kullanıcı Konumu"
+
+#: data/gtk/preferences.blp:386
+msgid "Import Game Launchers"
+msgstr "Oyun Başlatıcıları İçe Aktar"
+
+#: data/gtk/preferences.blp:391 cartridges/importer/desktop_source.py:215
+msgid "Desktop Entries"
+msgstr "Masaüstü Girdileri"
+
+#: data/gtk/preferences.blp:403 data/gtk/window.blp:562
+msgid "SteamGridDB"
+msgstr "SteamGridDB"
+
+#: data/gtk/preferences.blp:407
+msgid "Authentication"
+msgstr "Kimlik Doğrulaması"
+
+#: data/gtk/preferences.blp:410
+msgid "API Key"
+msgstr "API anahtarı"
+
+#: data/gtk/preferences.blp:418
+msgid "Use SteamGridDB"
+msgstr "SteamGridDB Kullan"
+
+#: data/gtk/preferences.blp:419
+msgid "Download images when adding or importing games"
+msgstr "Oyun eklerken veya içe aktarırken görüntüleri indir"
+
+#: data/gtk/preferences.blp:423
+msgid "Prefer Over Official Images"
+msgstr "Resmî Görsellere Yeğle"
+
+#: data/gtk/preferences.blp:427
+msgid "Prefer Animated Images"
+msgstr "Hareketli Görselleri Yeğle"
+
+#: data/gtk/preferences.blp:433
+msgid "Update Covers"
+msgstr "Kapakları Güncelle"
+
+#: data/gtk/preferences.blp:434
+msgid "Fetch covers for games already in your library"
+msgstr "Zaten kitaplığınızda bulunan oyunların kapaklarını getir"
+
+#: data/gtk/preferences.blp:439
+msgid "Update"
+msgstr "Güncelle"
+
+#: data/gtk/window.blp:6 data/gtk/window.blp:14
+msgid "No Games Found"
+msgstr "Hiçbir Oyun Bulunamadı"
+
+#: data/gtk/window.blp:7 data/gtk/window.blp:15
+msgid "Try a different search"
+msgstr "Başka arama dene"
+
+#: data/gtk/window.blp:21
+msgid "No Games"
+msgstr "Oyun Yok"
+
+#: data/gtk/window.blp:22
+msgid "Use the + button to add games"
+msgstr "Oyun eklemek için + düğmesini kullanın"
+
+#: data/gtk/window.blp:40
+msgid "No Hidden Games"
+msgstr "Gizli Oyun Yok"
+
+#: data/gtk/window.blp:41
+msgid "Games you hide will appear here"
+msgstr "Gizlediğiniz oyunlar burada belirecek"
+
+#: data/gtk/window.blp:76 data/gtk/window.blp:111 cartridges/main.py:228
+msgid "All Games"
+msgstr "Tüm Oyunlar"
+
+#: data/gtk/window.blp:136 cartridges/main.py:230
+msgid "Added"
+msgstr "Eklendi"
+
+#: data/gtk/window.blp:156
+msgid "Imported"
+msgstr "İçe aktarıldı"
+
+#: data/gtk/window.blp:258
+msgid "Hidden Games"
+msgstr "Gizli Oyunlar"
+
+#: data/gtk/window.blp:367
+msgid "Game Title"
+msgstr "Oyun Başlığı"
+
+#: data/gtk/window.blp:424
+msgid "Play"
+msgstr "Oyna"
+
+#: data/gtk/window.blp:501
+msgid "Sort"
+msgstr "Sırala"
+
+#: data/gtk/window.blp:504
+msgid "A-Z"
+msgstr "A-Z"
+
+#: data/gtk/window.blp:510
+msgid "Z-A"
+msgstr "Z-A"
+
+#: data/gtk/window.blp:516
+msgid "Newest"
+msgstr "En Yeni"
+
+#: data/gtk/window.blp:522
+msgid "Oldest"
+msgstr "En Eski"
+
+#: data/gtk/window.blp:528
+msgid "Last Played"
+msgstr "Son Oynanan"
+
+#: data/gtk/window.blp:535
+msgid "Show Hidden"
+msgstr "Gizlileri Göster"
+
+#: data/gtk/window.blp:544
+msgid "About Cartridges"
+msgstr "Kartuşlar Hakkında"
+
+#: data/gtk/window.blp:561
+msgid "IGDB"
+msgstr "IGDB"
+
+#: data/gtk/window.blp:563
+msgid "ProtonDB"
+msgstr "ProtonDB"
+
+#: data/gtk/window.blp:565
+msgid "HowLongToBeat"
+msgstr "HowLongToBeat"
+
+#. The variable is the title of the game
+#: cartridges/main.py:205 cartridges/game.py:125
+msgid "{} launched"
+msgstr "{} başlatıldı"
+
+#. Translators: Replace this with your name for it to show up in the about window
+#: cartridges/main.py:270
+msgid "translator_credits"
+msgstr "Sabri Ünal <libreajans@gmail.com>"
+
+#. The variable is the date when the game was added
+#: cartridges/window.py:373
+msgid "Added: {}"
+msgstr "Eklendi: {}"
+
+#: cartridges/window.py:376
+msgid "Never"
+msgstr "Asla"
+
+#. The variable is the date when the game was last played
+#: cartridges/window.py:380
+msgid "Last played: {}"
+msgstr "Son oynanma: {}"
+
+#: cartridges/details_dialog.py:73
+msgid "Apply"
+msgstr "Uygula"
+
+#: cartridges/details_dialog.py:79
+msgid "Add New Game"
+msgstr "Yeni Oyun Ekle"
+
+#: cartridges/details_dialog.py:80
+msgid "Add"
+msgstr "Ekle"
+
+#: cartridges/details_dialog.py:90
+msgid "Executables"
+msgstr "Yürütülebilirler"
+
+#. Translate this string as you would translate "file"
+#: cartridges/details_dialog.py:105
+msgid "file.txt"
+msgstr "dosya.txt"
+
+#. As in software
+#: cartridges/details_dialog.py:107
+msgid "program"
+msgstr "program"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:112 cartridges/details_dialog.py:114
+msgid "C:\\path\\to\\{}"
+msgstr "C:\\yol\\klasör\\{}"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:118 cartridges/details_dialog.py:120
+msgid "/path/to/{}"
+msgstr "/yol/klasör/{}"
+
+#: cartridges/details_dialog.py:125
+msgid ""
+"To launch the executable \"{}\", use the command:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"To open the file \"{}\" with the default application, use:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"If the path contains spaces, make sure to wrap it in double quotes!"
+msgstr ""
+"\"{}\" yürütülebilirini başlatmak için şu komutu kullanın:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"\"{}\" dosyasını öntanımlı uygulamayla açmak için şunu kullanın:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"Yol boşluk içeriyorsa, çift tırnak içine aldığınızdan emin olun!"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:173
+msgid "Couldn't Add Game"
+msgstr "Oyun Eklenemedi"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:209
+msgid "Game title cannot be empty."
+msgstr "Oyun başlığı boş olamaz."
+
+#: cartridges/details_dialog.py:173 cartridges/details_dialog.py:217
+msgid "Executable cannot be empty."
+msgstr "Çalıştırılabilir boş olamaz."
+
+#: cartridges/details_dialog.py:208 cartridges/details_dialog.py:216
+msgid "Couldn't Apply Preferences"
+msgstr "Tercihler Uygulanamadı"
+
+#. The variable is the title of the game
+#: cartridges/game.py:139
+msgid "{} hidden"
+msgstr "{} gizli"
+
+#: cartridges/game.py:139
+msgid "{} unhidden"
+msgstr "{} görünür"
+
+#. The variable is the title of the game
+#. The variable is the number of games removed
+#: cartridges/game.py:153 cartridges/importer/importer.py:391
+msgid "{} removed"
+msgstr "{} kaldırıldı"
+
+#: cartridges/preferences.py:133
+msgid "All games removed"
+msgstr "Tüm oyunlar kaldırıldı"
+
+#: cartridges/preferences.py:181
+msgid ""
+"An API key is required to use SteamGridDB. You can generate one {}here{}."
+msgstr ""
+"SteamGridDBʼyi kullanmak için API anahtarı gereklidir. {}Buradan{} bir tane "
+"oluşturabilirsiniz."
+
+#: cartridges/preferences.py:196
+msgid "Downloading covers…"
+msgstr "Kapaklar indiriliyor…"
+
+#: cartridges/preferences.py:215
+msgid "Covers updated"
+msgstr "Kapaklar güncellendi"
+
+#: cartridges/preferences.py:360
+msgid "Installation Not Found"
+msgstr "Kurulum Bulunamadı"
+
+#: cartridges/preferences.py:361
+msgid "Select a valid directory"
+msgstr "Geçerli bir dizin seçin"
+
+#: cartridges/preferences.py:397 cartridges/importer/importer.py:318
+msgid "Warning"
+msgstr "Uyarı"
+
+#: cartridges/preferences.py:431
+msgid "Invalid Directory"
+msgstr "Geçersiz Dizin"
+
+#: cartridges/preferences.py:437
+msgid "Set Location"
+msgstr "Konum Ayarla"
+
+#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:319
+msgid "Dismiss"
+msgstr "Vazgeç"
+
+#: cartridges/importer/importer.py:145
+msgid "Importing Games…"
+msgstr "Oyunlar İçe Aktarılıyor…"
+
+#: cartridges/importer/importer.py:338
+msgid "The following errors occured during import:"
+msgstr "İçe aktarılırken şu hatalar oluştu:"
+
+#: cartridges/importer/importer.py:367
+msgid "No new games found"
+msgstr "Yeni oyun bulunamadı"
+
+#: cartridges/importer/importer.py:379
+msgid "1 game imported"
+msgstr "1 oyun içe aktarıldı"
+
+#. The variable is the number of games
+#: cartridges/importer/importer.py:383
+msgid "{} games imported"
+msgstr "{} oyun içe aktarıldı"
+
+#. A single game removed
+#: cartridges/importer/importer.py:387
+msgid "1 removed"
+msgstr "1 kaldırıldı"
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:34
+msgid "Select the {} cache directory."
+msgstr "{} önbellek dizinini seç."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:36
+msgid "Select the {} configuration directory."
+msgstr "{} yapılandırma dizinini seç."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:38
+msgid "Select the {} data directory."
+msgstr "{} veri dizinini seç."
+
+#: cartridges/importer/retroarch_source.py:129
+msgid "No RetroArch Core Selected"
+msgstr "RetroArch Çekirdeği Seçilmedi"
+
+#. The variable is a newline separated list of playlists
+#: cartridges/importer/retroarch_source.py:131
+msgid "The following playlists have no default core:"
+msgstr "Aşağıdaki oynatma listelerinin öntanımlı çekirdeği yok:"
+
+#: cartridges/importer/retroarch_source.py:133
+msgid "Games with no core selected were not imported"
+msgstr "Çekirdek seçilmeyen oyunlar içe aktarılmadı"
+
+#: cartridges/store/managers/sgdb_manager.py:46
+msgid "Couldn't Authenticate SteamGridDB"
+msgstr "SteamGridDB Kimlik Doğrulaması Yapılamadı"
+
+#: cartridges/store/managers/sgdb_manager.py:47
+msgid "Verify your API key in preferences"
+msgstr "Tercihlerde API anahtarınızı doğrulayın"
+
+#~ msgid "Cache Location"
+#~ msgstr "Önbellek Konumu"
+
+#~ msgid "Library"
+#~ msgstr "Kütüphane"
+
+#~ msgid "Show preferences"
+#~ msgstr "Tercihleri Göster"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Kısayollar"
+
+#~ msgid "Open menu"
+#~ msgstr "Menüyü Aç"
+
+#~ msgid "Add new game"
+#~ msgstr "Yeni Oyun Ekle"
+
+#~ msgid "Import games"
+#~ msgstr "Oyunları İçe Aktar"
+
+#~ msgid "Back"
+#~ msgstr "Geri"
+
+#~ msgid "Search games"
+#~ msgstr "Oyun ara"
+
+#~ msgid "Search hidden games"
+#~ msgstr "Gizli oyunları ara"
+
+#~ msgid "The title of the game"
+#~ msgstr "Oyunun başlığı"
+
+#~ msgid "Developer"
+#~ msgstr "Geliştirici"
+
+#~ msgid "File to open or command to run when launching the game"
+#~ msgstr "Oyun başlatılırken açılacak dosya veya çalıştırılacak komut"
+
+#~ msgid "Confirm"
+#~ msgstr "Doğrula"
+
+#, fuzzy
+#~| msgid "Cache Not Found"
+#~ msgid "Directory not Valid"
+#~ msgstr "Önbellek Bulunamadı"
+
+#, fuzzy
+#~| msgid "Confirm"
+#~ msgid "Configuration"
+#~ msgstr "Doğrula"
+
+#~ msgid "Steam Install Location"
+#~ msgstr "Steam Kurulu Konumu"
+
+#~ msgid "Lutris Install Location"
+#~ msgstr "Lutris Kurulu Konumu"
+
+#~ msgid "Heroic Install Location"
+#~ msgstr "Heroic Kurulu Konumu"
+
+#~ msgid "Bottles Install Location"
+#~ msgstr "Şişeler Kurulu Konumu"
+
+#~ msgid "Today"
+#~ msgstr "Bugün"
+
+#~ msgid "Yesterday"
+#~ msgstr "Dün"
+
+#~ msgid "Select the Lutris cache directory."
+#~ msgstr "Lutris önbellek dizinini seç."

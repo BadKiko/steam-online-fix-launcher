@@ -1,0 +1,886 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the cartridges package.
+# kramo <contact@kramo.hu>, 2023.
+# Allan Nordhøy <epost@anotheragency.no>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: cartridges\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-14 12:48+0200\n"
+"PO-Revision-Date: 2023-04-06 08:09+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"cartridges/cartridges/nb_NO/>\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17-dev\n"
+
+#: data/page.kramo.Cartridges.desktop.in:3
+#: data/page.kramo.Cartridges.metainfo.xml.in:9
+#: data/page.kramo.Cartridges.metainfo.xml.in:40 data/gtk/window.blp:47
+#: data/gtk/window.blp:83
+msgid "Cartridges"
+msgstr "Cartridges"
+
+#: data/page.kramo.Cartridges.desktop.in:4
+msgid "Game Launcher"
+msgstr "Spillutvalgstarter"
+
+#: data/page.kramo.Cartridges.desktop.in:5
+#: data/page.kramo.Cartridges.metainfo.xml.in:10
+msgid "Launch all your games"
+msgstr "Start alle spillene dine"
+
+#: data/page.kramo.Cartridges.desktop.in:11
+msgid ""
+"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+msgstr ""
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:12
+msgid ""
+"Cartridges is a simple game launcher for all of your games. It has support "
+"for importing games from Steam, Lutris, Heroic and more with no login "
+"necessary. You can sort and hide games or download cover art from "
+"SteamGridDB."
+msgstr ""
+"Cartridges er en enkel spillutvalgsoppstarter for alle spillene dine. Den "
+"har støtte for importering av spill fra Steam, Lutris, Heroic, og flere uten "
+"innlogging. Du kan sortere og skjule spil eller laste ned omslagsbilder fra "
+"SteamGridDB."
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:44 data/gtk/window.blp:318
+#: cartridges/details_dialog.py:68
+msgid "Game Details"
+msgstr "Spilldetaljer"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:48
+msgid "Edit Game Details"
+msgstr "Rediger spilldetaljer"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
+#: data/gtk/window.blp:542 cartridges/details_dialog.py:267
+#: cartridges/importer/importer.py:320 cartridges/importer/importer.py:370
+msgid "Preferences"
+msgstr "Innstillinger"
+
+#: data/gtk/details-dialog.blp:15
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: data/gtk/details-dialog.blp:46
+msgid "New Cover"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:65
+msgid "Delete Cover"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:93 data/gtk/game.blp:81
+msgid "Title"
+msgstr "Navn"
+
+#: data/gtk/details-dialog.blp:97
+#, fuzzy
+msgid "Developer (optional)"
+msgstr "Utvikler eller utgiver (valgfritt)"
+
+#: data/gtk/details-dialog.blp:103
+msgid "Executable"
+msgstr "Kjørbar"
+
+#: data/gtk/details-dialog.blp:109
+msgid "Select File"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:120
+msgid "More Info"
+msgstr ""
+
+#: data/gtk/game.blp:102 data/gtk/game.blp:110 data/gtk/window.blp:443
+msgid "Edit"
+msgstr "Rediger"
+
+#: data/gtk/game.blp:103 cartridges/window.py:350
+msgid "Hide"
+msgstr "Skjul"
+
+#: data/gtk/game.blp:104 data/gtk/game.blp:112 data/gtk/window.blp:463
+msgid "Remove"
+msgstr "Fjern"
+
+#: data/gtk/game.blp:111 cartridges/window.py:352
+msgid "Unhide"
+msgstr "Opphev fjerning"
+
+#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
+msgid "General"
+msgstr "Generelt"
+
+#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:205 data/gtk/window.blp:221
+#: data/gtk/window.blp:272 data/gtk/window.blp:288 data/gtk/window.blp:474
+#, fuzzy
+msgid "Search"
+msgstr "Søk"
+
+#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:543
+msgid "Keyboard Shortcuts"
+msgstr "Tastatursnarveier"
+
+#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
+#: cartridges/preferences.py:134 cartridges/importer/importer.py:394
+msgid "Undo"
+msgstr "Angre"
+
+#: data/gtk/help-overlay.blp:34
+msgid "Quit"
+msgstr "Avslutt"
+
+#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:185
+msgid "Toggle Sidebar"
+msgstr ""
+
+#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:198 data/gtk/window.blp:265
+msgid "Main Menu"
+msgstr "Hovedmeny"
+
+#: data/gtk/help-overlay.blp:50
+msgid "Games"
+msgstr "Spill"
+
+#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:191 data/gtk/window.blp:550
+msgid "Add Game"
+msgstr "Legg til spill"
+
+#: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:113
+#: data/gtk/window.blp:27 data/gtk/window.blp:554
+msgid "Import"
+msgstr "Importer"
+
+#: data/gtk/help-overlay.blp:63
+#, fuzzy
+msgid "Show Hidden Games"
+msgstr "Vis skjulte spill"
+
+#: data/gtk/help-overlay.blp:68
+#, fuzzy
+msgid "Remove Game"
+msgstr "Fjern spill"
+
+#: data/gtk/preferences.blp:13 data/gtk/preferences.blp:117
+#: data/gtk/preferences.blp:415
+#, fuzzy
+msgid "Behavior"
+msgstr "Adferd"
+
+#: data/gtk/preferences.blp:16
+msgid "Exit After Launching Games"
+msgstr "Avslutt etter oppstart av spill"
+
+#: data/gtk/preferences.blp:20
+msgid "Cover Image Launches Game"
+msgstr "Omslagsbilde starter spill"
+
+#: data/gtk/preferences.blp:21
+msgid "Swaps the behavior of the cover image and the play button"
+msgstr "Bytter adferd for omslagsbilde og spill-knapp"
+
+#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:82
+msgid "Images"
+msgstr "Bilder"
+
+#: data/gtk/preferences.blp:29
+msgid "High Quality Images"
+msgstr "Høykvalitetsbilder"
+
+#: data/gtk/preferences.blp:30
+msgid "Save game covers losslessly at the cost of storage"
+msgstr "Lagre spillomslag tapsfritt på bekostning av lagringsplass"
+
+#: data/gtk/preferences.blp:35
+msgid "Danger Zone"
+msgstr "Faresone"
+
+#: data/gtk/preferences.blp:48
+msgid "Remove All Games"
+msgstr "Fjern alle spill"
+
+#: data/gtk/preferences.blp:120
+#, fuzzy
+msgid "Remove Uninstalled Games"
+msgstr "Fjern alle spill"
+
+#: data/gtk/preferences.blp:125
+msgid "Sources"
+msgstr "Kilder"
+
+#: data/gtk/preferences.blp:128 cartridges/importer/steam_source.py:114
+msgid "Steam"
+msgstr "Steam"
+
+#: data/gtk/preferences.blp:137 data/gtk/preferences.blp:164
+#: data/gtk/preferences.blp:199 data/gtk/preferences.blp:242
+#: data/gtk/preferences.blp:269 data/gtk/preferences.blp:296
+#: data/gtk/preferences.blp:323
+#, fuzzy
+msgid "Install Location"
+msgstr "Installasjonssted for itch"
+
+#: data/gtk/preferences.blp:155 data/gtk/window.blp:564
+#: cartridges/importer/lutris_source.py:96
+msgid "Lutris"
+msgstr "Lutris"
+
+#: data/gtk/preferences.blp:181
+#, fuzzy
+msgid "Import Steam Games"
+msgstr "Importer sideinnlastede spill"
+
+#: data/gtk/preferences.blp:185
+#, fuzzy
+msgid "Import Flatpak Games"
+msgstr "Importer sideinnlastede spill"
+
+#: data/gtk/preferences.blp:190 cartridges/importer/heroic_source.py:355
+msgid "Heroic"
+msgstr "Heroic"
+
+#: data/gtk/preferences.blp:216
+msgid "Import Epic Games"
+msgstr "Importer Epic-spill"
+
+#: data/gtk/preferences.blp:220
+msgid "Import GOG Games"
+msgstr "Importer GOG-spill"
+
+#: data/gtk/preferences.blp:224
+msgid "Import Amazon Games"
+msgstr "Importer Amazon-spill"
+
+#: data/gtk/preferences.blp:228
+msgid "Import Sideloaded Games"
+msgstr "Importer sideinnlastede spill"
+
+#: data/gtk/preferences.blp:233 cartridges/importer/bottles_source.py:86
+msgid "Bottles"
+msgstr "Bottles"
+
+#: data/gtk/preferences.blp:260 cartridges/importer/itch_source.py:81
+#, fuzzy
+msgid "itch"
+msgstr "itch"
+
+#: data/gtk/preferences.blp:287 cartridges/importer/legendary_source.py:97
+msgid "Legendary"
+msgstr ""
+
+#: data/gtk/preferences.blp:314 cartridges/importer/retroarch_source.py:142
+msgid "RetroArch"
+msgstr ""
+
+#: data/gtk/preferences.blp:341 cartridges/importer/flatpak_source.py:143
+msgid "Flatpak"
+msgstr ""
+
+#. The location of the system-wide data directory
+#: data/gtk/preferences.blp:351
+#, fuzzy
+msgid "System Location"
+msgstr "Velg mappe"
+
+#. The location of the user-specific data directory
+#: data/gtk/preferences.blp:369
+#, fuzzy
+msgid "User Location"
+msgstr "Velg mappe"
+
+#: data/gtk/preferences.blp:386
+#, fuzzy
+msgid "Import Game Launchers"
+msgstr "Spillutvalgstarter"
+
+#: data/gtk/preferences.blp:391 cartridges/importer/desktop_source.py:215
+msgid "Desktop Entries"
+msgstr ""
+
+#: data/gtk/preferences.blp:403 data/gtk/window.blp:562
+msgid "SteamGridDB"
+msgstr "SteamGridDB"
+
+#: data/gtk/preferences.blp:407
+msgid "Authentication"
+msgstr "Identitetsbekreftelse"
+
+#: data/gtk/preferences.blp:410
+#, fuzzy
+msgid "API Key"
+msgstr "API-nøkkel"
+
+#: data/gtk/preferences.blp:418
+msgid "Use SteamGridDB"
+msgstr "Bruk SteamGridDB"
+
+#: data/gtk/preferences.blp:419
+#, fuzzy
+msgid "Download images when adding or importing games"
+msgstr "Mappe å bruke ved import av spill"
+
+#: data/gtk/preferences.blp:423
+#, fuzzy
+msgid "Prefer Over Official Images"
+msgstr "Foretrekk over offisielle bilder"
+
+#: data/gtk/preferences.blp:427
+#, fuzzy
+msgid "Prefer Animated Images"
+msgstr "Foretrekk over offisielle bilder"
+
+#: data/gtk/preferences.blp:433
+msgid "Update Covers"
+msgstr ""
+
+#: data/gtk/preferences.blp:434
+msgid "Fetch covers for games already in your library"
+msgstr ""
+
+#: data/gtk/preferences.blp:439
+msgid "Update"
+msgstr ""
+
+#: data/gtk/window.blp:6 data/gtk/window.blp:14
+msgid "No Games Found"
+msgstr "Fant ingen spill"
+
+#: data/gtk/window.blp:7 data/gtk/window.blp:15
+msgid "Try a different search"
+msgstr "Prøv et forskjellig søk"
+
+#: data/gtk/window.blp:21
+msgid "No Games"
+msgstr "Ingen spill"
+
+#: data/gtk/window.blp:22
+msgid "Use the + button to add games"
+msgstr "Bruk «+»-knappen for å legge til spill"
+
+#: data/gtk/window.blp:40
+msgid "No Hidden Games"
+msgstr "Ingen skjulte spill"
+
+#: data/gtk/window.blp:41
+msgid "Games you hide will appear here"
+msgstr "Spill du skjuler vil vises her"
+
+#: data/gtk/window.blp:76 data/gtk/window.blp:111 cartridges/main.py:228
+#, fuzzy
+msgid "All Games"
+msgstr "Fjern alle spill"
+
+#: data/gtk/window.blp:136 cartridges/main.py:230
+#, fuzzy
+msgid "Added"
+msgstr "Tillagt: {}"
+
+#: data/gtk/window.blp:156
+#, fuzzy
+msgid "Imported"
+msgstr "Importer"
+
+#: data/gtk/window.blp:258
+msgid "Hidden Games"
+msgstr "Skjulte spill"
+
+#: data/gtk/window.blp:367
+msgid "Game Title"
+msgstr "Spillnavn"
+
+#: data/gtk/window.blp:424
+msgid "Play"
+msgstr "Spill"
+
+#: data/gtk/window.blp:501
+msgid "Sort"
+msgstr "Sorter"
+
+#: data/gtk/window.blp:504
+msgid "A-Z"
+msgstr "A-Å"
+
+#: data/gtk/window.blp:510
+msgid "Z-A"
+msgstr "Å-A"
+
+#: data/gtk/window.blp:516
+msgid "Newest"
+msgstr "Nyeste"
+
+#: data/gtk/window.blp:522
+msgid "Oldest"
+msgstr "Eldste"
+
+#: data/gtk/window.blp:528
+msgid "Last Played"
+msgstr "Sist spilt"
+
+#: data/gtk/window.blp:535
+msgid "Show Hidden"
+msgstr "Vis skjulte"
+
+#: data/gtk/window.blp:544
+msgid "About Cartridges"
+msgstr "Om"
+
+#: data/gtk/window.blp:561
+msgid "IGDB"
+msgstr ""
+
+#: data/gtk/window.blp:563
+msgid "ProtonDB"
+msgstr ""
+
+#: data/gtk/window.blp:565
+msgid "HowLongToBeat"
+msgstr ""
+
+#. The variable is the title of the game
+#: cartridges/main.py:205 cartridges/game.py:125
+msgid "{} launched"
+msgstr "{} startet"
+
+#. Translators: Replace this with your name for it to show up in the about window
+#: cartridges/main.py:270
+msgid "translator_credits"
+msgstr "Allan Nordhøy, <epost@anotheragency.no>"
+
+#. The variable is the date when the game was added
+#: cartridges/window.py:373
+msgid "Added: {}"
+msgstr "Tillagt: {}"
+
+#: cartridges/window.py:376
+msgid "Never"
+msgstr "Aldri"
+
+#. The variable is the date when the game was last played
+#: cartridges/window.py:380
+msgid "Last played: {}"
+msgstr "Sist spilt: {}"
+
+#: cartridges/details_dialog.py:73
+msgid "Apply"
+msgstr "Bruk"
+
+#: cartridges/details_dialog.py:79
+msgid "Add New Game"
+msgstr "Legg til nytt spill"
+
+#: cartridges/details_dialog.py:80
+msgid "Add"
+msgstr ""
+
+#: cartridges/details_dialog.py:90
+#, fuzzy
+msgid "Executables"
+msgstr "Kjørbar"
+
+#. Translate this string as you would translate "file"
+#: cartridges/details_dialog.py:105
+msgid "file.txt"
+msgstr "fil.txt"
+
+#. As in software
+#: cartridges/details_dialog.py:107
+msgid "program"
+msgstr "program"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:112 cartridges/details_dialog.py:114
+msgid "C:\\path\\to\\{}"
+msgstr "C:\\sti\\til\\{}"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:118 cartridges/details_dialog.py:120
+msgid "/path/to/{}"
+msgstr "/sti/til/{}"
+
+#: cartridges/details_dialog.py:125
+msgid ""
+"To launch the executable \"{}\", use the command:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"To open the file \"{}\" with the default application, use:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"If the path contains spaces, make sure to wrap it in double quotes!"
+msgstr ""
+"Start den kjørbare «{}»-filen med denne kommandoen:\n"
+"\n"
+"<tt>«{}»</tt>\n"
+"\n"
+"For å åpne filen «{}» med forvalgt program bruker du:\n"
+"\n"
+"<tt>{} «{}»</tt>\n"
+"\n"
+"Hvis stien inneholder mellomrom må du pakke den inn i doble engelske "
+"sitattegn."
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:173
+msgid "Couldn't Add Game"
+msgstr "Kunne ikke legge til spill"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:209
+msgid "Game title cannot be empty."
+msgstr "Spillnavnet kan ikke være tomt."
+
+#: cartridges/details_dialog.py:173 cartridges/details_dialog.py:217
+msgid "Executable cannot be empty."
+msgstr "Kjørbar fil må angis."
+
+#: cartridges/details_dialog.py:208 cartridges/details_dialog.py:216
+msgid "Couldn't Apply Preferences"
+msgstr "Kunne ikke ta i bruk endringer"
+
+#. The variable is the title of the game
+#: cartridges/game.py:139
+#, fuzzy
+msgid "{} hidden"
+msgstr "{} skjult"
+
+#: cartridges/game.py:139
+msgid "{} unhidden"
+msgstr "{} synlig"
+
+#. The variable is the title of the game
+#. The variable is the number of games removed
+#: cartridges/game.py:153 cartridges/importer/importer.py:391
+msgid "{} removed"
+msgstr "{} fjernet"
+
+#: cartridges/preferences.py:133
+msgid "All games removed"
+msgstr "Alle spill fjernet"
+
+#: cartridges/preferences.py:181
+msgid ""
+"An API key is required to use SteamGridDB. You can generate one {}here{}."
+msgstr ""
+"En API-nøkkel kreves for å bruke SteamGridDB. Du kan generere en {}her{}."
+
+#: cartridges/preferences.py:196
+#, fuzzy
+msgid "Downloading covers…"
+msgstr "Importerer omslag …"
+
+#: cartridges/preferences.py:215
+msgid "Covers updated"
+msgstr ""
+
+#: cartridges/preferences.py:360
+#, fuzzy
+msgid "Installation Not Found"
+msgstr "Fant ikke installasjonen"
+
+#: cartridges/preferences.py:361
+#, fuzzy
+msgid "Select a valid directory"
+msgstr "Velg {}-datamappen."
+
+#: cartridges/preferences.py:397 cartridges/importer/importer.py:318
+msgid "Warning"
+msgstr ""
+
+#: cartridges/preferences.py:431
+msgid "Invalid Directory"
+msgstr ""
+
+#: cartridges/preferences.py:437
+#, fuzzy
+msgid "Set Location"
+msgstr "Velg mappe"
+
+#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:319
+msgid "Dismiss"
+msgstr "Forkast"
+
+#: cartridges/importer/importer.py:145
+msgid "Importing Games…"
+msgstr "Importerer spill …"
+
+#: cartridges/importer/importer.py:338
+msgid "The following errors occured during import:"
+msgstr ""
+
+#: cartridges/importer/importer.py:367
+#, fuzzy
+msgid "No new games found"
+msgstr "Fant ingen spill"
+
+#: cartridges/importer/importer.py:379
+#, fuzzy
+msgid "1 game imported"
+msgstr "Spill importert"
+
+#. The variable is the number of games
+#: cartridges/importer/importer.py:383
+#, fuzzy
+msgid "{} games imported"
+msgstr "Spill importert"
+
+#. A single game removed
+#: cartridges/importer/importer.py:387
+#, fuzzy
+msgid "1 removed"
+msgstr "{} fjernet"
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:34
+#, fuzzy
+msgid "Select the {} cache directory."
+msgstr "Velg {}-datamappen."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:36
+#, fuzzy
+msgid "Select the {} configuration directory."
+msgstr "Velg {}-oppsettsmappen."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:38
+#, fuzzy
+msgid "Select the {} data directory."
+msgstr "Velg {}-datamappen."
+
+#: cartridges/importer/retroarch_source.py:129
+msgid "No RetroArch Core Selected"
+msgstr ""
+
+#. The variable is a newline separated list of playlists
+#: cartridges/importer/retroarch_source.py:131
+msgid "The following playlists have no default core:"
+msgstr ""
+
+#: cartridges/importer/retroarch_source.py:133
+msgid "Games with no core selected were not imported"
+msgstr ""
+
+#: cartridges/store/managers/sgdb_manager.py:46
+#, fuzzy
+msgid "Couldn't Authenticate SteamGridDB"
+msgstr "Kunne ikke koble til SteamGridDB"
+
+#: cartridges/store/managers/sgdb_manager.py:47
+msgid "Verify your API key in preferences"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Cache Location"
+#~ msgstr "Posisjon for Lutris-hurtiglager"
+
+#~ msgid "Library"
+#~ msgstr "Bibliotek"
+
+#~ msgid "Show preferences"
+#~ msgstr "Vis innstillinger"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Snarveier"
+
+#~ msgid "Open menu"
+#~ msgstr "Åpne meny"
+
+#~ msgid "Add new game"
+#~ msgstr "Legg til nytt spill"
+
+#~ msgid "Import games"
+#~ msgstr "Importer spill"
+
+#~ msgid "Back"
+#~ msgstr "Tilbake"
+
+#, fuzzy
+#~ msgid "Search games"
+#~ msgstr "Søk"
+
+#, fuzzy
+#~| msgid "Show hidden games"
+#~ msgid "Search hidden games"
+#~ msgstr "Vis skjulte spill"
+
+#~ msgid "The title of the game"
+#~ msgstr "Navnet på spillet"
+
+#~ msgid "Developer"
+#~ msgstr "Utvikler"
+
+#~ msgid "File to open or command to run when launching the game"
+#~ msgstr "Fil å åpne eller kommando å kjøre ved oppstart av spillet"
+
+#~ msgid "Confirm"
+#~ msgstr "Bekreft"
+
+#, fuzzy
+#~ msgid "Directory not Valid"
+#~ msgstr "Kunne ikke finne Steam-mappen."
+
+#, fuzzy
+#~ msgid "Configuration"
+#~ msgstr "Bekreft"
+
+#~ msgid "Steam Install Location"
+#~ msgstr "Installasjonssted for Steam"
+
+#~ msgid "Lutris Install Location"
+#~ msgstr "Installasjonssted for Lutris"
+
+#~ msgid "Heroic Install Location"
+#~ msgstr "Installasjonssted for Heroic"
+
+#~ msgid "Bottles Install Location"
+#~ msgstr "Installasjonssted for Bottles"
+
+#~ msgid "Today"
+#~ msgstr "I dag"
+
+#~ msgid "Yesterday"
+#~ msgstr "I går"
+
+#, fuzzy
+#~ msgid "Cache Not Found"
+#~ msgstr "Fant ikke hurtiglager"
+
+#, fuzzy
+#~ msgid "Select the Lutris cache directory."
+#~ msgstr "Velg {name}-datamappen."
+
+#~ msgid "Directory to use when importing games"
+#~ msgstr "Mappe å bruke ved import av spill"
+
+#~ msgid "Extra Steam Libraries"
+#~ msgstr "Ekstra Steam-bibliotek"
+
+#, fuzzy
+#~ msgid "Select other directories where you have Steam games installed"
+#~ msgstr "Velg andre mapper der du har Steam-spill installert"
+
+#~ msgid "Clear"
+#~ msgstr "Tøm"
+
+#, fuzzy
+#~ msgid "Directory to use when importing game covers"
+#~ msgstr "Mappe å bruke ved import av spillomslag"
+
+#~ msgid "Details"
+#~ msgstr "Detaljer"
+
+#~ msgid "No new games were found on your system."
+#~ msgstr "Fant ingen nye spill på systemet ditt."
+
+#~ msgid "Successfully imported 1 game."
+#~ msgstr "Importerte ett spill."
+
+#, fuzzy
+#~ msgid "Successfully imported {} games."
+#~ msgstr "Importerte {} spill."
+
+#, fuzzy
+#~ msgid ""
+#~ "Looks like you have multiple Steam libraries. Would you like to add them "
+#~ "in preferences?"
+#~ msgstr ""
+#~ "Du har flere Steam-bibliotek. Vil du legge dem til i innstillingene?"
+
+#~ msgid "Launch your games"
+#~ msgstr "Start spillene dine"
+
+#, python-brace-format
+#~ msgid "Last played: {last_played_date}"
+#~ msgstr "Sist spilt: {last_played_date}"
+
+#, python-brace-format
+#~ msgid "Successfully imported {games_no} games."
+#~ msgstr "Importerte {games_no} spill."
+
+#, python-brace-format
+#~ msgid "C:\\path\\to\\{file_name}"
+#~ msgstr "C:\\sti\\til\\{file_name}"
+
+#, python-brace-format
+#~ msgid "/path/to/{file_name}"
+#~ msgstr "/sti/til/{file_name}"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "General"
+#~ msgstr "Generelt"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "Search"
+#~ msgstr "Søk"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "Undo"
+#~ msgstr "Angre"
+
+#~ msgid "First stable release"
+#~ msgstr "Første ordentlige utgave"
+
+#~ msgctxt "shortcut window"
+#~ msgid "General"
+#~ msgstr "Generelt"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Search"
+#~ msgstr "Søk"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Undo"
+#~ msgstr "Angre"
+
+#~ msgid "Couldn't Import Games"
+#~ msgstr "Kunne ikke importere spill"
+
+#~ msgid "The Bottles directory cannot be found."
+#~ msgstr "Finner ikke Bottles-mappen."
+
+#~ msgid "Set Bottles Location"
+#~ msgstr "Sett mappe for Bottles"
+
+#~ msgid "No new games were found in the Bottles library."
+#~ msgstr "Fant ingen nye spill i Bottles-biblioteket."
+
+#~ msgid "Bottles Games Imported"
+#~ msgstr "Bottles-spill importert"
+
+#~ msgid "The Heroic directory cannot be found."
+#~ msgstr "Finner ikke Heroic-spillmappen."
+
+#~ msgid "Heroic Games Imported"
+#~ msgstr "Heroic-spill importert"
+
+#~ msgid "No new games were found in the Steam library."
+#~ msgstr "Fant ingen nye spill i Steam-biblioteket."
+
+#, fuzzy
+#~ msgid "Talking to Steam"
+#~ msgstr "Snakker med Steam"
+
+#, fuzzy
+#~ msgid "Successfully imported {str(len(bottles_games))} games."
+#~ msgstr "Importerte ett spill."
+
+#, fuzzy
+#~ msgid "Successfully imported {str(len(heroic_games))} games."
+#~ msgstr "Importerte ett spill."
+
+#~ msgid "Successfully imported"
+#~ msgstr "Importert"
+
+#~ msgid "games."
+#~ msgstr "spill."

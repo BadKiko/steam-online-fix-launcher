@@ -1,0 +1,450 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $CartridgesPreferences: Adw.PreferencesDialog {
+  search-enabled: true;
+
+  Adw.PreferencesPage general_page {
+    name: "general";
+    title: _("General");
+    icon-name: "user-home-symbolic";
+
+    Adw.PreferencesGroup behavior_group {
+      title: _("Behavior");
+
+      Adw.SwitchRow exit_after_launch_switch {
+        title: _("Exit After Launching Games");
+      }
+
+      Adw.SwitchRow cover_launches_game_switch {
+        title: _("Cover Image Launches Game");
+        subtitle: _("Swaps the behavior of the cover image and the play button");
+      }
+    }
+
+    Adw.PreferencesGroup images_group {
+      title: _("Images");
+
+      Adw.SwitchRow high_quality_images_switch {
+        title: _("High Quality Images");
+        subtitle: _("Save game covers losslessly at the cost of storage");
+      }
+    }
+
+    Adw.PreferencesGroup danger_zone_group {
+      title: _("Danger Zone");
+
+      ListBox remove_all_games_list_box {
+        Adw.PreferencesRow {
+          activatable: true;
+          selectable: false;
+
+          Box {
+            spacing: 6;
+            valign: center;
+            halign: center;
+
+            Label {
+              label: _("Remove All Games");
+              ellipsize: end;
+
+              styles [
+                "heading",
+              ]
+            }
+
+            styles [
+              "header",
+            ]
+          }
+
+          styles [
+            "error",
+          ]
+        }
+
+        styles [
+          "boxed-list",
+        ]
+      }
+    }
+
+    Adw.PreferencesGroup reset_group {
+      visible: false;
+
+      ListBox reset_list_box {
+        Adw.PreferencesRow {
+          activatable: true;
+          selectable: false;
+
+          Box {
+            spacing: 6;
+            valign: center;
+            halign: center;
+
+            Label {
+              label: "Reset App";
+              ellipsize: end;
+
+              styles [
+                "heading",
+              ]
+            }
+
+            styles [
+              "header",
+            ]
+          }
+
+          styles [
+            "error",
+          ]
+        }
+
+        styles [
+          "boxed-list",
+        ]
+      }
+    }
+  }
+
+  Adw.PreferencesPage import_page {
+    name: "import";
+    title: _("Import");
+    icon-name: "document-save-symbolic";
+
+    Adw.PreferencesGroup import_behavior_group {
+      title: _("Behavior");
+
+      Adw.SwitchRow remove_missing_switch {
+        title: _("Remove Uninstalled Games");
+      }
+    }
+
+    Adw.PreferencesGroup sources_group {
+      title: _("Sources");
+
+      Adw.ExpanderRow steam_expander_row {
+        title: _("Steam");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "steam-source-symbolic";
+        }
+
+        Adw.ActionRow steam_data_action_row {
+          title: _("Install Location");
+
+          Button steam_data_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+      }
+
+      Adw.ExpanderRow lutris_expander_row {
+        title: _("Lutris");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "lutris-source-symbolic";
+        }
+
+        Adw.ActionRow lutris_data_action_row {
+          title: _("Install Location");
+
+          Button lutris_data_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+
+        Adw.SwitchRow lutris_import_steam_switch {
+          title: _("Import Steam Games");
+        }
+
+        Adw.SwitchRow lutris_import_flatpak_switch {
+          title: _("Import Flatpak Games");
+        }
+      }
+
+      Adw.ExpanderRow heroic_expander_row {
+        title: _("Heroic");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "heroic-source-symbolic";
+        }
+
+        Adw.ActionRow heroic_config_action_row {
+          title: _("Install Location");
+
+          Button heroic_config_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+
+        Adw.SwitchRow heroic_import_epic_switch {
+          title: _("Import Epic Games");
+        }
+
+        Adw.SwitchRow heroic_import_gog_switch {
+          title: _("Import GOG Games");
+        }
+
+        Adw.SwitchRow heroic_import_amazon_switch {
+          title: _("Import Amazon Games");
+        }
+
+        Adw.SwitchRow heroic_import_sideload_switch {
+          title: _("Import Sideloaded Games");
+        }
+      }
+
+      Adw.ExpanderRow bottles_expander_row {
+        title: _("Bottles");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "bottles-source-symbolic";
+        }
+
+        Adw.ActionRow bottles_data_action_row {
+          title: _("Install Location");
+
+          Button bottles_data_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+      }
+
+      Adw.ExpanderRow itch_expander_row {
+        title: _("itch");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "itch-source-symbolic";
+        }
+
+        Adw.ActionRow itch_config_action_row {
+          title: _("Install Location");
+
+          Button itch_config_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+      }
+
+      Adw.ExpanderRow legendary_expander_row {
+        title: _("Legendary");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "legendary-source-symbolic";
+        }
+
+        Adw.ActionRow legendary_config_action_row {
+          title: _("Install Location");
+
+          Button legendary_config_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+      }
+
+      Adw.ExpanderRow retroarch_expander_row {
+        title: _("RetroArch");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "retroarch-source-symbolic";
+        }
+
+        Adw.ActionRow retroarch_config_action_row {
+          title: _("Install Location");
+
+          Button retroarch_config_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+      }
+
+      Adw.ExpanderRow flatpak_expander_row {
+        title: _("Flatpak");
+        show-enable-switch: true;
+
+        [prefix]
+        Image {
+          icon-name: "flatpak-source-symbolic";
+        }
+
+        Adw.ActionRow flatpak_system_data_action_row {
+          // The location of the system-wide data directory
+          title: _("System Location");
+
+          Button flatpak_system_data_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+
+        Adw.ActionRow flatpak_user_data_action_row {
+          // The location of the user-specific data directory
+          title: _("User Location");
+
+          Button flatpak_user_data_file_chooser_button {
+            icon-name: "folder-symbolic";
+            valign: center;
+
+            styles [
+              "flat"
+            ]
+          }
+
+          styles [
+            "property"
+          ]
+        }
+
+        Adw.SwitchRow flatpak_import_launchers_switch {
+          title: _("Import Game Launchers");
+        }
+      }
+
+      Adw.SwitchRow desktop_switch {
+        title: _("Desktop Entries");
+
+        [prefix]
+        Image {
+          icon-name: "user-desktop-symbolic";
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesPage sgdb_page {
+    name: "sgdb";
+    title: _("SteamGridDB");
+    icon-name: "image-x-generic-symbolic";
+
+    Adw.PreferencesGroup sgdb_key_group {
+      title: _("Authentication");
+
+      Adw.EntryRow sgdb_key_entry_row {
+        title: _("API Key");
+      }
+    }
+
+    Adw.PreferencesGroup sgdb_behavior_group {
+      title: _("Behavior");
+
+      Adw.SwitchRow sgdb_switch {
+        title: _("Use SteamGridDB");
+        subtitle: _("Download images when adding or importing games");
+      }
+
+      Adw.SwitchRow sgdb_prefer_switch {
+        title: _("Prefer Over Official Images");
+      }
+
+      Adw.SwitchRow sgdb_animated_switch {
+        title: _("Prefer Animated Images");
+      }
+    }
+
+    Adw.PreferencesGroup {
+      Adw.ActionRow {
+        title: _("Update Covers");
+        subtitle: _("Fetch covers for games already in your library");
+        sensitive: bind sgdb_switch.active;
+
+        Stack sgdb_stack {
+          Button sgdb_fetch_button {
+            label: _("Update");
+            valign: center;
+          }
+
+          Spinner sgdb_spinner {
+            valign: center;
+          }
+        }
+      }
+    }
+  }
+}

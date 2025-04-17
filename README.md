@@ -1,9 +1,28 @@
-# steam-online-fix-launcher
-This script allows you to launch 'steam is not running' online-fix games in linux
+<p align="center">
+    <img src="https://github.com/BadKiko/steam-online-fix-launcher/main/banner.svg?raw=true" alt="banner" height="150" />
+</p>
+<h3 align="center">SOFL </h3>
 
-Go to releases - download zip - unpack zip to game folder - add launcher.exe to steam and write name in arguments 
+🎮 Big News! 🎮
 
-For example path: "/home/kiko/HddDrive/BGames/drive_c/Games/Kebab Chefs Pioneer/launcher.exe"  "Kebab Chefs! - Restaurant Simulator.exe", working path: /home/kiko/HddDrive/BGames/drive_c/Games/Kebab Chefs Pioneer/, start args: WINEDLLOVERRIDES="OnlineFix64=n;SteamOverlay64=n;winmm=n,b;dnet=n;steam_api64=n" %command%. and set force proton
+I'm excited to announce that I'm merging my two projects - SOFL and Dark Cartridges! This is a huge step forward, and I couldn't be more thrilled about what this means for all users.
+
+🔄 What's Happening? 🔄
+
+I'm combining my SOFL and Dark Cartridges projects into a single, powerful solution for launching online-fix games on Linux. This unified project under the SOFL name will create a seamless experience for everyone.
+
+⚙️ Legacy Instructions ⚙️
+
+Until the merger is complete, you can still use SOFL as follows:
+- Download from releases
+- Extract to game folder
+- Add launcher.exe to Steam with game name in arguments
+
+Example setup:
+Path: "/home/kiko/HddDrive/BGames/drive_c/Games/Kebab Chefs Pioneer/launcher.exe" "Kebab Chefs! - Restaurant Simulator.exe"
+Working dir: /home/kiko/HddDrive/BGames/drive_c/Games/Kebab Chefs Pioneer/
+Launch options: WINEDLLOVERRIDES="OnlineFix64=n;SteamOverlay64=n;winmm=n,b;dnet=n;steam_api64=n" %command%
+Don't forget to enable Force Proton!
 
 ## Reddit Post
 

@@ -1,0 +1,114 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $Game: Box {
+  orientation: vertical;
+  halign: center;
+  valign: start;
+
+  Adw.Clamp {
+    maximum-size: 200;
+    unit: px;
+
+    Overlay {
+      [overlay]
+      Revealer play_revealer {
+        transition-type: crossfade;
+        valign: start;
+        halign: start;
+
+        Button play_button {
+          icon-name: "media-playback-start-symbolic";
+          margin-start: 6;
+          margin-end: 3;
+          margin-top: 6;
+          margin-bottom: 3;
+
+          styles [
+            "circular",
+            "osd",
+          ]
+        }
+      }
+
+      [overlay]
+      Revealer menu_revealer {
+        transition-type: crossfade;
+        valign: start;
+        halign: end;
+
+        MenuButton menu_button {
+          icon-name: "view-more-symbolic";
+          margin-start: 3;
+          margin-end: 6;
+          margin-top: 6;
+          margin-bottom: 3;
+
+          styles [
+            "circular",
+            "osd",
+          ]
+        }
+      }
+
+      Button cover_button {
+        name: "cover_button";
+        overflow: hidden;
+
+        accessibility {
+          labelled-by: title;
+        }
+
+        Box {
+          orientation: vertical;
+
+          Overlay {
+            [overlay]
+            Spinner spinner {
+              margin-start: 72;
+              margin-end: 72;
+            }
+
+            Picture cover {
+              width-request: 200;
+              height-request: 300;
+              hexpand: true;
+              vexpand: true;
+            }
+          }
+
+          Label title {
+            label: _("Title");
+            ellipsize: end;
+            hexpand: true;
+            halign: start;
+            margin-top: 15;
+            margin-bottom: 15;
+            margin-start: 12;
+            margin-end: 12;
+          }
+        }
+
+        styles [
+          "card",
+        ]
+      }
+    }
+  }
+}
+
+menu game_options {
+  section {
+    item (_("Edit"), "app.edit_game")
+    item (_("Hide"), "app.hide_game")
+    item (_("Remove"), "app.remove_game")
+  }
+}
+
+menu hidden_game_options {
+  section {
+    item (_("Edit"), "app.edit_game")
+    item (_("Unhide"), "app.hide_game")
+    item (_("Remove"), "app.remove_game")
+  }
+}

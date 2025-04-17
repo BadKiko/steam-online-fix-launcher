@@ -1,0 +1,848 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the cartridges package.
+# Philip Goto <philip.goto@gmail.com>, 2023, 2024.
+# kramo <contact@kramo.hu>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: cartridges\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-14 12:48+0200\n"
+"PO-Revision-Date: 2024-02-15 17:02+0000\n"
+"Last-Translator: Philip Goto <philip.goto@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/cartridges/"
+"cartridges/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4-dev\n"
+
+#: data/page.kramo.Cartridges.desktop.in:3
+#: data/page.kramo.Cartridges.metainfo.xml.in:9
+#: data/page.kramo.Cartridges.metainfo.xml.in:40 data/gtk/window.blp:47
+#: data/gtk/window.blp:83
+msgid "Cartridges"
+msgstr "Cartridges"
+
+#: data/page.kramo.Cartridges.desktop.in:4
+msgid "Game Launcher"
+msgstr "Game-launcher"
+
+#: data/page.kramo.Cartridges.desktop.in:5
+#: data/page.kramo.Cartridges.metainfo.xml.in:10
+msgid "Launch all your games"
+msgstr "Start al uw games op"
+
+#: data/page.kramo.Cartridges.desktop.in:11
+msgid ""
+"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+msgstr ""
+"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+"spelen;games;starten;opstarten;"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:12
+msgid ""
+"Cartridges is a simple game launcher for all of your games. It has support "
+"for importing games from Steam, Lutris, Heroic and more with no login "
+"necessary. You can sort and hide games or download cover art from "
+"SteamGridDB."
+msgstr ""
+"Cartridges is een eenvoudige launcher voor al uw games. Het biedt "
+"ondersteuning voor het importeren van games van Steam, Lutris, Heroic en "
+"meer, zonder in te hoeven loggen. U kunt spellen sorteren, verbergen en "
+"covers van SteamGridDB downloaden."
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:44 data/gtk/window.blp:318
+#: cartridges/details_dialog.py:68
+msgid "Game Details"
+msgstr "Game-details"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:48
+msgid "Edit Game Details"
+msgstr "Game-details bewerken"
+
+#: data/page.kramo.Cartridges.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
+#: data/gtk/window.blp:542 cartridges/details_dialog.py:267
+#: cartridges/importer/importer.py:320 cartridges/importer/importer.py:370
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: data/gtk/details-dialog.blp:15
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: data/gtk/details-dialog.blp:46
+msgid "New Cover"
+msgstr "Nieuwe cover"
+
+#: data/gtk/details-dialog.blp:65
+msgid "Delete Cover"
+msgstr "Cover verwijderen"
+
+#: data/gtk/details-dialog.blp:93 data/gtk/game.blp:81
+msgid "Title"
+msgstr "Titel"
+
+#: data/gtk/details-dialog.blp:97
+msgid "Developer (optional)"
+msgstr "Ontwikkelaar (optioneel)"
+
+#: data/gtk/details-dialog.blp:103
+msgid "Executable"
+msgstr "Programmabestand"
+
+#: data/gtk/details-dialog.blp:109
+msgid "Select File"
+msgstr "Bestand selecteren"
+
+#: data/gtk/details-dialog.blp:120
+msgid "More Info"
+msgstr "Meer info"
+
+#: data/gtk/game.blp:102 data/gtk/game.blp:110 data/gtk/window.blp:443
+msgid "Edit"
+msgstr "Bewerken"
+
+#: data/gtk/game.blp:103 cartridges/window.py:350
+msgid "Hide"
+msgstr "Verbergen"
+
+#: data/gtk/game.blp:104 data/gtk/game.blp:112 data/gtk/window.blp:463
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: data/gtk/game.blp:111 cartridges/window.py:352
+msgid "Unhide"
+msgstr "Niet meer verbergen"
+
+#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
+msgid "General"
+msgstr "Algemeen"
+
+#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:205 data/gtk/window.blp:221
+#: data/gtk/window.blp:272 data/gtk/window.blp:288 data/gtk/window.blp:474
+msgid "Search"
+msgstr "Zoeken"
+
+#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:543
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#: data/gtk/help-overlay.blp:29 cartridges/game.py:103
+#: cartridges/preferences.py:134 cartridges/importer/importer.py:394
+msgid "Undo"
+msgstr "Ongedaan maken"
+
+#: data/gtk/help-overlay.blp:34
+msgid "Quit"
+msgstr "Afsluiten"
+
+#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:185
+msgid "Toggle Sidebar"
+msgstr "Zijbalk omschakelen"
+
+#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:198 data/gtk/window.blp:265
+msgid "Main Menu"
+msgstr "Hoofdmenu"
+
+#: data/gtk/help-overlay.blp:50
+msgid "Games"
+msgstr "Games"
+
+#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:191 data/gtk/window.blp:550
+msgid "Add Game"
+msgstr "Game toevoegen"
+
+#: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:113
+#: data/gtk/window.blp:27 data/gtk/window.blp:554
+msgid "Import"
+msgstr "Importeren"
+
+#: data/gtk/help-overlay.blp:63
+msgid "Show Hidden Games"
+msgstr "Verborgen games tonen"
+
+#: data/gtk/help-overlay.blp:68
+msgid "Remove Game"
+msgstr "Game verwijderen"
+
+#: data/gtk/preferences.blp:13 data/gtk/preferences.blp:117
+#: data/gtk/preferences.blp:415
+msgid "Behavior"
+msgstr "Gedrag"
+
+#: data/gtk/preferences.blp:16
+msgid "Exit After Launching Games"
+msgstr "Sluiten na starten van game"
+
+#: data/gtk/preferences.blp:20
+msgid "Cover Image Launches Game"
+msgstr "Cover-afbeelding start game"
+
+#: data/gtk/preferences.blp:21
+msgid "Swaps the behavior of the cover image and the play button"
+msgstr "Wisselt het gedrag van de cover-afbeelding en de speelknop om"
+
+#: data/gtk/preferences.blp:26 cartridges/details_dialog.py:82
+msgid "Images"
+msgstr "Afbeeldingen"
+
+#: data/gtk/preferences.blp:29
+msgid "High Quality Images"
+msgstr "Afbeeldingen van hoge kwaliteit"
+
+#: data/gtk/preferences.blp:30
+msgid "Save game covers losslessly at the cost of storage"
+msgstr ""
+"Game-covers zonder kwaliteitsverlies opslaan ten koste van opslagruimte"
+
+#: data/gtk/preferences.blp:35
+msgid "Danger Zone"
+msgstr "Gevarenzone"
+
+#: data/gtk/preferences.blp:48
+msgid "Remove All Games"
+msgstr "Alle games verwijderen"
+
+#: data/gtk/preferences.blp:120
+msgid "Remove Uninstalled Games"
+msgstr "Gedeïnstalleerde games verwijderen"
+
+#: data/gtk/preferences.blp:125
+msgid "Sources"
+msgstr "Bronnen"
+
+#: data/gtk/preferences.blp:128 cartridges/importer/steam_source.py:114
+msgid "Steam"
+msgstr "Steam"
+
+#: data/gtk/preferences.blp:137 data/gtk/preferences.blp:164
+#: data/gtk/preferences.blp:199 data/gtk/preferences.blp:242
+#: data/gtk/preferences.blp:269 data/gtk/preferences.blp:296
+#: data/gtk/preferences.blp:323
+msgid "Install Location"
+msgstr "Installatielocatie"
+
+#: data/gtk/preferences.blp:155 data/gtk/window.blp:564
+#: cartridges/importer/lutris_source.py:96
+msgid "Lutris"
+msgstr "Lutris"
+
+#: data/gtk/preferences.blp:181
+msgid "Import Steam Games"
+msgstr "Steam-games importeren"
+
+#: data/gtk/preferences.blp:185
+msgid "Import Flatpak Games"
+msgstr "Flatpak-games importeren"
+
+#: data/gtk/preferences.blp:190 cartridges/importer/heroic_source.py:355
+msgid "Heroic"
+msgstr "Heroic"
+
+#: data/gtk/preferences.blp:216
+msgid "Import Epic Games"
+msgstr "Epic-games importeren"
+
+#: data/gtk/preferences.blp:220
+msgid "Import GOG Games"
+msgstr "GOG-games importeren"
+
+#: data/gtk/preferences.blp:224
+msgid "Import Amazon Games"
+msgstr "Amazon-games importeren"
+
+#: data/gtk/preferences.blp:228
+msgid "Import Sideloaded Games"
+msgstr "Gesideloade games importeren"
+
+#: data/gtk/preferences.blp:233 cartridges/importer/bottles_source.py:86
+msgid "Bottles"
+msgstr "Bottles"
+
+#: data/gtk/preferences.blp:260 cartridges/importer/itch_source.py:81
+msgid "itch"
+msgstr "itch"
+
+#: data/gtk/preferences.blp:287 cartridges/importer/legendary_source.py:97
+msgid "Legendary"
+msgstr "Legendary"
+
+#: data/gtk/preferences.blp:314 cartridges/importer/retroarch_source.py:142
+msgid "RetroArch"
+msgstr "RetroArch"
+
+#: data/gtk/preferences.blp:341 cartridges/importer/flatpak_source.py:143
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#. The location of the system-wide data directory
+#: data/gtk/preferences.blp:351
+msgid "System Location"
+msgstr "Systeem­locatie"
+
+#. The location of the user-specific data directory
+#: data/gtk/preferences.blp:369
+msgid "User Location"
+msgstr "Gebruikers­locatie"
+
+#: data/gtk/preferences.blp:386
+msgid "Import Game Launchers"
+msgstr "Game-launchers importeren"
+
+#: data/gtk/preferences.blp:391 cartridges/importer/desktop_source.py:215
+msgid "Desktop Entries"
+msgstr "Lokale apps"
+
+#: data/gtk/preferences.blp:403 data/gtk/window.blp:562
+msgid "SteamGridDB"
+msgstr "SteamGridDB"
+
+#: data/gtk/preferences.blp:407
+msgid "Authentication"
+msgstr "Authenticatie"
+
+#: data/gtk/preferences.blp:410
+msgid "API Key"
+msgstr "API-sleutel"
+
+#: data/gtk/preferences.blp:418
+msgid "Use SteamGridDB"
+msgstr "SteamGridDB gebruiken"
+
+#: data/gtk/preferences.blp:419
+msgid "Download images when adding or importing games"
+msgstr "Afbeeldingen downloaden bij het toevoegen of importeren van games"
+
+#: data/gtk/preferences.blp:423
+msgid "Prefer Over Official Images"
+msgstr "Voorkeur geven boven officiële afbeeldingen"
+
+#: data/gtk/preferences.blp:427
+msgid "Prefer Animated Images"
+msgstr "Voorkeur geven aan geanimeerde afbeeldingen"
+
+#: data/gtk/preferences.blp:433
+msgid "Update Covers"
+msgstr "Covers bijwerken"
+
+#: data/gtk/preferences.blp:434
+msgid "Fetch covers for games already in your library"
+msgstr "Haal covers op voor games in uw bibliotheek"
+
+#: data/gtk/preferences.blp:439
+msgid "Update"
+msgstr "Bijwerken"
+
+#: data/gtk/window.blp:6 data/gtk/window.blp:14
+msgid "No Games Found"
+msgstr "Geen games gevonden"
+
+#: data/gtk/window.blp:7 data/gtk/window.blp:15
+msgid "Try a different search"
+msgstr "Probeer een andere zoekopdracht"
+
+#: data/gtk/window.blp:21
+msgid "No Games"
+msgstr "Geen games"
+
+#: data/gtk/window.blp:22
+msgid "Use the + button to add games"
+msgstr "Gebruik de plusknop om games toe te voegen"
+
+#: data/gtk/window.blp:40
+msgid "No Hidden Games"
+msgstr "Geen verborgen games"
+
+#: data/gtk/window.blp:41
+msgid "Games you hide will appear here"
+msgstr "Games die u verbergt zullen hier verschijnen"
+
+#: data/gtk/window.blp:76 data/gtk/window.blp:111 cartridges/main.py:228
+msgid "All Games"
+msgstr "Alle games"
+
+#: data/gtk/window.blp:136 cartridges/main.py:230
+msgid "Added"
+msgstr "Toegevoegd"
+
+#: data/gtk/window.blp:156
+msgid "Imported"
+msgstr "Geïmporteerd"
+
+#: data/gtk/window.blp:258
+msgid "Hidden Games"
+msgstr "Verborgen games"
+
+#: data/gtk/window.blp:367
+msgid "Game Title"
+msgstr "Game-titel"
+
+#: data/gtk/window.blp:424
+msgid "Play"
+msgstr "Spelen"
+
+#: data/gtk/window.blp:501
+msgid "Sort"
+msgstr "Sorteren"
+
+#: data/gtk/window.blp:504
+msgid "A-Z"
+msgstr "A-Z"
+
+#: data/gtk/window.blp:510
+msgid "Z-A"
+msgstr "Z-A"
+
+#: data/gtk/window.blp:516
+msgid "Newest"
+msgstr "Nieuwste"
+
+#: data/gtk/window.blp:522
+msgid "Oldest"
+msgstr "Oudste"
+
+#: data/gtk/window.blp:528
+msgid "Last Played"
+msgstr "Laatst gespeeld"
+
+#: data/gtk/window.blp:535
+msgid "Show Hidden"
+msgstr "Verborgen games tonen"
+
+#: data/gtk/window.blp:544
+msgid "About Cartridges"
+msgstr "Over Cartridges"
+
+#: data/gtk/window.blp:561
+msgid "IGDB"
+msgstr "IGDB"
+
+#: data/gtk/window.blp:563
+msgid "ProtonDB"
+msgstr "ProtonDB"
+
+#: data/gtk/window.blp:565
+msgid "HowLongToBeat"
+msgstr "HowLongToBeat"
+
+#. The variable is the title of the game
+#: cartridges/main.py:205 cartridges/game.py:125
+msgid "{} launched"
+msgstr "{} gestart"
+
+#. Translators: Replace this with your name for it to show up in the about window
+#: cartridges/main.py:270
+msgid "translator_credits"
+msgstr "Philip Goto https://flipflop97.github.io/"
+
+#. The variable is the date when the game was added
+#: cartridges/window.py:373
+msgid "Added: {}"
+msgstr "Toegevoegd op {}"
+
+#: cartridges/window.py:376
+msgid "Never"
+msgstr "Nooit"
+
+#. The variable is the date when the game was last played
+#: cartridges/window.py:380
+msgid "Last played: {}"
+msgstr "Laatst gespeeld: {}"
+
+#: cartridges/details_dialog.py:73
+msgid "Apply"
+msgstr "Toepassen"
+
+#: cartridges/details_dialog.py:79
+msgid "Add New Game"
+msgstr "Nieuwe game toevoegen"
+
+#: cartridges/details_dialog.py:80
+msgid "Add"
+msgstr "Toevoegen"
+
+#: cartridges/details_dialog.py:90
+msgid "Executables"
+msgstr "Programmabestanden"
+
+#. Translate this string as you would translate "file"
+#: cartridges/details_dialog.py:105
+msgid "file.txt"
+msgstr "bestand.txt"
+
+#. As in software
+#: cartridges/details_dialog.py:107
+msgid "program"
+msgstr "programma"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:112 cartridges/details_dialog.py:114
+msgid "C:\\path\\to\\{}"
+msgstr "C:\\pad\\naar\\{}"
+
+#. Translate this string as you would translate "path to {}"
+#: cartridges/details_dialog.py:118 cartridges/details_dialog.py:120
+msgid "/path/to/{}"
+msgstr "/pad/naar/{}"
+
+#: cartridges/details_dialog.py:125
+msgid ""
+"To launch the executable \"{}\", use the command:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"To open the file \"{}\" with the default application, use:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"If the path contains spaces, make sure to wrap it in double quotes!"
+msgstr ""
+"Om het programma ‘{}’ te starten, gebruik de volgende opdracht:\n"
+"\n"
+"<tt>\"{}\"</tt>\n"
+"\n"
+"Om het bestand ‘{}’ met de standaard-app te openen, gebruik de volgende "
+"opdracht:\n"
+"\n"
+"<tt>{} \"{}\"</tt>\n"
+"\n"
+"Indien het pad spaties bevat, zorg er dan voor dat er dubbele "
+"aanhalingstekens omheen staan!"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:173
+msgid "Couldn't Add Game"
+msgstr "Kon game niet toevoegen"
+
+#: cartridges/details_dialog.py:167 cartridges/details_dialog.py:209
+msgid "Game title cannot be empty."
+msgstr "Game-titel mag niet leeg zijn."
+
+#: cartridges/details_dialog.py:173 cartridges/details_dialog.py:217
+msgid "Executable cannot be empty."
+msgstr "Programmabestand mag niet leeg zijn."
+
+#: cartridges/details_dialog.py:208 cartridges/details_dialog.py:216
+msgid "Couldn't Apply Preferences"
+msgstr "Kon voorkeuren niet toepassen"
+
+#. The variable is the title of the game
+#: cartridges/game.py:139
+msgid "{} hidden"
+msgstr "{} verborgen"
+
+#: cartridges/game.py:139
+msgid "{} unhidden"
+msgstr "{} hersteld"
+
+#. The variable is the title of the game
+#. The variable is the number of games removed
+#: cartridges/game.py:153 cartridges/importer/importer.py:391
+msgid "{} removed"
+msgstr "{} verwijderd"
+
+#: cartridges/preferences.py:133
+msgid "All games removed"
+msgstr "Alle games verwijderd"
+
+#: cartridges/preferences.py:181
+msgid ""
+"An API key is required to use SteamGridDB. You can generate one {}here{}."
+msgstr ""
+"Een API-sleutel is vereist om SteamGridDB te gebruiken. U kunt er {}hier{} "
+"één genereren."
+
+#: cartridges/preferences.py:196
+msgid "Downloading covers…"
+msgstr "Covers downloaden…"
+
+#: cartridges/preferences.py:215
+msgid "Covers updated"
+msgstr "Covers bijgewerkt"
+
+#: cartridges/preferences.py:360
+msgid "Installation Not Found"
+msgstr "Installatie niet gevonden"
+
+#: cartridges/preferences.py:361
+msgid "Select a valid directory"
+msgstr "Selecteer een geldige map"
+
+#: cartridges/preferences.py:397 cartridges/importer/importer.py:318
+msgid "Warning"
+msgstr "Waarschuwing"
+
+#: cartridges/preferences.py:431
+msgid "Invalid Directory"
+msgstr "Ongeldige map"
+
+#: cartridges/preferences.py:437
+msgid "Set Location"
+msgstr "Locatie instellen"
+
+#: cartridges/utils/create_dialog.py:33 cartridges/importer/importer.py:319
+msgid "Dismiss"
+msgstr "Sluiten"
+
+#: cartridges/importer/importer.py:145
+msgid "Importing Games…"
+msgstr "Games importeren…"
+
+#: cartridges/importer/importer.py:338
+msgid "The following errors occured during import:"
+msgstr "De volgende fouten zijn opgetreden tijdens het importeren:"
+
+#: cartridges/importer/importer.py:367
+msgid "No new games found"
+msgstr "Geen nieuwe games gevonden"
+
+#: cartridges/importer/importer.py:379
+msgid "1 game imported"
+msgstr "1 game geïmporteerd"
+
+#. The variable is the number of games
+#: cartridges/importer/importer.py:383
+msgid "{} games imported"
+msgstr "{} games geïmporteerd"
+
+#. A single game removed
+#: cartridges/importer/importer.py:387
+msgid "1 removed"
+msgstr "1 verwijderd"
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:34
+msgid "Select the {} cache directory."
+msgstr "Selecteer de cache-map van {}."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:36
+msgid "Select the {} configuration directory."
+msgstr "Selecteer de configuratiemap van {}."
+
+#. The variable is the name of the source
+#: cartridges/importer/location.py:38
+msgid "Select the {} data directory."
+msgstr "Selecteer de gegevensmap van {}."
+
+#: cartridges/importer/retroarch_source.py:129
+msgid "No RetroArch Core Selected"
+msgstr "Geen RetroArch-core geselecteerd"
+
+#. The variable is a newline separated list of playlists
+#: cartridges/importer/retroarch_source.py:131
+msgid "The following playlists have no default core:"
+msgstr "De volgende afspeellijsten hebben geen standaard-core:"
+
+#: cartridges/importer/retroarch_source.py:133
+msgid "Games with no core selected were not imported"
+msgstr "Games zonder geselecteerde core zijn niet geïmporteerd"
+
+#: cartridges/store/managers/sgdb_manager.py:46
+msgid "Couldn't Authenticate SteamGridDB"
+msgstr "Kan SteamGridDB niet authenticeren"
+
+#: cartridges/store/managers/sgdb_manager.py:47
+msgid "Verify your API key in preferences"
+msgstr "Verifieer uw API-sleutel onder voorkeuren"
+
+#~ msgid "Cache Location"
+#~ msgstr "Cache-locatie"
+
+#~ msgid "Library"
+#~ msgstr "Bibliotheek"
+
+#~ msgid "Show preferences"
+#~ msgstr "Voorkeuren tonen"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Sneltoetsen"
+
+#~ msgid "Open menu"
+#~ msgstr "Menu openen"
+
+#~ msgid "Add new game"
+#~ msgstr "Nieuwe game toevoegen"
+
+#~ msgid "Import games"
+#~ msgstr "Games importeren"
+
+#~ msgid "Back"
+#~ msgstr "Terug"
+
+#, fuzzy
+#~| msgid "Search"
+#~ msgid "Search games"
+#~ msgstr "Zoeken"
+
+#, fuzzy
+#~| msgid "Show hidden games"
+#~ msgid "Search hidden games"
+#~ msgstr "Verborgen games tonen"
+
+#~ msgid "The title of the game"
+#~ msgstr "De titel van de game"
+
+#~ msgid "Developer"
+#~ msgstr "Ontwikkelaar"
+
+#~ msgid "File to open or command to run when launching the game"
+#~ msgstr ""
+#~ "Te openen bestand of uit te voeren opdracht bij het starten van de game"
+
+#~ msgid "Confirm"
+#~ msgstr "Bevestigen"
+
+#, fuzzy
+#~| msgid "The Steam directory cannot be found."
+#~ msgid "Directory not Valid"
+#~ msgstr "Steam-map kan niet worden gevonden"
+
+#, fuzzy
+#~| msgid "Confirm"
+#~ msgid "Configuration"
+#~ msgstr "Bevestigen"
+
+#~ msgid "Steam Install Location"
+#~ msgstr "Installatielocatie van Steam"
+
+#~ msgid "Lutris Install Location"
+#~ msgstr "Installatielocatie van Lutris"
+
+#~ msgid "Heroic Install Location"
+#~ msgstr "Installatielocatie van Heroic"
+
+#~ msgid "Bottles Install Location"
+#~ msgstr "Installatielocatie van Bottles"
+
+#~ msgid "Today"
+#~ msgstr "Vandaag"
+
+#~ msgid "Yesterday"
+#~ msgstr "Gisteren"
+
+#~ msgid "Cache Not Found"
+#~ msgstr "Cache niet gevonden"
+
+#~ msgid "Select the Lutris cache directory."
+#~ msgstr "Selecteer de cache-map van Lutris"
+
+#~ msgid "Directory to use when importing games"
+#~ msgstr "Map om te gebruiken bij het importeren van games"
+
+#~ msgid "Extra Steam Libraries"
+#~ msgstr "Extra Steam-bibliotheken"
+
+#~ msgid "Select other directories where you have Steam games installed"
+#~ msgstr "Andere mappen waar u Steam-games heeft geïnstalleerd"
+
+#~ msgid "Clear"
+#~ msgstr "Wissen"
+
+#~ msgid "Directory to use when importing game covers"
+#~ msgstr "Map om te gebruiken bij het importeren van game-covers"
+
+#~ msgid "Details"
+#~ msgstr "Details"
+
+#~ msgid "No new games were found on your system."
+#~ msgstr "Geen nieuwe games gevonden op uw systeem"
+
+#~ msgid "Successfully imported 1 game."
+#~ msgstr "1 game succesvol geïmporteerd"
+
+#~ msgid "Successfully imported {} games."
+#~ msgstr "{} games succesvol geïmporteerd"
+
+#~ msgid ""
+#~ "Looks like you have multiple Steam libraries. Would you like to add them "
+#~ "in preferences?"
+#~ msgstr ""
+#~ "Het lijkt erop dat u meerdere Steam-bibliotheken heeft. Wilt u ze "
+#~ "toevoegen in de voorkeuren?"
+
+#~ msgid "Launch your games"
+#~ msgstr "Start uw games op"
+
+#, python-brace-format
+#~ msgid "Last played: {last_played_date}"
+#~ msgstr "Laatst gespeeld op {last_played_date}"
+
+#, python-brace-format
+#~ msgid "Successfully imported {games_no} games."
+#~ msgstr "{games_no} games succesvol geïmporteerd"
+
+#, python-brace-format
+#~ msgid "C:\\path\\to\\{file_name}"
+#~ msgstr "C:\\pad\\naar\\{file_name}"
+
+#, python-brace-format
+#~ msgid "/path/to/{file_name}"
+#~ msgstr "/pad/naar/{file_name}"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "Search"
+#~ msgstr "Zoeken"
+
+#, fuzzy
+#~ msgctxt "shortcuts window"
+#~ msgid "Undo"
+#~ msgstr "Ongedaan maken"
+
+#~ msgid "First stable release"
+#~ msgstr "Eerste stabiele uitgave"
+
+#~ msgctxt "shortcut window"
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Search"
+#~ msgstr "Zoeken"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Undo"
+#~ msgstr "Ongedaan maken"
+
+#~ msgid "Couldn't Import Games"
+#~ msgstr "Kon games niet importeren"
+
+#~ msgid "The Bottles directory cannot be found."
+#~ msgstr "De Bottles-map kan niet worden gevonden"
+
+#~ msgid "Set Bottles Location"
+#~ msgstr "Bottles-locatie instellen"
+
+#~ msgid "No new games were found in the Bottles library."
+#~ msgstr "Geen nieuwe games gevonden in de Bottles-bibliotheek"
+
+#~ msgid "Bottles Games Imported"
+#~ msgstr "Bottles-games geïmporteerd"
+
+#~ msgid "The Heroic directory cannot be found."
+#~ msgstr "De Heroic-map kan niet worden gevonden"
+
+#~ msgid "Heroic Games Imported"
+#~ msgstr "Heroic-games geïmporteerd"
+
+#~ msgid "No new games were found in the Steam library."
+#~ msgstr "Geen nieuwe games gevonden in de Steam-bibliotheek"
+
+#~ msgid "Talking to Steam"
+#~ msgstr "Steam-bibliotheek aan het ophalen"
+
+#, fuzzy
+#~| msgid "No new games were found in the Heroic library."
+#~ msgid "No new games were found on your device."
+#~ msgstr "Geen nieuwe games gevonden in de Heroic-bibliotheek"
+
+#~ msgid "Set Steam Location"
+#~ msgstr "Steam-locatie instellen"
