@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/BadKiko/steam-online-fix-launcher/main/banner.svg?raw=true" alt="banner" height="150" />
+    <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/refs/heads/main/banner.svg" alt="banner" height="150" />
 </p>
 <h3 align="center">SOFL </h3>
 
