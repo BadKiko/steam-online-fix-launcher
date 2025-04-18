@@ -14,6 +14,7 @@
     <file>library_placeholder_small.svg</file>
   </gresource>
   <gresource prefix="@PREFIX@/icons/scalable/categories/">
+  <file alias="cog-source-symbolic.svg">icons/sources/cog-source-symbolic.svg</file>
   <file alias="bottles-source-symbolic.svg">icons/sources/bottles-source-symbolic.svg</file>
   <file alias="flatpak-source-symbolic.svg">icons/sources/flatpak-source-symbolic.svg</file>
   <file alias="heroic-source-symbolic.svg">icons/sources/heroic-source-symbolic.svg</file>

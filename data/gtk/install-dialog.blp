@@ -3,12 +3,16 @@ using Adw 1;
 
 template $InstallDialog: Adw.Dialog {
   content-width: 480;
-
+  
   Adw.ToolbarView {
     [top]
     Adw.HeaderBar HeaderBar {
       show-start-title-buttons: false;
       show-end-title-buttons: false;
+
+      title-widget: Adw.WindowTitle {
+        title: _("Add Game");
+      };
 
       [start]
       Button cancel_button {
@@ -18,21 +22,47 @@ template $InstallDialog: Adw.Dialog {
 
       [end]
       Button apply_button {
+        label: _("Add");
+        sensitive: false;
+
         styles [
-          "suggested-action"
+          "suggested-action",
         ]
       }
     }
 
-    Adw.PreferencesPage {
-      Adw.PreferencesGroup {
-        Label test_label {
-          label: "Текст для теста";
-          halign: center;
-          margin-top: 24;
-          margin-bottom: 24;
+    content: Adw.ToastOverlay toast_overlay {
+      child: Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+          Adw.EntryRow game_path {
+            title: _("Game Path");
+
+            [suffix]
+            Button file_chooser_button {
+              valign: center;
+              icon-name: "document-open-symbolic";
+              tooltip-text: _("Select File");
+              clicked => $on_file_chooser_clicked();
+
+              styles [
+                "flat",
+              ]
+            }
+          }
+
+          Adw.EntryRow game_title {
+            title: _("Game Title");
+          }
+
+          // Status page is hidden but we keep it in UI for compatibility
+          Adw.StatusPage status_page {
+            title: _("Status");
+            description: _("Select a game file to check");
+            icon-name: "dialog-question-symbolic";
+            visible: false;
+          }
         }
-      }
-    }
+      };
+    };
   }
 }

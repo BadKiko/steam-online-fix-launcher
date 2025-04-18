@@ -3,6 +3,7 @@ using Adw 1;
 
 template $SOFLPreferences: Adw.PreferencesDialog {
   search-enabled: true;
+  content-width: 800;
 
   Adw.PreferencesPage general_page {
     name: "general";
@@ -39,7 +40,7 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         title: _("Remove All Games");
 
         styles [
-          "destructive-action"
+          "destructive-action",
         ]
       }
 
@@ -48,7 +49,7 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         title: "Reset App";
 
         styles [
-          "destructive-action"
+          "destructive-action",
         ]
       }
     }
@@ -92,12 +93,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -119,12 +120,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -154,12 +155,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -197,12 +198,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -224,12 +225,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -251,12 +252,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -278,12 +279,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -306,12 +307,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -324,12 +325,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -395,6 +396,32 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             visible: false;
             valign: center;
           }
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesPage online_fix_page {
+    name: "online-fix";
+    title: _("Online-Fix");
+    icon-name: "image-x-generic-symbolic";
+
+    Adw.PreferencesGroup online_fix_group {
+      title: _("Installation");
+      description: _("Set your installation settings for online-fix games");
+
+      Adw.EntryRow online_fix_entry_row {
+        title: _("Default path");
+
+        [suffix]
+        Button online_fix_file_chooser_button {
+          valign: center;
+          icon-name: "folder-symbolic";
+          tooltip-text: _("Select File");
+
+          styles [
+            "flat",
+          ]
         }
       }
     }
