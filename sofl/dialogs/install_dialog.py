@@ -22,6 +22,7 @@
 import os
 import re
 import rarfile
+import subprocess
 from pathlib import Path
 from sys import platform
 from typing import Any, Optional
@@ -34,6 +35,7 @@ from sofl.game import Game
 # Constants
 ONLINE_FIX_PASSWORD = "online-fix.me"
 GAME_TITLE_REGEX = r"(^.*?)\.v"
+TOAST_DEBOUNCE_DELAY = 1000  # Миллисекунды
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/install-dialog.ui")
 class InstallDialog(Adw.Dialog):
@@ -47,6 +49,8 @@ class InstallDialog(Adw.Dialog):
     toast_overlay = Gtk.Template.Child()
     
     is_open: bool = False
+    _toast_debounce_id: Optional[int] = None
+    _last_toast_message: Optional[str] = None
 
     def __init__(self, game: Optional[Game] = None, **kwargs: Any):
         super().__init__(**kwargs)
@@ -162,32 +166,16 @@ class InstallDialog(Adw.Dialog):
             # File exists and is accessible, continue with checking
             if path.lower().endswith(".rar"):
                 try:
-                    # Check if the archive is password protected
-                    with rarfile.RarFile(path) as rar_file:
-                        try:
-                            # Try to view information about the first file without a password
-                            first_file = rar_file.infolist()[0]
-                            if first_file.needs_password():
-                                # Try with online-fix.me password
-                                try:
-                                    if self.validate_with_password(path):
-                                        self.show_toast("Confirmed: This is an Online-Fix game")
-                                        self.extract_game_title(os.path.basename(path))
-                                        self.apply_button.set_sensitive(True)
-                                    else:
-                                        self.show_toast("Wrong password, this is not an Online-Fix game")
-                                        self.apply_button.set_sensitive(False)
-                                except Exception as e:
-                                    self.show_toast(f"Error checking archive: {str(e)}")
-                                    self.apply_button.set_sensitive(False)
-                            else:
-                                self.show_toast("Archive is not password protected, this is not an Online-Fix game")
-                                self.apply_button.set_sensitive(False)
-                        except rarfile.BadRarFile as e:
-                            self.show_toast(f"RAR archive error: {str(e)}")
-                            self.apply_button.set_sensitive(False)
-                except (rarfile.BadRarFile, Exception) as e:
-                    self.show_toast(f"Error opening archive: {str(e)}")
+                    # Проверяем архив с паролем напрямую
+                    if self.validate_with_password(path):
+                        self.show_toast("Confirmed: This is an Online-Fix game")
+                        self.extract_game_title(os.path.basename(path))
+                        self.apply_button.set_sensitive(True)
+                    else:
+                        # Если с паролем не получилось, попробуем проверить архив более подробно
+                        self.check_rar_detailed(path)
+                except Exception as e:
+                    self.show_toast(f"Error checking archive: {str(e)}")
                     self.apply_button.set_sensitive(False)
             elif path.lower().endswith(".exe"):
                 # Placeholder for exe files
@@ -200,6 +188,47 @@ class InstallDialog(Adw.Dialog):
         except GLib.Error as error:
             self.show_toast(f"Error accessing file: {error.message}")
             self.apply_button.set_sensitive(False)
+            
+    def check_rar_detailed(self, path):
+        """Более подробная проверка RAR-архива"""
+        try:
+            # Попытка открыть архив без пароля для проверки структуры
+            with rarfile.RarFile(path) as rar_file:
+                try:
+                    # Получаем список файлов
+                    info_list = rar_file.infolist()
+                    
+                    # Выводим информацию о количестве файлов для диагностики
+                    if not info_list:
+                        self.show_toast("RAR archive appears empty (0 files found)")
+                        self.apply_button.set_sensitive(False)
+                        return
+                    
+                    # Проверяем, защищен ли первый файл паролем
+                    first_file = info_list[0]
+                    if first_file.needs_password():
+                        self.show_toast(f"Archive is password protected. Testing with password...")
+                        # Если файл требует пароль, ещё раз проверим с паролем
+                        if self.validate_with_password(path):
+                            self.show_toast("Confirmed: This is an Online-Fix game")
+                            self.extract_game_title(os.path.basename(path))
+                            self.apply_button.set_sensitive(True)
+                        else:
+                            self.show_toast("Wrong password, this is not an Online-Fix game")
+                            self.apply_button.set_sensitive(False)
+                    else:
+                        self.show_toast(f"Archive contains {len(info_list)} files but is not password protected")
+                        self.apply_button.set_sensitive(False)
+                        
+                except rarfile.BadRarFile as e:
+                    self.show_toast(f"RAR archive error: {str(e)}")
+                    self.apply_button.set_sensitive(False)
+                except IndexError:
+                    self.show_toast("Invalid RAR archive structure")
+                    self.apply_button.set_sensitive(False)
+        except Exception as e:
+            self.show_toast(f"Error analyzing archive: {str(e)}")
+            self.apply_button.set_sensitive(False)
 
     def validate_with_password(self, path):
         try:
@@ -207,10 +236,11 @@ class InstallDialog(Adw.Dialog):
                 # Set the password
                 rar_file.setpassword(ONLINE_FIX_PASSWORD)
                 # Try to get file list
-                rar_file.infolist()
-                # If no exception was thrown, the password works
-                return True
-        except (rarfile.BadRarFile, rarfile.PasswordRequired, Exception):
+                files = rar_file.infolist()
+                # Если архив имеет хотя бы один файл и с паролем открылся без ошибок
+                return len(files) > 0
+        except (rarfile.BadRarFile, rarfile.PasswordRequired, Exception) as e:
+            self.show_toast(f"Password verification failed: {str(e)}")
             return False
 
     def extract_game_title(self, filename):
@@ -220,11 +250,35 @@ class InstallDialog(Adw.Dialog):
             self.game_title.set_text(game_title)
 
     def show_toast(self, message):
-        """Show a toast notification using the toast overlay"""
-        toast = Adw.Toast.new(message)
-        toast.set_timeout(3)  # 3 seconds
-        toast.set_priority(Adw.ToastPriority.HIGH)
-        self.toast_overlay.add_toast(toast)
+        """Show a toast notification using the toast overlay with debouncing"""
+        # Если сообщение такое же как предыдущее, сбросим таймер
+        if self._toast_debounce_id is not None:
+            GLib.source_remove(self._toast_debounce_id)
+            self._toast_debounce_id = None
+        
+        # Запомним последнее сообщение
+        self._last_toast_message = message
+        
+        # Устанавливаем новый таймер для дебаунсинга
+        self._toast_debounce_id = GLib.timeout_add(
+            TOAST_DEBOUNCE_DELAY, 
+            self._do_show_toast
+        )
+
+    def _do_show_toast(self):
+        """Фактически показать тост после дебаунсинга"""
+        if self._last_toast_message:
+            toast = Adw.Toast.new(self._last_toast_message)
+            toast.set_timeout(3)  # 3 секунды
+            toast.set_priority(Adw.ToastPriority.HIGH)
+            self.toast_overlay.add_toast(toast)
+        
+        # Сбрасываем ID таймера и сообщение
+        self._toast_debounce_id = None
+        self._last_toast_message = None
+        
+        # Возвращаем False, чтобы остановить повторения таймера
+        return False
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
