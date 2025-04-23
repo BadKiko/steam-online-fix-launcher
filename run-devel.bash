@@ -349,11 +349,8 @@ check_install_sdk() {
     if ! flatpak list | grep -q "$SDK//$RUNTIME_VERSION"; then
         log_message "warn" "$SDK версии $RUNTIME_VERSION не установлен. Устанавливаю..."
         
-        # Сначала пробуем установить SDK глобально (для всей системы)
-        if flatpak install --system -y flathub "$SDK//$RUNTIME_VERSION"; then
-            log_message "info" "$SDK версии $RUNTIME_VERSION успешно установлен глобально"
-        # Затем пробуем установить для пользователя
-        elif flatpak install --user -y flathub "$SDK//$RUNTIME_VERSION"; then
+        # Устанавливаем SDK только для пользователя (--user), чтобы избежать ошибки с правами доступа
+        if flatpak install --user -y flathub "$SDK//$RUNTIME_VERSION"; then
             log_message "info" "$SDK версии $RUNTIME_VERSION успешно установлен для пользователя"
         else
             # Пробуем установить из другого репозитория
@@ -373,13 +370,7 @@ check_install_sdk() {
                     
                     if [ -n "$ALTERNATIVE_VERSION" ]; then
                         log_message "info" "Попытка установить альтернативную версию: $ALTERNATIVE_VERSION"
-                        if flatpak install --system -y flathub "$SDK//$ALTERNATIVE_VERSION"; then
-                            log_message "info" "$SDK версии $ALTERNATIVE_VERSION успешно установлен глобально"
-                            # Обновляем манифест с новой версией
-                            log_message "warn" "Обновляю манифест для использования версии $ALTERNATIVE_VERSION"
-                            sed -i "s/\"runtime-version\": \"$RUNTIME_VERSION\"/\"runtime-version\": \"$ALTERNATIVE_VERSION\"/" "$MANIFEST"
-                            RUNTIME_VERSION="$ALTERNATIVE_VERSION"
-                        elif flatpak install --user -y flathub "$SDK//$ALTERNATIVE_VERSION"; then
+                        if flatpak install --user -y flathub "$SDK//$ALTERNATIVE_VERSION"; then
                             log_message "info" "$SDK версии $ALTERNATIVE_VERSION успешно установлен для пользователя"
                             # Обновляем манифест с новой версией
                             log_message "warn" "Обновляю манифест для использования версии $ALTERNATIVE_VERSION"
@@ -406,9 +397,7 @@ check_install_sdk() {
     # Также проверяем наличие runtime
     if ! flatpak list | grep -q "$RUNTIME//$RUNTIME_VERSION"; then
         log_message "warn" "$RUNTIME версии $RUNTIME_VERSION не установлен. Устанавливаю..."
-        if flatpak install --system -y flathub "$RUNTIME//$RUNTIME_VERSION"; then
-            log_message "info" "$RUNTIME версии $RUNTIME_VERSION успешно установлен глобально"
-        elif flatpak install --user -y flathub "$RUNTIME//$RUNTIME_VERSION"; then
+        if flatpak install --user -y flathub "$RUNTIME//$RUNTIME_VERSION"; then
             log_message "info" "$RUNTIME версии $RUNTIME_VERSION успешно установлен для пользователя"
         else
             # Пробуем установить из другого репозитория

@@ -192,6 +192,58 @@ class InstallDialog(Adw.Dialog):
     def check_rar_detailed(self, path):
         """Более подробная проверка RAR-архива"""
         try:
+            # Проверим наличие исполняемого файла unrar в системе
+            unrar_path = rarfile.UNRAR_TOOL
+            if not os.path.exists(unrar_path):
+                # Проверяем альтернативные пути в зависимости от среды выполнения
+                alt_paths = [
+                    "/app/bin/unrar",  # В Flatpak
+                    "/usr/bin/unrar",   # В большинстве систем Linux
+                    "/bin/unrar",       # Альтернативный путь
+                ]
+                
+                for alt_path in alt_paths:
+                    if os.path.exists(alt_path):
+                        self.show_toast(f"Использую unrar из {alt_path}")
+                        rarfile.UNRAR_TOOL = alt_path
+                        unrar_path = alt_path
+                        break
+                
+                if not os.path.exists(rarfile.UNRAR_TOOL):
+                    self.show_toast(f"unrar не найден! Проверьте, установлен ли он в системе.")
+                    self.apply_button.set_sensitive(False)
+                    return
+            
+            self.show_toast(f"Путь к unrar: {unrar_path}")
+            
+            # Попробуем сначала напрямую использовать subprocess для проверки архива
+            try:
+                # Пробуем прямой вызов unrar для получения списка файлов с паролем
+                self.show_toast("Проверяю архив напрямую через unrar...")
+                result = subprocess.run(
+                    [unrar_path, "lb", "-p" + ONLINE_FIX_PASSWORD, path], 
+                    capture_output=True, 
+                    text=True, 
+                    check=False
+                )
+                
+                if result.returncode == 0 and result.stdout.strip():
+                    # Если получили список файлов, значит архив рабочий
+                    file_count = len(result.stdout.strip().split('\n'))
+                    self.show_toast(f"Напрямую через unrar найдено {file_count} файлов")
+                    
+                    # Извлечем название игры из имени файла
+                    self.extract_game_title(os.path.basename(path))
+                    self.apply_button.set_sensitive(True)
+                    return True
+                else:
+                    self.show_toast(f"Ошибка unrar: {result.stderr}")
+            except Exception as e:
+                self.show_toast(f"Ошибка при прямом вызове unrar: {str(e)}")
+            
+            # Если прямой метод не сработал, попробуем через rarfile
+            self.show_toast("Проверяю архив через библиотеку rarfile...")
+            
             # Попытка открыть архив без пароля для проверки структуры
             with rarfile.RarFile(path) as rar_file:
                 try:
@@ -200,47 +252,89 @@ class InstallDialog(Adw.Dialog):
                     
                     # Выводим информацию о количестве файлов для диагностики
                     if not info_list:
-                        self.show_toast("RAR archive appears empty (0 files found)")
+                        self.show_toast("RAR архив пуст (0 файлов найдено)")
                         self.apply_button.set_sensitive(False)
                         return
                     
                     # Проверяем, защищен ли первый файл паролем
                     first_file = info_list[0]
-                    if first_file.needs_password():
-                        self.show_toast(f"Archive is password protected. Testing with password...")
+                    is_encrypted = first_file.needs_password()
+                    self.show_toast(f"Архив содержит {len(info_list)} файлов, защищен паролем: {is_encrypted}")
+                    
+                    if is_encrypted:
                         # Если файл требует пароль, ещё раз проверим с паролем
+                        self.show_toast("Пробую открыть архив с паролем...")
                         if self.validate_with_password(path):
-                            self.show_toast("Confirmed: This is an Online-Fix game")
+                            self.show_toast("Подтверждено: Это игра Online-Fix")
                             self.extract_game_title(os.path.basename(path))
                             self.apply_button.set_sensitive(True)
                         else:
-                            self.show_toast("Wrong password, this is not an Online-Fix game")
+                            self.show_toast("Неверный пароль или проблема с архивом")
                             self.apply_button.set_sensitive(False)
                     else:
-                        self.show_toast(f"Archive contains {len(info_list)} files but is not password protected")
+                        self.show_toast(f"Архив содержит {len(info_list)} файлов, но не защищен паролем")
                         self.apply_button.set_sensitive(False)
                         
                 except rarfile.BadRarFile as e:
-                    self.show_toast(f"RAR archive error: {str(e)}")
+                    self.show_toast(f"Ошибка RAR архива: {str(e)}")
                     self.apply_button.set_sensitive(False)
                 except IndexError:
-                    self.show_toast("Invalid RAR archive structure")
+                    self.show_toast("Некорректная структура RAR архива")
                     self.apply_button.set_sensitive(False)
+        except rarfile.RarExecError as e:
+            self.show_toast(f"Ошибка запуска unrar: {str(e)}. Убедитесь, что unrar установлен.")
+            self.apply_button.set_sensitive(False)
         except Exception as e:
-            self.show_toast(f"Error analyzing archive: {str(e)}")
+            self.show_toast(f"Ошибка анализа архива: {str(e)}")
             self.apply_button.set_sensitive(False)
 
     def validate_with_password(self, path):
         try:
+            self.show_toast(f"Открываю архив с паролем: {ONLINE_FIX_PASSWORD}")
+            
+            # Сначала попробуем прямой вызов unrar
+            try:
+                unrar_path = rarfile.UNRAR_TOOL
+                result = subprocess.run(
+                    [unrar_path, "t", "-p" + ONLINE_FIX_PASSWORD, path], 
+                    capture_output=True, 
+                    text=True, 
+                    check=False
+                )
+                
+                if result.returncode == 0:
+                    self.show_toast("Архив успешно проверен через прямой вызов unrar")
+                    return True
+            except Exception as e:
+                self.show_toast(f"Ошибка прямой проверки: {str(e)}")
+            
+            # Если прямой метод не сработал, используем rarfile
             with rarfile.RarFile(path, 'r') as rar_file:
                 # Set the password
                 rar_file.setpassword(ONLINE_FIX_PASSWORD)
                 # Try to get file list
                 files = rar_file.infolist()
+                # Выведем детальную информацию о файлах в архиве
+                file_count = len(files)
+                self.show_toast(f"Найдено {file_count} файлов в архиве")
+                
+                if file_count > 0 and file_count < 5:  # Если файлов мало, покажем их имена
+                    file_names = [f.filename for f in files[:5]]
+                    self.show_toast(f"Файлы в архиве: {', '.join(file_names)}")
+                
                 # Если архив имеет хотя бы один файл и с паролем открылся без ошибок
-                return len(files) > 0
-        except (rarfile.BadRarFile, rarfile.PasswordRequired, Exception) as e:
-            self.show_toast(f"Password verification failed: {str(e)}")
+                return file_count > 0
+        except rarfile.BadRarFile as e:
+            self.show_toast(f"Ошибка формата RAR: {str(e)}")
+            return False
+        except rarfile.PasswordRequired as e:
+            self.show_toast(f"Требуется пароль: {str(e)}")
+            return False
+        except rarfile.RarExecError as e:
+            self.show_toast(f"Ошибка выполнения unrar: {str(e)}")
+            return False
+        except Exception as e:
+            self.show_toast(f"Ошибка проверки пароля: {str(e)}")
             return False
 
     def extract_game_title(self, filename):
