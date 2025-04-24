@@ -47,6 +47,7 @@ from sofl.importer.legendary_source import LegendarySource
 from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
+from sofl.importer.source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences
 from sofl.store.managers.cover_manager import CoverManager
@@ -252,7 +253,17 @@ class SOFLApplication(Adw.Application):
         elif source_id == "imported":
             name = _("Added")
         else:
-            name = globals()[f'{source_id.split("_")[0].title()}Source'].name
+            # Обрабатываем источник с дефисом (online-fix)
+            source_class_prefix = source_id
+            if "-" in source_id:
+                # Преобразуем "online-fix" в "OnlineFix"
+                parts = source_id.split("-")
+                source_class_prefix = "".join(part.title() for part in parts)
+            else:
+                # Обычная обработка для источников без дефиса
+                source_class_prefix = source_id.split("_")[0].title()
+                
+            name = globals()[f'{source_class_prefix}Source'].name
         return name
 
     def on_about_action(self, *_args: Any) -> None:

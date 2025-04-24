@@ -29,11 +29,14 @@ import threading
 from pathlib import Path
 from sys import platform
 from typing import Any, Optional, Callable
+from time import time
 
 from gi.repository import Adw, Gtk, GLib, Gio
 
 from sofl import shared
 from sofl.game import Game
+from sofl.installer.online_fix_installer import OnlineFixInstaller
+from sofl.details_dialog import DetailsDialog
 
 # Constants
 ONLINE_FIX_PASSWORD = "online-fix.me"
@@ -72,10 +75,16 @@ class InstallDialog(Adw.Dialog):
         # Hide status page, we'll use toast instead
         self.status_page.set_visible(False)
         
+        # Подключаем обработчик кнопки Install
+        self.apply_button.connect("clicked", self.on_install_clicked)
+        
         # Если заполнен игрой, заполняем поля
         if game:
             self.game_path.set_text(game.path if game.path else "")
             self.game_title.set_text(game.name if game.name else "")
+            
+        # Инициализируем установщик
+        self.installer = OnlineFixInstaller()
 
     def show_progress(self, show: bool, message: Optional[str] = None) -> None:
         """Показывает или скрывает индикатор загрузки
@@ -108,10 +117,9 @@ class InstallDialog(Adw.Dialog):
                 # Если скрываем - останавливаем спиннер
                 self.progress_spinner.set_spinning(False)
             
-            # Заставляем GTK обработать события и обновить UI
-            while Gtk.events_pending():
-                Gtk.main_iteration_do(False)
-                
+            # Форсируем обновление UI без использования устаревшего events_pending
+            # в GTK4 это автоматически обрабатывается через GLib.MainContext
+            
             return False
             
         # Выполняем в основном потоке, так как это UI операция
@@ -538,4 +546,127 @@ class InstallDialog(Adw.Dialog):
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
+
+    def on_install_clicked(self, button):
+        """Обработчик нажатия на кнопку Install (Установка игры)"""
+        # Получаем путь к архиву и название игры
+        archive_path = self.game_path.get_text()
+        game_name = self.game_title.get_text()
+        
+        if not archive_path or not game_name:
+            self.show_toast("Выберите архив и укажите название игры")
+            return
+            
+        # Проверяем, существует ли файл
+        if not os.path.exists(archive_path):
+            self.show_toast("Файл не существует")
+            return
+            
+        # Показываем прогресс
+        self.show_progress(True, "Подготовка к установке...")
+        
+        # Запускаем установку асинхронно
+        def install_task():
+            def progress_update(progress, message):
+                GLib.idle_add(lambda: self.update_installation_progress(progress, message))
+                
+            # Вызываем метод установки из установщика
+            success, result, executable = self.installer.install_game(
+                archive_path, 
+                game_name, 
+                progress_update
+            )
+            
+            return success, result, executable
+            
+        def after_install(result):
+            if not result:
+                self.show_toast("Ошибка при установке игры")
+                return
+                
+            success, install_path, executable = result
+            
+            if success:
+                self.show_toast(f"Игра успешно установлена в: {install_path}")
+                
+                # Создаем новую игру
+                try:
+                    # Инкрементально создаем ID для новой игры
+                    source_id = "online-fix"
+                    numbers = [0]
+                    for game_id in shared.store.source_games.get(source_id, set()):
+                        prefix = "online-fix_"
+                        if not game_id.startswith(prefix):
+                            continue
+                        try:
+                            numbers.append(int(game_id.replace(prefix, "", 1)))
+                        except ValueError:
+                            pass
+                    
+                    game_number = max(numbers) + 1
+                    
+                    # Создаем новую игру
+                    new_game = Game({
+                        "game_id": f"online-fix_{game_number}",
+                        "hidden": False,
+                        "source": source_id,
+                        "name": game_name,
+                        "path": install_path,
+                        "executable": executable if executable else "",
+                        "added": int(time()),
+                    })
+                    
+                    # Добавляем игру в хранилище
+                    shared.store.add_game(new_game, {}, run_pipeline=False)
+                    new_game.save()
+                    
+                    # Скрываем текущий диалог установки
+                    self.hide()
+                    
+                    # Показываем диалог деталей игры для завершения настройки
+                    GLib.idle_add(lambda: self.show_details_dialog(new_game))
+                    
+                except Exception as e:
+                    self.log_message(f"Ошибка при добавлении игры: {str(e)}", logging.ERROR)
+                    self.show_toast(f"Игра установлена, но не добавлена в библиотеку: {str(e)}")
+                    
+                    # Закрываем диалог после успешной установки через таймаут
+                    GLib.timeout_add(1500, lambda: self.hide() or False)
+            else:
+                self.show_toast(f"Ошибка при установке игры: {install_path}")
+        
+        self.run_async(install_task, after_install)
+    
+    def show_details_dialog(self, game):
+        """Показывает диалог с деталями игры для редактирования
+        
+        Args:
+            game: Игра для редактирования
+        """
+        try:
+            if DetailsDialog.is_open:
+                return
+            
+            # Устанавливаем флаг для диалога деталей
+            DetailsDialog.install_mode = True
+            
+            # Создаем и показываем диалог
+            dialog = DetailsDialog(game)
+            dialog.present(self.get_root())
+        except Exception as e:
+            self.log_message(f"Ошибка при открытии диалога деталей: {str(e)}", logging.ERROR)
+            self.show_toast(f"Не удалось открыть диалог настройки игры: {str(e)}")
+    
+    def update_installation_progress(self, progress: float, message: str) -> bool:
+        """Обновляет индикатор прогресса установки
+        
+        Args:
+            progress: Прогресс от 0 до 1
+            message: Сообщение о текущем статусе
+            
+        Returns:
+            bool: False для однократного вызова через GLib.idle_add
+        """
+        self.show_progress(True, message)
+        return False
 

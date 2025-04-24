@@ -20,10 +20,11 @@
 import sys
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Any, Collection, Generator, Optional
+from typing import Any, Collection, Generator, Optional, TypeVar
 
 from sofl.game import Game
 from sofl.importer.location import Location, UnresolvableLocationError
+from sofl.errors.friendly_error import FriendlyError
 
 # Type of the data returned by iterating on a Source
 SourceIterationResult = Optional[Game | tuple[Game, tuple[Any]]]
@@ -132,3 +133,20 @@ class URLExecutableSource(ExecutableFormatSource):
         raise NotImplementedError(
             f"No URL handler command available for {sys.platform}"
         )
+
+
+class OnlineFixSource(Source):
+    """Source for Online-Fix games"""
+    
+    source_id = "online-fix"
+    name = _("Online-Fix")
+    iterable_class = SourceIterable  # Используем базовый итератор, так как у нас нет специальной логики
+    available_on = {"linux", "win32", "darwin"}  # Доступно на всех платформах
+    
+    def __init__(self) -> None:
+        super().__init__()
+        self.locations = []  # У нас нет специальных локаций для проверки
+    
+    def make_executable(self, *args, **kwargs) -> str:
+        """Создает команду для запуска игры"""
+        return kwargs.get("executable", "")
