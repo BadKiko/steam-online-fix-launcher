@@ -91,6 +91,13 @@ class DetailsDialog(Adw.Dialog):
 
         if self.install_mode:
             self.set_title(_("Install Game"))
+            # В режиме установки делаем все поля редактируемыми
+            self.name.set_sensitive(True)
+            self.developer.set_sensitive(True)
+            self.executable.set_sensitive(True)
+            self.apply_button.set_sensitive(True)
+            self.cover_button_edit.set_sensitive(True)
+            self.file_chooser_button.set_sensitive(True)
 
         image_filter = Gtk.FileFilter(name=_("Images"))
 
@@ -253,7 +260,6 @@ class DetailsDialog(Adw.Dialog):
         self.game.save()
         self.game.update()
 
-        # TODO: this is fucked up (less than before)
         # Get a cover from SGDB if none is present
         if not self.game_cover.get_texture():
             self.game.set_loading(1)
@@ -263,8 +269,12 @@ class DetailsDialog(Adw.Dialog):
 
         self.game_cover.pictures.remove(self.cover)
 
-        self.close()
-        shared.win.show_details_page(self.game)
+        # В режиме установки не показываем страницу деталей
+        if not self.install_mode:
+            self.close()
+            shared.win.show_details_page(self.game)
+        else:
+            self.close()
 
     def update_cover_callback(self, manager: SgdbManager) -> None:
         # Set the game as not loading
@@ -344,3 +354,26 @@ class DetailsDialog(Adw.Dialog):
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
+        
+        # При закрытии диалога также закрываем все дочерние диалоги и сбрасываем флаг install_mode
+        if not is_open:
+            # Сбрасываем флаг install_mode
+            self.__class__.install_mode = False
+            
+            # Закрываем все диалоги в корневом окне
+            root = self.get_root()
+            if root:
+                # Получаем все дочерние виджеты и закрываем диалоги
+                def close_dialogs(widget):
+                    if isinstance(widget, (Adw.Dialog, Gtk.Dialog)) and widget != self:
+                        widget.close()
+                    if hasattr(widget, 'get_first_child'):
+                        child = widget.get_first_child()
+                        while child:
+                            close_dialogs(child)
+                            child = child.get_next_sibling()
+                
+                close_dialogs(root)
+                
+                # Возвращаем фокус основному окну
+                root.present()

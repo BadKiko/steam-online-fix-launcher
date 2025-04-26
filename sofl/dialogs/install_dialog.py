@@ -612,7 +612,7 @@ class InstallDialog(Adw.Dialog):
                         "source": source_id,
                         "name": game_name,
                         "path": install_path,
-                        "executable": executable if executable else "",
+                        "executable":  str(Path(shared.home) / "Games" / "Online-Fix" / executable) if executable else "",
                         "added": int(time()),
                     })
                     
