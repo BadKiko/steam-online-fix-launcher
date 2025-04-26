@@ -425,7 +425,8 @@ class SOFLPreferences(Adw.PreferencesDialog):
             """Callback called when a dir picker button is clicked"""
             try:
                 path = Path(self.file_chooser.select_folder_finish(result).get_path())
-            except GLib.Error:
+            except GLib.Error as e:
+                logging.error("Error selecting directory: %s", e.message)
                 return
 
             # Good picked location
@@ -480,40 +481,39 @@ class SOFLPreferences(Adw.PreferencesDialog):
         # Set the source row subtitles
         self.resolve_locations(source)
         self.update_source_action_row_paths(source)
-
     def setup_online_fix_settings(self) -> None:
-        """Настройка параметров для Online-Fix"""
-        # Проверяем наличие ключа в настройках
+        """Setup parameters for Online-Fix"""
+        # Check for the key in settings
         try:
-            # Пробуем получить значение, если ключ существует
+            # Try to get the value if the key exists
             current_path = shared.schema.get_string("online-fix-install-path")
         except:
-            # Если ключа нет, устанавливаем значение по умолчанию
+            # If the key does not exist, set the default value
             default_path = str(Path(shared.home) / "Games" / "Online-Fix")
             shared.schema.set_string("online-fix-install-path", default_path)
             current_path = default_path
         
-        # Заполняем поле последним сохраненным путем
+        # Fill the field with the last saved path
         self.online_fix_entry_row.set_text(current_path)
         
-        # Обработчик изменения пути вручную
+        # Handler for manual path change
         def online_fix_path_changed(*_args: Any) -> None:
             shared.schema.set_string("online-fix-install-path", self.online_fix_entry_row.get_text())
         
         self.online_fix_entry_row.connect("changed", online_fix_path_changed)
         
-        # Обработчик кнопки выбора папки
-        self.online_fix_file_chooser_button.connect("clicked", self.choose_online_fix_dir)
+        # Handler for the folder selection button
+        self.online_fix_file_chooser_button.connect("clicked", self.online_fix_path_browse_handler)
 
-    def choose_online_fix_dir(self, _widget: Any) -> None:
-        """Выбор директории для установки Online-Fix игр"""
+    def online_fix_path_browse_handler(self, *_args):
+        """Choose directory for Online-Fix games installation"""
         
         def set_online_fix_dir(_widget: Any, result: Gio.Task) -> None:
             try:
                 path = Path(self.file_chooser.select_folder_finish(result).get_path())
                 shared.schema.set_string("online-fix-install-path", str(path))
                 self.online_fix_entry_row.set_text(str(path))
-            except GLib.Error:
-                return
+            except GLib.Error as e:
+                logging.debug("Error selecting folder for Online-Fix: %s", e)
         
         self.file_chooser.select_folder(shared.win, None, set_online_fix_dir)

@@ -327,96 +327,96 @@ fi
 
 # Функция для проверки и установки необходимых SDK Flatpak
 check_install_sdk() {
-    # Извлечение информации о runtime и SDK из манифеста
+    # Extracting runtime and SDK info from manifest
     if [ ! -f "$MANIFEST" ]; then
-        log_message "error" "Манифест $MANIFEST не найден"
+        log_message "error" "Manifest $MANIFEST not found"
         exit 1
     fi
     
-    # Извлекаем информацию о runtime, версии и SDK из JSON файла
+    # Extract runtime, version and SDK info from JSON file
     RUNTIME=$(grep -o '"runtime": "[^"]*"' "$MANIFEST" | cut -d'"' -f4)
     RUNTIME_VERSION=$(grep -o '"runtime-version": "[^"]*"' "$MANIFEST" | cut -d'"' -f4)
     SDK=$(grep -o '"sdk": "[^"]*"' "$MANIFEST" | cut -d'"' -f4)
     
     if [ -z "$RUNTIME" ] || [ -z "$RUNTIME_VERSION" ] || [ -z "$SDK" ]; then
-        log_message "error" "Не удалось извлечь информацию о runtime/sdk из манифеста"
+        log_message "error" "Failed to extract runtime/sdk info from manifest"
         exit 1
     fi
     
-    log_message "info" "Проверка наличия $SDK/$RUNTIME_VERSION..."
+    log_message "info" "Checking for $SDK/$RUNTIME_VERSION..."
     
-    # Проверяем, установлен ли SDK
+    # Check if SDK is installed
     if ! flatpak list | grep -q "$SDK//$RUNTIME_VERSION"; then
-        log_message "warn" "$SDK версии $RUNTIME_VERSION не установлен. Устанавливаю..."
+        log_message "warn" "$SDK version $RUNTIME_VERSION not installed. Installing..."
         
-        # Устанавливаем SDK только для пользователя (--user), чтобы избежать ошибки с правами доступа
+        # Install SDK only for user (--user) to avoid access rights issue
         if flatpak install --user -y flathub "$SDK//$RUNTIME_VERSION"; then
-            log_message "info" "$SDK версии $RUNTIME_VERSION успешно установлен для пользователя"
+            log_message "info" "$SDK version $RUNTIME_VERSION successfully installed for user"
         else
-            # Пробуем установить из другого репозитория
-            log_message "warn" "Не удалось установить из Flathub, пробую GNOME репозиторий..."
+            # Try to install from another repository
+            log_message "warn" "Failed to install from Flathub, trying GNOME repository..."
             if flatpak install --user -y gnome-nightly "$SDK//$RUNTIME_VERSION"; then
-                log_message "info" "$SDK версии $RUNTIME_VERSION успешно установлен из GNOME репозитория"
+                log_message "info" "$SDK version $RUNTIME_VERSION successfully installed from GNOME repository"
             else
-                # Пробуем более старую версию, если указанная не найдена
-                log_message "warn" "Версия $RUNTIME_VERSION не найдена, пробую найти другие доступные версии..."
+                # Try older version if specified version not found
+                log_message "warn" "Version $RUNTIME_VERSION not found, trying to find other available versions..."
                 
-                # Получаем список доступных версий
+                # Get list of available versions
                 AVAILABLE_SDK_VERSIONS=$(flatpak remote-ls --columns=ref flathub | grep "$SDK" | sort -r)
                 if [ -n "$AVAILABLE_SDK_VERSIONS" ]; then
-                    log_message "info" "Найдены доступные версии SDK: $AVAILABLE_SDK_VERSIONS"
-                    # Берем первую (самую новую) версию
+                    log_message "info" "Found available SDK versions: $AVAILABLE_SDK_VERSIONS"
+                    # Take first (latest) version
                     ALTERNATIVE_VERSION=$(echo "$AVAILABLE_SDK_VERSIONS" | head -n1 | sed -E 's/.*\/([0-9.]+)\/.*/\1/')
                     
                     if [ -n "$ALTERNATIVE_VERSION" ]; then
-                        log_message "info" "Попытка установить альтернативную версию: $ALTERNATIVE_VERSION"
+                        log_message "info" "Trying to install alternative version: $ALTERNATIVE_VERSION"
                         if flatpak install --user -y flathub "$SDK//$ALTERNATIVE_VERSION"; then
-                            log_message "info" "$SDK версии $ALTERNATIVE_VERSION успешно установлен для пользователя"
-                            # Обновляем манифест с новой версией
-                            log_message "warn" "Обновляю манифест для использования версии $ALTERNATIVE_VERSION"
+                            log_message "info" "$SDK version $ALTERNATIVE_VERSION successfully installed for user"
+                            # Update manifest with new version
+                            log_message "warn" "Updating manifest to use version $ALTERNATIVE_VERSION"
                             sed -i "s/\"runtime-version\": \"$RUNTIME_VERSION\"/\"runtime-version\": \"$ALTERNATIVE_VERSION\"/" "$MANIFEST"
                             RUNTIME_VERSION="$ALTERNATIVE_VERSION"
                         else
-                            log_message "error" "Не удалось установить $SDK"
+                            log_message "error" "Failed to install $SDK"
                             exit 1
                         fi
                     else
-                        log_message "error" "Не удалось найти альтернативную версию для $SDK"
+                        log_message "error" "Failed to find alternative version for $SDK"
                         exit 1
                     fi
                 else
-                    log_message "error" "Не удалось установить $SDK версии $RUNTIME_VERSION"
+                    log_message "error" "Failed to install $SDK version $RUNTIME_VERSION"
                     exit 1
                 fi
             fi
         fi
     else
-        log_message "info" "$SDK версии $RUNTIME_VERSION уже установлен"
+        log_message "info" "$SDK version $RUNTIME_VERSION already installed"
     fi
     
-    # Также проверяем наличие runtime
+    # Also check for runtime
     if ! flatpak list | grep -q "$RUNTIME//$RUNTIME_VERSION"; then
-        log_message "warn" "$RUNTIME версии $RUNTIME_VERSION не установлен. Устанавливаю..."
+        log_message "warn" "$RUNTIME version $RUNTIME_VERSION not installed. Installing..."
         if flatpak install --user -y flathub "$RUNTIME//$RUNTIME_VERSION"; then
-            log_message "info" "$RUNTIME версии $RUNTIME_VERSION успешно установлен для пользователя"
+            log_message "info" "$RUNTIME version $RUNTIME_VERSION successfully installed for user"
         else
-            # Пробуем установить из другого репозитория
-            log_message "warn" "Не удалось установить из Flathub, пробую GNOME репозиторий..."
+            # Try to install from another repository
+            log_message "warn" "Failed to install from Flathub, trying GNOME repository..."
             if flatpak install --user -y gnome-nightly "$RUNTIME//$RUNTIME_VERSION"; then
-                log_message "info" "$RUNTIME версии $RUNTIME_VERSION успешно установлен из GNOME репозитория"
+                log_message "info" "$RUNTIME version $RUNTIME_VERSION successfully installed from GNOME repository"
             else
-                log_message "error" "Не удалось установить $RUNTIME версии $RUNTIME_VERSION"
+                log_message "error" "Failed to install $RUNTIME version $RUNTIME_VERSION"
                 exit 1
             fi
         fi
     else
-        log_message "info" "$RUNTIME версии $RUNTIME_VERSION уже установлен"
+        log_message "info" "$RUNTIME version $RUNTIME_VERSION already installed"
     fi
     
-    # Обновляем переменную XDG_DATA_DIRS если она не содержит пути flatpak
+    # Update XDG_DATA_DIRS if it doesn't contain flatpak paths
     if [[ ! "$XDG_DATA_DIRS" == *"flatpak/exports/share"* ]]; then
         export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-        log_message "info" "Обновлена переменная XDG_DATA_DIRS для поиска Flatpak приложений"
+        log_message "info" "Updated XDG_DATA_DIRS for searching Flatpak applications"
     fi
 }
 
@@ -563,102 +563,102 @@ rebuild_reason=""
 
 if [ ! -d "$BUILD_DIR" ] || [ -z "$(ls -A $BUILD_DIR 2>/dev/null)" ]; then
     build_required=true
-    rebuild_reason="Директория сборки отсутствует или пуста"
+    rebuild_reason="Build directory is missing or empty"
 else
-    # Проверяем изменения в исходных файлах
+    # Check for changes in source files
     if [ -f "$LAST_BUILD_TIMESTAMP_FILE" ]; then
         LAST_BUILD=$(cat "$LAST_BUILD_TIMESTAMP_FILE")
         
-        # Проверяем, были ли изменения в каталогах с исходным кодом
-        # и вычитаем 1 чтобы избежать ложного обнаружения изменений
+        # Check if there were changes in source code directories
+        # subtract 1 to avoid false change detection
         CHANGED_FILES=$(find . -type f -not -path "./$BUILD_DIR/*" -not -path "./.git/*" -newer "$LAST_BUILD_TIMESTAMP_FILE" | wc -l)
         CHANGED_FILES=$((CHANGED_FILES - 1))
         
         if [ "$CHANGED_FILES" -gt 0 ]; then
             build_required=true
-            rebuild_reason="Обнаружены изменения в исходных файлах ($CHANGED_FILES файлов)"
+            rebuild_reason="Changes detected in source files ($CHANGED_FILES files)"
         else
-            log_message "info" "Изменений в файлах не обнаружено"
+            log_message "info" "No changes detected in files"
         fi
     else
         build_required=true
-        rebuild_reason="Не найден файл с отметкой времени последней сборки"
+        rebuild_reason="Last build timestamp file not found"
     fi
 fi
 
-# Проверяем metainfo.xml перед сборкой
+# Check metainfo.xml before building
 check_metainfo_xml
 
-# Очищаем директорию сборки, если требуется сборка
+# Clean build directory if build is required
 if [ "$build_required" = true ]; then
     if [ -d "$BUILD_DIR" ] && [ ! -z "$(ls -A $BUILD_DIR 2>/dev/null)" ]; then
-        log_message "info" "Очистка директории сборки..."
+        log_message "info" "Cleaning build directory..."
         rm -rf "$BUILD_DIR"
     fi
     mkdir -p "$BUILD_DIR"
 fi
 
-# Выполняем сборку, если необходимо
+# Perform build if necessary
 if [ "$build_required" = true ]; then
-    log_message "info" "Требуется сборка: $rebuild_reason"
+    log_message "info" "Build required: $rebuild_reason"
     
-    # Настройки для WSL
+    # WSL settings
     BUILD_OPTS=""
     if [ "$WSL_ENV" = true ]; then
-        log_message "info" "Сборка в WSL, добавляю специальные опции..."
+        log_message "info" "Building in WSL, adding special options..."
     fi
     
-    # Выполняем сборку
-    log_message "info" "Начало сборки..."
+    # Perform build
+    log_message "info" "Starting build..."
     if run_flatpak_builder "$BUILD_OPTS" "$BUILD_DIR" "$MANIFEST"; then
-        log_message "info" "Сборка успешно завершена"
-        # Сохраняем отметку времени сборки
+        log_message "info" "Build completed successfully"
+        # Save build timestamp
         date > "$LAST_BUILD_TIMESTAMP_FILE"
     else
-        log_message "error" "Сборка завершилась с ошибками"
-        # Пробуем проверить и исправить metainfo.xml еще раз
+        log_message "error" "Build failed"
+        # Try to check and fix metainfo.xml again
         check_metainfo_xml
         
-        # Проверяем blueprint-compiler снова перед второй попыткой
+        # Check blueprint-compiler again before second try
         prepare_blueprint_compiler
         
-        # Патчим тесты blueprint-compiler еще раз
+        # Patch blueprint-compiler again
         patch_blueprint_tests
         
-        log_message "warn" "Пробуем сборку еще раз с принудительной очисткой..."
+        log_message "warn" "Trying build again with forced clean..."
         if run_flatpak_builder "--force-clean $BUILD_OPTS" "$BUILD_DIR" "$MANIFEST"; then
-            log_message "info" "Вторая попытка сборки успешна"
+            log_message "info" "Second try build successful"
             date > "$LAST_BUILD_TIMESTAMP_FILE"
         else
-            # Явно добавляем пропуск всех проверок, если другие методы не сработали
-            log_message "warn" "Вторая попытка тоже не удалась, пробую с другими опциями..."
+            # Explicitly add skip all checks if other methods didn't work
+            log_message "warn" "Second try also failed, trying with other options..."
             if run_flatpak_builder "--force-clean" "$BUILD_DIR" "$MANIFEST"; then
-                log_message "info" "Третья попытка сборки успешна"
+                log_message "info" "Third try build successful"
                 date > "$LAST_BUILD_TIMESTAMP_FILE"
             else
-                log_message "error" "Все попытки сборки завершились с ошибками"
+                log_message "error" "All build attempts failed"
                 exit 1
             fi
         fi
     fi
 else
-    log_message "info" "Сборка не требуется, используем существующую"
+    log_message "info" "Build not required, using existing"
 fi
 
-# Запуск приложения
-log_message "info" "Запуск приложения..."
+# Run application
+log_message "info" "Running application..."
 
-# Настраиваем D-Bus для WSL перед запуском
+# Setup D-Bus for WSL before running
 setup_dbus_for_wsl
 
 if [ "$USE_NATIVE_BUILDER" = true ]; then
     if ! flatpak-builder --run "$BUILD_DIR" "$MANIFEST" "$APP_COMMAND"; then
-        log_message "error" "Не удалось запустить приложение"
+        log_message "error" "Failed to run application"
         exit 1
     fi
 else
     if ! flatpak run --filesystem=host $FLATPAK_BUILDER_APP --run "$BUILD_DIR" "$MANIFEST" "$APP_COMMAND"; then
-        log_message "error" "Не удалось запустить приложение"
+        log_message "error" "Failed to run application"
         exit 1
     fi
 fi

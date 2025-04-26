@@ -41,10 +41,10 @@ from sofl.details_dialog import DetailsDialog
 # Constants
 ONLINE_FIX_PASSWORD = "online-fix.me"
 GAME_TITLE_REGEX = r"(^.*?)\.v"
-TOAST_DEBOUNCE_DELAY = 1000  # Миллисекунды
+TOAST_DEBOUNCE_DELAY = 1000  # Milliseconds
 FLATPAK_PATH_PATTERN = r"/run/user/\d+/doc/"
 
-# Настройка логирования
+# Logging setup
 logger = logging.getLogger(__name__)
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/install-dialog.ui")
@@ -75,86 +75,86 @@ class InstallDialog(Adw.Dialog):
         # Hide status page, we'll use toast instead
         self.status_page.set_visible(False)
         
-        # Подключаем обработчик кнопки Install
+        # Connect Install button handler
         self.apply_button.connect("clicked", self.on_install_clicked)
         
-        # Если заполнен игрой, заполняем поля
+        # If initialized with a game, fill in the fields
         if game:
             self.game_path.set_text(game.path if game.path else "")
             self.game_title.set_text(game.name if game.name else "")
             
-        # Инициализируем установщик
+        # Initialize the installer
         self.installer = OnlineFixInstaller()
 
     def show_progress(self, show: bool, message: Optional[str] = None) -> None:
-        """Показывает или скрывает индикатор загрузки
+        """Shows or hides the loading indicator
         
         Args:
-            show: True для показа, False для скрытия
-            message: Сообщение для отображения в индикаторе
+            show: True to show, False to hide
+            message: Message to display in the indicator
         """
         def update_ui():
-            # Сначала активируем спиннер, если показываем прогресс
+            # First activate the spinner if showing progress
             if show:
-                # Важно: активируем спиннер до переключения страницы
+                # Important: activate spinner before switching pages
                 self.progress_spinner.set_spinning(True)
-                # Иногда спиннер не обновляется из-за GTK оптимизаций,
-                # поэтому делаем его явно видимым
+                # Sometimes spinner doesn't update due to GTK optimizations,
+                # so make it explicitly visible
                 self.progress_spinner.set_visible(True)
             
-            # Переключаем видимый стек в зависимости от состояния загрузки
+            # Switch visible stack depending on loading state
             stack_page = "loading" if show else "content"
             self.main_stack.set_visible_child_name(stack_page)
             
-            # Обновляем текст сообщения, если он предоставлен
+            # Update message text if provided
             if message:
                 self.progress_label.set_label(message)
             
-            # Деактивируем кнопку Add во время загрузки
+            # Deactivate Add button during loading
             if show:
                 self.apply_button.set_sensitive(False)
             else:
-                # Если скрываем - останавливаем спиннер
+                # If hiding - stop spinner
                 self.progress_spinner.set_spinning(False)
             
-            # Форсируем обновление UI без использования устаревшего events_pending
-            # в GTK4 это автоматически обрабатывается через GLib.MainContext
+            # Force UI update without using deprecated events_pending
+            # in GTK4 this is automatically handled through GLib.MainContext
             
             return False
             
-        # Выполняем в основном потоке, так как это UI операция
+        # Execute in main thread since this is a UI operation
         GLib.idle_add(update_ui)
 
     def run_async(self, func: Callable, callback: Optional[Callable] = None) -> None:
-        """Запускает функцию асинхронно в отдельном потоке
+        """Runs a function asynchronously in a separate thread
         
         Args:
-            func: Функция для выполнения
-            callback: Обратный вызов после завершения (будет выполнен в основном потоке)
+            func: Function to execute
+            callback: Callback after completion (will be executed in main thread)
         """
         def thread_func():
             try:
-                # Гарантируем, что UI обновится перед запуском долгой операции
+                # Ensure UI updates before starting long operation
                 GLib.idle_add(lambda: None)
                 
                 result = func()
                 if callback:
                     GLib.idle_add(lambda: callback(result))
             except Exception as e:
-                self.log_message(f"Ошибка в асинхронной операции: {str(e)}", logging.ERROR)
+                self.log_message(f"Error in asynchronous operation: {str(e)}", logging.ERROR)
                 if callback:
                     GLib.idle_add(lambda: callback(None))
             finally:
-                # Скрываем индикатор прогресса после завершения
+                # Hide progress indicator after completion
                 GLib.idle_add(lambda: self.show_progress(False))
                 self._current_task = None
         
-        # Остановить текущую задачу, если она есть
+        # Stop current task if it exists
         if self._current_task and self._current_task.is_alive():
-            self.log_message("Отмена предыдущей задачи")
-            # Просто создадим новый поток (Python не позволяет безопасно остановить потоки)
+            self.log_message("Cancelling previous task")
+            # Just create a new thread (Python doesn't allow safely stopping threads)
         
-        # Создаем и запускаем новый поток
+        # Create and start new thread
         self._current_task = threading.Thread(target=thread_func)
         self._current_task.daemon = True
         self._current_task.start()
@@ -189,69 +189,69 @@ class InstallDialog(Adw.Dialog):
                 original_path = file.get_path()
                 path = original_path
                 
-                # Показываем прогресс в UI
-                self.show_progress(True, "Проверка файла...")
+                # Show progress in UI
+                self.show_progress(True, "Checking file...")
                 
-                # Проверяем, нужно ли скопировать файл из Flatpak
+                # Check if we need to copy the file from Flatpak
                 if self.is_flatpak_path(path):
-                    self.log_message(f"Обнаружен путь Flatpak: {path}")
+                    self.log_message(f"Detected Flatpak path: {path}")
                     
-                    # Асинхронно копируем файл
-                    self.show_progress(True, "Копирование файла...")
+                    # Asynchronously copy the file
+                    self.show_progress(True, "Copying file...")
                     
                     def copy_file():
                         return self.copy_flatpak_file(path)
                     
                     def after_copy(new_path):
                         if new_path and new_path != path:
-                            self.log_message(f"Используем скопированный файл: {new_path}")
+                            self.log_message(f"Using copied file: {new_path}")
                             self.game_path.set_text(new_path)
                         
-                        # Проверяем файл после копирования
+                        # Check file after copying
                         self.check_file_async(new_path or path)
                     
                     self.run_async(copy_file, after_copy)
                 else:
-                    # Форматируем путь для отображения
+                    # Format path for display
                     display_path = self.format_path_for_display(path)
                     self.game_path.set_text(path)
                     
-                    # Асинхронно проверяем файл
+                    # Asynchronously check file
                     self.check_file_async(path)
                     
         except GLib.Error as error:
-            self.log_message(f"Ошибка доступа к файлу: {error.message}", logging.ERROR)
+            self.log_message(f"Error accessing file: {error.message}", logging.ERROR)
             self.show_toast(f"Error accessing file: {error.message}")
             return
 
     def check_file_async(self, path: str) -> None:
-        """Асинхронная проверка файла игры
+        """Asynchronous game file check
         
         Args:
-            path: Путь к файлу
+            path: Path to the file
         """
-        self.show_progress(True, "Проверка файла игры...")
+        self.show_progress(True, "Checking game file...")
         
         def check_task():
             file = Gio.File.new_for_path(path)
             try:
                 if not file.query_exists():
-                    self.log_message(f"Файл не существует: {path}", logging.ERROR)
+                    self.log_message(f"File does not exist: {path}", logging.ERROR)
                     self.show_toast("File does not exist")
                     return False
                 
-                # Проверяем файл
+                # Check file
                 try:
                     file_stream = file.read()
                     file_stream.close()
                     
-                    # Оптимизированная проверка архива
+                    # Optimized archive check
                     if path.lower().endswith(".rar"):
-                        self.show_progress(True, "Проверка архива...")
+                        self.show_progress(True, "Checking archive...")
                         
-                        # Быстрая проверка архива - только открываем его с паролем, не распаковывая
+                        # Quick archive check - just open it with password without extracting
                         if self.verify_rar_password(path):
-                            # Извлекаем название игры из имени файла
+                            # Extract game title from filename
                             self.extract_game_title(os.path.basename(path))
                             self.show_toast("Confirmed: This is an Online-Fix game")
                             return True
@@ -260,19 +260,19 @@ class InstallDialog(Adw.Dialog):
                             return False
                             
                     elif path.lower().endswith(".exe"):
-                        self.log_message("EXE файлы пока не поддерживаются")
+                        self.log_message("EXE files are not supported yet")
                         self.show_toast("EXE files are not supported yet")
                         return False
                     else:
-                        self.log_message("Неподдерживаемый формат файла")
+                        self.log_message("Unsupported file format")
                         self.show_toast("Unsupported file format")
                         return False
                 except Exception as e:
-                    self.log_message(f"Ошибка при проверке файла: {str(e)}", logging.ERROR)
+                    self.log_message(f"Error checking file: {str(e)}", logging.ERROR)
                     self.show_toast(f"Error checking file: {str(e)}")
                     return False
             except GLib.Error as error:
-                self.log_message(f"Ошибка доступа к файлу: {error.message}", logging.ERROR)
+                self.log_message(f"Error accessing file: {error.message}", logging.ERROR)
                 self.show_toast(f"Error accessing file: {error.message}")
                 return False
         
@@ -284,16 +284,16 @@ class InstallDialog(Adw.Dialog):
     def on_path_changed(self, entry, pspec):
         path = self.game_path.get_text()
         if path:
-            # Проверяем, нужно ли скопировать файл из Flatpak
+            # Check if we need to copy the file from Flatpak
             if self.is_flatpak_path(path):
-                self.show_progress(True, "Обнаружен путь Flatpak...")
+                self.show_progress(True, "Detected Flatpak path...")
                 
                 def copy_file():
                     return self.copy_flatpak_file(path)
                 
                 def after_copy(new_path):
                     if new_path and new_path != path:
-                        self.log_message(f"Используем скопированный файл: {new_path}")
+                        self.log_message(f"Using copied file: {new_path}")
                         self.game_path.set_text(new_path)
                     
                     self.check_file_async(new_path or path)
@@ -316,54 +316,54 @@ class InstallDialog(Adw.Dialog):
         return path
 
     def is_flatpak_path(self, path: str) -> bool:
-        """Проверяет, является ли путь путем Flatpak"""
+        """Checks if the path is a Flatpak path"""
         return bool(re.search(FLATPAK_PATH_PATTERN, path))
 
     def copy_flatpak_file(self, path: str) -> str:
-        """Копирует файл из Flatpak в доступную директорию
+        """Copies a file from Flatpak to an accessible directory
         
         Args:
-            path: Путь к файлу в Flatpak
+            path: Path to the file in Flatpak
             
         Returns:
-            str: Путь к скопированному файлу или исходный путь в случае ошибки
+            str: Path to the copied file or original path in case of error
         """
         try:
-            # Создаем временную директорию, если её еще нет
+            # Create temporary directory if it doesn't exist yet
             temp_dir = os.path.join(GLib.get_user_cache_dir(), "sofl-temp")
             os.makedirs(temp_dir, exist_ok=True)
             
-            # Получаем имя файла из пути
+            # Get filename from path
             filename = os.path.basename(path)
             new_path = os.path.join(temp_dir, filename)
             
-            self.log_message(f"Копирую файл из Flatpak в: {new_path}")
+            self.log_message(f"Copying file from Flatpak to: {new_path}")
             
-            # Метод 1: Использование GIO для копирования файла (предпочтительный метод)
+            # Method 1: Use GIO for file copying (preferred method)
             try:
-                self.log_message("Метод 1: Пробую копировать через GIO...")
+                self.log_message("Method 1: Trying to copy via GIO...")
                 source_file = Gio.File.new_for_path(path)
                 dest_file = Gio.File.new_for_path(new_path)
                 
-                # Проверяем существование исходного файла
+                # Check if source file exists
                 if not source_file.query_exists():
-                    self.log_message(f"Исходный файл не существует через GIO: {path}", logging.WARNING)
+                    self.log_message(f"Source file does not exist via GIO: {path}", logging.WARNING)
                 else:
-                    # Копируем файл с флагами перезаписи
+                    # Copy file with overwrite flags
                     source_file.copy(
                         dest_file,
                         Gio.FileCopyFlags.OVERWRITE,
-                        None, None  # Без отслеживания прогресса и отмены
+                        None, None  # No progress tracking and cancellation
                     )
-                    self.log_message("GIO: Файл успешно скопирован")
+                    self.log_message("GIO: File successfully copied")
                     return new_path
             except GLib.Error as e:
-                self.log_message(f"GIO: Ошибка копирования: {e.message}", logging.ERROR)
+                self.log_message(f"GIO: Copy error: {e.message}", logging.ERROR)
             
-            # Метод 2: Использование flatpak-spawn для доступа к хосту
+            # Method 2: Use flatpak-spawn to access host
             try:
-                self.log_message("Метод 2: Пробую копировать через flatpak-spawn...")
-                # Для доступа к файлам хоста через Flatpak
+                self.log_message("Method 2: Trying to copy via flatpak-spawn...")
+                # For accessing host files through Flatpak
                 result = subprocess.run(
                     ["flatpak-spawn", "--host", "cp", path, new_path],
                     capture_output=True,
@@ -372,48 +372,48 @@ class InstallDialog(Adw.Dialog):
                 )
                 
                 if result.returncode == 0:
-                    self.log_message("flatpak-spawn: Файл успешно скопирован")
+                    self.log_message("flatpak-spawn: File successfully copied")
                     return new_path
                 else:
-                    self.log_message(f"flatpak-spawn: Ошибка копирования: {result.stderr}", logging.ERROR)
+                    self.log_message(f"flatpak-spawn: Copy error: {result.stderr}", logging.ERROR)
             except Exception as e:
-                self.log_message(f"flatpak-spawn: Ошибка: {str(e)}", logging.ERROR)
+                self.log_message(f"flatpak-spawn: Error: {str(e)}", logging.ERROR)
             
-            # Метод 3: Используем xdg-document-portal
+            # Method 3: Use xdg-document-portal
             try:
-                self.log_message("Метод 3: Пробую получить реальный путь к файлу через портал документов...")
-                # Извлекаем ID документа из пути Flatpak
+                self.log_message("Method 3: Trying to get real path to file via document portal...")
+                # Extract document ID from Flatpak path
                 match = re.search(r'/run/user/\d+/doc/([^/]+)/', path)
                 if match:
                     doc_id = match.group(1)
-                    self.log_message(f"ID документа: {doc_id}")
+                    self.log_message(f"Document ID: {doc_id}")
                     
-                    # Попытка получить путь через FUSE или другие методы
-                    # Здесь мы предполагаем, что документ может быть доступен через системный путь
-                    # Проверяем несколько возможных мест
+                    # Attempt to get path via FUSE or other methods
+                    # Here we assume the document might be accessible via system path
+                    # Check several possible locations
                     potential_paths = [
-                        # Общий путь к документам на хосте
+                        # Common path to documents on host
                         f"/run/user/{os.getuid()}/doc/{doc_id}",
                         f"/tmp/doc/{doc_id}" if os.access(f"/tmp/doc/{doc_id}", os.W_OK) else None,
-                        # Используем относительный путь без префикса
+                        # Use relative path without prefix
                         path.replace(f"/run/user/{os.getuid()}/doc/{doc_id}/", "")
                     ]
                     
                     for alt_path in potential_paths:
-                        self.log_message(f"Проверяю путь: {alt_path}")
+                        self.log_message(f"Checking path: {alt_path}")
                         if os.path.exists(alt_path):
-                            self.log_message(f"Найден файл по пути: {alt_path}")
-                            # Копируем файл стандартным способом
+                            self.log_message(f"Found file at path: {alt_path}")
+                            # Copy file the standard way
                             with open(alt_path, "rb") as src, open(new_path, "wb") as dst:
                                 dst.write(src.read())
-                            self.log_message("Файл успешно скопирован через Python")
+                            self.log_message("File successfully copied via Python")
                             return new_path
             except Exception as e:
-                self.log_message(f"Метод 3: Ошибка: {str(e)}", logging.ERROR)
+                self.log_message(f"Method 3: Error: {str(e)}", logging.ERROR)
             
-            # Метод 4: Прямое использование команды cp
+            # Method 4: Direct use of cp command
             try:
-                self.log_message("Метод 4: Пробую прямое копирование через cp...")
+                self.log_message("Method 4: Trying direct copying via cp...")
                 result = subprocess.run(
                     ["cp", path, new_path],
                     capture_output=True,
@@ -422,32 +422,32 @@ class InstallDialog(Adw.Dialog):
                 )
                 
                 if result.returncode == 0:
-                    self.log_message("cp: Файл успешно скопирован")
+                    self.log_message("cp: File successfully copied")
                     return new_path
                 else:
-                    self.log_message(f"cp: Ошибка копирования: {result.stderr}", logging.ERROR)
+                    self.log_message(f"cp: Copy error: {result.stderr}", logging.ERROR)
             except Exception as e:
-                self.log_message(f"cp: Ошибка: {str(e)}", logging.ERROR)
+                self.log_message(f"cp: Error: {str(e)}", logging.ERROR)
             
-            # Все методы не удались, возвращаем исходный путь
-            self.log_message("Все методы копирования не удались. Продолжаем с исходным файлом.", logging.WARNING)
+            # All methods failed, return original path
+            self.log_message("All copy methods failed. Proceeding with original file.", logging.WARNING)
             return path
         except Exception as e:
-            self.log_message(f"Общая ошибка при копировании файла: {str(e)}", logging.ERROR)
+            self.log_message(f"General error when copying file: {str(e)}", logging.ERROR)
             return path
 
     def verify_rar_password(self, path: str) -> bool:
-        """Быстрая проверка архива с паролем без распаковки
+        """Quick verification of password-protected archive without extraction
         
         Args:
-            path: Путь к файлу
+            path: Path to the file
             
         Returns:
-            bool: True если архив валидный и открывается с паролем, иначе False
+            bool: True if the archive is valid and opens with password, otherwise False
         """
         try:
-            # Способ 1: Используем unrar напрямую для тестирования архива (самый быстрый)
-            self.log_message("Быстрая проверка архива через unrar")
+            # Method 1: Use unrar directly for archive testing (fastest)
+            self.log_message("Quick archive verification via unrar")
             try:
                 unrar_path = rarfile.UNRAR_TOOL
                 result = subprocess.run(
@@ -455,43 +455,43 @@ class InstallDialog(Adw.Dialog):
                     capture_output=True, 
                     text=True, 
                     check=False,
-                    timeout=10  # Таймаут в секундах
+                    timeout=10  # Timeout in seconds
                 )
                 
                 if result.returncode == 0:
-                    self.log_message("Архив прошел проверку через unrar")
+                    self.log_message("Archive passed verification via unrar")
                     return True
                 else:
-                    self.log_message(f"Архив не прошел проверку: {result.stderr}")
+                    self.log_message(f"Archive failed verification: {result.stderr}")
                     return False
             except subprocess.TimeoutExpired:
-                self.log_message("Проверка архива заняла слишком много времени, отмена")
+                self.log_message("Archive verification took too long, cancelling")
                 return False
             except Exception as e:
-                self.log_message(f"Ошибка при проверке через unrar: {str(e)}")
+                self.log_message(f"Error during verification via unrar: {str(e)}")
                 
-                # Способ 2: Используем rarfile для проверки (резервный вариант)
-                self.log_message("Проверка архива через rarfile")
+                # Method 2: Use rarfile for verification (fallback)
+                self.log_message("Checking archive via rarfile")
                 try:
                     with rarfile.RarFile(path) as rf:
                         rf.setpassword(ONLINE_FIX_PASSWORD)
-                        # Получаем только список файлов, не распаковываем
+                        # Just get file list, don't extract
                         info_list = rf.infolist()
-                        # Если получили список файлов с паролем, значит архив правильный
+                        # If we got file list with password, the archive is correct
                         return len(info_list) > 0
                 except rarfile.PasswordRequired:
-                    # Если требуется пароль, но не тот что мы указали, это не Online-Fix архив
-                    self.log_message("Архив защищен другим паролем")
+                    # If password required but not the one we specified, it's not an Online-Fix archive
+                    self.log_message("Archive is protected by a different password")
                     return False
                 except Exception as e:
-                    self.log_message(f"Ошибка при проверке через rarfile: {str(e)}")
+                    self.log_message(f"Error during verification via rarfile: {str(e)}")
                     return False
         except Exception as e:
-            self.log_message(f"Общая ошибка при проверке архива: {str(e)}")
+            self.log_message(f"General error during archive verification: {str(e)}")
             return False
 
     def extract_game_title(self, filename):
-        """Извлекает название игры из имени файла"""
+        """Extracts game title from filename"""
         match = re.search(GAME_TITLE_REGEX, filename)
         if match:
             game_title = match.group(1).replace(".", " ")
@@ -499,77 +499,69 @@ class InstallDialog(Adw.Dialog):
 
     def show_toast(self, message):
         """Show a toast notification using the toast overlay with debouncing"""
-        # Вызываем унифицированный метод логирования
+        # Call unified logging method
         self.log_message(message)
         
-        # Если сообщение такое же как предыдущее, сбросим таймер
+        # If message is the same as previous, reset timer
         if self._toast_debounce_id is not None:
             GLib.source_remove(self._toast_debounce_id)
             self._toast_debounce_id = None
         
-        # Запомним последнее сообщение
+        # Remember last message
         self._last_toast_message = message
         
-        # Устанавливаем новый таймер для дебаунсинга
+        # Set new timer for debouncing
         self._toast_debounce_id = GLib.timeout_add(
             TOAST_DEBOUNCE_DELAY, 
             self._do_show_toast
         )
 
     def log_message(self, message, level=logging.INFO):
-        """Унифицированный метод для логирования и отображения сообщений
-        
-        Args:
-            message: Сообщение для отображения и логирования
-            level: Уровень логирования (по умолчанию INFO)
-        """
-        # Логирование в консоль
         logger.log(level, message)
-        # Также печатаем в stdout для отладки
         print(f"[SOFL] {message}")
 
     def _do_show_toast(self):
-        """Фактически показать тост после дебаунсинга"""
+        """Actually show toast after debouncing"""
         if self._last_toast_message:
             toast = Adw.Toast.new(self._last_toast_message)
-            toast.set_timeout(3)  # 3 секунды
+            toast.set_timeout(3)  # 3 seconds
             toast.set_priority(Adw.ToastPriority.HIGH)
             self.toast_overlay.add_toast(toast)
         
-        # Сбрасываем ID таймера и сообщение
+        # Reset timer ID and message
         self._toast_debounce_id = None
         self._last_toast_message = None
         
-        # Возвращаем False, чтобы остановить повторения таймера
+        # Return False to stop timer repetitions
         return False
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
 
     def on_install_clicked(self, button):
-        """Обработчик нажатия на кнопку Install (Установка игры)"""
-        # Получаем путь к архиву и название игры
+        """Handler for Install button click (Game installation)"""
+        # Get archive path and game name
         archive_path = self.game_path.get_text()
         game_name = self.game_title.get_text()
         
         if not archive_path or not game_name:
-            self.show_toast("Выберите архив и укажите название игры")
+            self.show_toast("Select an archive and specify game name")
             return
             
-        # Проверяем, существует ли файл
+        # Check if file exists
         if not os.path.exists(archive_path):
-            self.show_toast("Файл не существует")
+            self.show_toast("File does not exist")
             return
             
-        # Показываем прогресс
-        self.show_progress(True, "Подготовка к установке...")
+        # Show progress
+        self.show_progress(True, "Preparing for installation...")
         
-        # Запускаем установку асинхронно
+        # Start installation asynchronously
         def install_task():
             def progress_update(progress, message):
                 GLib.idle_add(lambda: self.update_installation_progress(progress, message))
                 
-            # Вызываем метод установки из установщика
+            # Call installation method from installer
             success, result, executable = self.installer.install_game(
                 archive_path, 
                 game_name, 
@@ -580,17 +572,17 @@ class InstallDialog(Adw.Dialog):
             
         def after_install(result):
             if not result:
-                self.show_toast("Ошибка при установке игры")
+                self.show_toast("Error during game installation")
                 return
                 
             success, install_path, executable = result
             
             if success:
-                self.show_toast(f"Игра успешно установлена в: {install_path}")
+                self.show_toast(f"Game successfully installed in: {install_path}")
                 
-                # Создаем новую игру
+                # Create new game
                 try:
-                    # Инкрементально создаем ID для новой игры
+                    # Incrementally create ID for new game
                     source_id = "online-fix"
                     numbers = [0]
                     for game_id in shared.store.source_games.get(source_id, set()):
@@ -604,7 +596,7 @@ class InstallDialog(Adw.Dialog):
                     
                     game_number = max(numbers) + 1
                     
-                    # Создаем новую игру
+                    # Create new game
                     new_game = Game({
                         "game_id": f"online-fix_{game_number}",
                         "hidden": False,
@@ -615,56 +607,56 @@ class InstallDialog(Adw.Dialog):
                         "added": int(time()),
                     })
                     
-                    # Добавляем игру в хранилище
+                    # Add game to store
                     shared.store.add_game(new_game, {}, run_pipeline=False)
                     new_game.save()
                     
-                    # Скрываем текущий диалог установки
+                    # Hide current installation dialog
                     self.hide()
                     
-                    # Показываем диалог деталей игры для завершения настройки
+                    # Show game details dialog to complete setup
                     GLib.idle_add(lambda: self.show_details_dialog(new_game))
                     
                 except Exception as e:
-                    self.log_message(f"Ошибка при добавлении игры: {str(e)}", logging.ERROR)
-                    self.show_toast(f"Игра установлена, но не добавлена в библиотеку: {str(e)}")
+                    self.log_message(f"Error adding game: {str(e)}", logging.ERROR)
+                    self.show_toast(f"Game installed but not added to library: {str(e)}")
                     
-                    # Закрываем диалог после успешной установки через таймаут
+                    # Close dialog after successful installation via timeout
                     GLib.timeout_add(1500, lambda: self.hide() or False)
             else:
-                self.show_toast(f"Ошибка при установке игры: {install_path}")
+                self.show_toast(f"Error during game installation: {install_path}")
         
         self.run_async(install_task, after_install)
     
     def show_details_dialog(self, game):
-        """Показывает диалог с деталями игры для редактирования
+        """Shows dialog with game details for editing
         
         Args:
-            game: Игра для редактирования
+            game: Game to edit
         """
         try:
             if DetailsDialog.is_open:
                 return
             
-            # Устанавливаем флаг для диалога деталей
+            # Set flag for details dialog
             DetailsDialog.install_mode = True
             
-            # Создаем и показываем диалог
+            # Create and show dialog
             dialog = DetailsDialog(game)
             dialog.present(self.get_root())
         except Exception as e:
-            self.log_message(f"Ошибка при открытии диалога деталей: {str(e)}", logging.ERROR)
-            self.show_toast(f"Не удалось открыть диалог настройки игры: {str(e)}")
+            self.log_message(f"Error opening details dialog: {str(e)}", logging.ERROR)
+            self.show_toast(f"Could not open game configuration dialog: {str(e)}")
     
     def update_installation_progress(self, progress: float, message: str) -> bool:
-        """Обновляет индикатор прогресса установки
+        """Updates installation progress indicator
         
         Args:
-            progress: Прогресс от 0 до 1
-            message: Сообщение о текущем статусе
+            progress: Progress from 0 to 1
+            message: Current status message
             
         Returns:
-            bool: False для однократного вызова через GLib.idle_add
+            bool: False for one-time call via GLib.idle_add
         """
         self.show_progress(True, message)
         return False

@@ -30,22 +30,22 @@ from gi.repository import GLib
 
 from sofl import shared
 
-# Константы
+# Constants
 ONLINE_FIX_PASSWORD = "online-fix.me"
 logger = logging.getLogger(__name__)
 
-# Список игнорируемых исполняемых файлов - не рассматриваются как основные игровые файлы
+# List of ignored executable files - not considered as main game files
 IGNORED_EXECUTABLES = [
-    "UnityHandler64.exe",  # Unity обработчик
-    "UnityHandler.exe",    # Unity обработчик
-    "UnityCrashHandler.exe", # Обработчик крэшей Unity
-    "UnityCrashHandler64.exe", # Обработчик крэшей Unity
-    "launcher.exe",        # Общее название для лаунчеров
-    "LauncherHelper.exe",  # Вспомогательный лаунчер
-    "redist.exe",          # Установщик зависимостей
-    "vcredist.exe",        # Установщик Visual C++ runtime
-    "directx_setup.exe",   # Установщик DirectX
-    "dxsetup.exe",         # Установщик DirectX
+    "UnityHandler64.exe",  # Unity handler
+    "UnityHandler.exe",    # Unity handler
+    "UnityCrashHandler.exe", # Unity crash handler
+    "UnityCrashHandler64.exe", # Unity crash handler 64-bit
+    "launcher.exe",        # Generic launcher name
+    "LauncherHelper.exe",  # Helper launcher
+    "redist.exe",          # Dependency installer
+    "vcredist.exe",        # Visual C++ runtime installer
+    "directx_setup.exe",   # DirectX installer
+    "dxsetup.exe",         # DirectX installer
     "dotNetFx40_Full_setup.exe", # .NET Framework installer
     "unins000.exe",        # Uninstaller
     "steam_api.exe",       # Steam API
@@ -74,28 +74,28 @@ IGNORED_EXECUTABLES = [
 ]
 
 class OnlineFixInstaller:
-    """Класс для установки игр Online-Fix из RAR-архивов"""
+    """Class for installing Online-Fix games from RAR archives"""
     
     def __init__(self):
-        """Инициализация установщика"""
-        # Проверяем наличие пути для установки
+        """Installer initialization"""
+        # Check if installation path exists
         try:
-            # Пробуем получить значение, если ключ существует
+            # Try to get the value if the key exists
             shared.schema.get_string("online-fix-install-path")
         except:
-            # Если ключа нет, устанавливаем значение по умолчанию
+            # If the key doesn't exist, set the default value
             default_path = str(Path(shared.home) / "Games" / "Online-Fix")
             shared.schema.set_string("online-fix-install-path", default_path)
     
     def get_install_path(self) -> str:
-        """Получает путь для установки из настроек
+        """Gets the installation path from settings
         
         Returns:
-            str: Путь установки
+            str: Installation path
         """
         path = shared.schema.get_string("online-fix-install-path")
         
-        # Заменяем символ ~ на домашнюю директорию пользователя
+        # Replace ~ symbol with user's home directory
         if path.startswith("~"):
             path = str(Path(shared.home) / path[2:])
             
@@ -105,62 +105,62 @@ class OnlineFixInstaller:
                      archive_path: str, 
                      game_name: str, 
                      progress_callback: Optional[Callable[[float, str], None]] = None) -> Tuple[bool, str, Optional[str]]:
-        """Распаковывает игру Online-Fix из архива в указанную директорию
+        """Extracts an Online-Fix game from an archive to the specified directory
         
         Args:
-            archive_path: Путь к RAR-архиву
-            game_name: Название игры (для информационных целей)
-            progress_callback: Опционально функция обратного вызова для отображения прогресса
-                               принимает прогресс (0-100) и сообщение
+            archive_path: Path to the RAR archive
+            game_name: Game name (for informational purposes)
+            progress_callback: Optional callback function to display progress
+                               takes progress (0-100) and message
         
         Returns:
-            Tuple[bool, str, Optional[str]]: (успешность, путь установки, исполняемый файл или сообщение об ошибке)
+            Tuple[bool, str, Optional[str]]: (success, installation path, executable file or error message)
         """
         try:
-            # Получаем базовый путь для установки из настроек
+            # Get base installation path from settings
             base_install_path = self.get_install_path()
             
-            # Не создаем дополнительную папку, так как архивы онлайн-фикса
-            # обычно уже содержат папку игры
+            # Don't create additional folder as online-fix archives
+            # usually already contain game folder
             dest_dir = base_install_path
             
-            # Создаем директорию назначения, если она еще не существует
+            # Create destination directory if it doesn't exist
             os.makedirs(dest_dir, exist_ok=True)
             
-            # Сначала пробуем использовать unrar напрямую (быстрее и с прогрессом)
+            # First try to use unrar directly (faster and with progress)
             if self._extract_with_unrar(archive_path, dest_dir, progress_callback):
-                # Пытаемся обнаружить реальную папку игры внутри распакованных файлов
+                # Try to detect actual game folder inside extracted files
                 game_folder = self._detect_game_folder(dest_dir, game_name)
                 
-                # Ищем исполняемый файл игры
+                # Search for game executable
                 if progress_callback:
-                    progress_callback(0.95, "Поиск исполняемого файла игры...")
+                    progress_callback(0.95, "Searching for game executable...")
                 
                 executable_path = self._find_game_executable(game_folder)
                 
-                # Возвращаем относительный путь к исполняемому файлу, если он найден
+                # Return relative path to executable if found
                 relative_executable = None
                 if executable_path:
                     relative_executable = os.path.relpath(executable_path, game_folder)
                 
                 return True, game_folder, relative_executable
             
-            # Если unrar не сработал, используем библиотеку rarfile
+            # If unrar didn't work, use rarfile library
             if progress_callback:
-                progress_callback(0, "Извлечение архива (запасной метод)...")
+                progress_callback(0, "Extracting archive (backup method)...")
                 
             self._extract_with_rarfile(archive_path, dest_dir, progress_callback)
             
-            # Обнаруживаем реальную папку игры
+            # Detect actual game folder
             game_folder = self._detect_game_folder(dest_dir, game_name)
             
-            # Ищем исполняемый файл игры
+            # Search for game executable
             if progress_callback:
-                progress_callback(0.95, "Поиск исполняемого файла игры...")
+                progress_callback(0.95, "Searching for game executable...")
             
             executable_path = self._find_game_executable(game_folder)
             
-            # Возвращаем относительный путь к исполняемому файлу, если он найден
+            # Return relative path to executable if found
             relative_executable = None
             if executable_path:
                 relative_executable = os.path.relpath(executable_path, game_folder)
@@ -168,20 +168,20 @@ class OnlineFixInstaller:
             return True, game_folder, relative_executable
             
         except Exception as e:
-            error_msg = f"Ошибка при установке игры: {str(e)}"
+            error_msg = f"Error during game installation: {str(e)}"
             logger.error(error_msg)
             return False, error_msg, None
     
     def _sanitize_name(self, name: str) -> str:
-        """Очищает имя игры для безопасного использования в качестве имени папки
+        """Cleans up game name for safe use as folder name
         
         Args:
-            name: Имя игры
+            name: Game name
             
         Returns:
-            str: Безопасное имя папки
+            str: Safe folder name
         """
-        # Заменяем специальные символы и пробелы на подчеркивания
+        # Replace special characters and spaces with underscores
         sanitized = re.sub(r'[^\w\-\.]', '_', name)
         return sanitized
     
@@ -189,21 +189,21 @@ class OnlineFixInstaller:
                            archive_path: str, 
                            dest_dir: str, 
                            progress_callback: Optional[Callable[[float, str], None]] = None) -> bool:
-        """Распаковывает архив с помощью утилиты unrar, отслеживая прогресс
+        """Extracts an archive using the unrar utility, tracking progress
         
         Args:
-            archive_path: Путь к архиву
-            dest_dir: Путь назначения для распаковки
-            progress_callback: Функция для уведомления о прогрессе
+            archive_path: Path to the archive
+            dest_dir: Destination path for extraction
+            progress_callback: Function for progress notification
             
         Returns:
-            bool: True если успешно, иначе False
+            bool: True if successful, otherwise False
         """
         try:
-            # Проверяем наличие unrar
+            # Check for unrar
             unrar_path = rarfile.UNRAR_TOOL
             if not os.path.exists(unrar_path):
-                # Проверяем альтернативные пути
+                # Check for alternative paths
                 alt_paths = [
                     "/app/bin/unrar",  # Flatpak
                     "/usr/bin/unrar",
@@ -216,10 +216,10 @@ class OnlineFixInstaller:
                         break
                         
                 if not os.path.exists(unrar_path):
-                    logger.warning("unrar не найден, невозможно отслеживать прогресс")
+                    logger.warning("unrar not found, unable to track progress")
                     return False
             
-            # Запускаем процесс unrar с выводом
+            # Start unrar process with output
             process = subprocess.Popen(
                 [unrar_path, "x", "-idp", "-y", f"-p{ONLINE_FIX_PASSWORD}", archive_path, dest_dir], 
                 stdout=subprocess.PIPE, 
@@ -230,175 +230,175 @@ class OnlineFixInstaller:
             if not process.stdout:
                 return False
                 
-            # Паттерн для определения прогресса (процент и имя файла)
+            # Pattern for determining progress (percentage and file name)
             progress_pattern = re.compile(r"([0-9]{1,3})%")
             last_progress = 0
             
             for line in process.stdout:
-                # Ищем процент в текущей строке
+                # Search for percentage in current line
                 match = progress_pattern.search(line)
                 if match:
                     percent = int(match.group(1))
                     if percent != last_progress and progress_callback:
                         file_info = line.strip()
-                        # Оповещаем о прогрессе
-                        progress_callback(percent / 100.0, f"Распаковка: {percent}%")
+                        # Notify about progress
+                        progress_callback(percent / 100.0, f"Extracting: {percent}%")
                         last_progress = percent
             
-            # Ждем окончания процесса
+            # Wait for process to finish
             return_code = process.wait()
             if return_code != 0:
-                logger.error(f"unrar завершился с ошибкой: {return_code}")
+                logger.error(f"unrar finished with error: {return_code}")
                 return False
                 
-            # Если все дошло до сюда, распаковка успешна
+            # If everything reached here, extraction was successful
             if progress_callback:
-                progress_callback(1.0, "Распаковка завершена")
+                progress_callback(1.0, "Extraction complete")
             return True
                 
         except Exception as e:
-            logger.error(f"Ошибка при распаковке через unrar: {str(e)}")
+            logger.error(f"Error during extraction with unrar: {str(e)}")
             return False
     
     def _extract_with_rarfile(self, 
                              archive_path: str, 
                              dest_dir: str, 
                              progress_callback: Optional[Callable[[float, str], None]] = None) -> bool:
-        """Распаковывает архив с помощью библиотеки rarfile
+        """Extracts an archive using the rarfile library
         
         Args:
-            archive_path: Путь к архиву
-            dest_dir: Путь назначения для распаковки
-            progress_callback: Функция для уведомления о прогрессе
+            archive_path: Path to the archive
+            dest_dir: Destination path for extraction
+            progress_callback: Function for progress notification
             
         Returns:
-            bool: True если успешно, иначе False
+            bool: True if successful, otherwise False
         """
         try:
             with rarfile.RarFile(archive_path) as rf:
                 rf.setpassword(ONLINE_FIX_PASSWORD)
                 
-                # Получаем список файлов
+                # Get file list
                 file_list = rf.infolist()
                 total_files = len(file_list)
                 
-                # Распаковываем каждый файл
+                # Extract each file
                 for i, file_info in enumerate(file_list):
                     rf.extract(file_info, path=dest_dir)
                     
-                    # Обновляем прогресс
+                    # Update progress
                     if progress_callback:
                         progress = (i + 1) / total_files
-                        progress_callback(progress, f"Распаковка: {int(progress * 100)}%")
+                        progress_callback(progress, f"Extracting: {int(progress * 100)}%")
                         
-                        # Обрабатываем события GTK для обновления UI
-                        # В GTK4 это происходит автоматически через MainContext
-                        # Поэтому просто даем время событийному циклу
+                        # Process GTK events to update UI
+                        # In GTK4 this happens automatically through MainContext
+                        # So we just give time to the event loop
                         GLib.main_context_default().iteration(False)
             
             if progress_callback:
-                progress_callback(1.0, "Распаковка завершена")
+                progress_callback(1.0, "Extraction complete")
             return True
                 
         except Exception as e:
-            logger.error(f"Ошибка при распаковке через rarfile: {str(e)}")
+            logger.error(f"Error during extraction with rarfile: {str(e)}")
             raise 
     
     def _detect_game_folder(self, base_dir: str, game_name: str) -> str:
-        """Обнаруживает папку игры внутри базовой директории установки
+        """Detects the game folder inside the base installation directory
         
         Args:
-            base_dir: Базовая директория, в которую распакован архив
-            game_name: Название игры для поиска похожих папок
+            base_dir: Base directory where the archive was extracted
+            game_name: Game name for matching purposes
             
         Returns:
-            str: Путь к обнаруженной папке игры
+            str: Path to the detected game folder
         """
         try:
-            # Сначала проверяем содержимое базовой директории
+            # First check the contents of base directory
             items = os.listdir(base_dir)
             
-            # Ищем папки, которые могут содержать игру
+            # Search for folders that might contain the game
             game_dirs = [d for d in items if os.path.isdir(os.path.join(base_dir, d))]
             
             if not game_dirs:
-                # Если нет подпапок, возвращаем базовую директорию
+                # If no subfolders, return base directory
                 return base_dir
                 
-            # Если есть только одна подпапка, скорее всего это и есть наша игра
+            # If there's only one subfolder, it's probably our game
             if len(game_dirs) == 1:
                 return os.path.join(base_dir, game_dirs[0])
                 
-            # Если есть несколько папок, попробуем найти ту, которая похожа на название игры
+            # If there are multiple folders, try to find the one that matches the game name
             clean_game_name = self._sanitize_name(game_name).lower()
             
             for dir_name in game_dirs:
                 if clean_game_name in dir_name.lower() or dir_name.lower() in clean_game_name:
                     return os.path.join(base_dir, dir_name)
             
-            # Если не нашли похожую, ищем папку, которая содержит исполняемые файлы
+            # If we haven't found a similar one, look for a folder that contains executable files
             for dir_name in game_dirs:
                 dir_path = os.path.join(base_dir, dir_name)
                 exe_files = [f for f in os.listdir(dir_path) if f.lower().endswith('.exe')]
                 if exe_files:
                     return dir_path
             
-            # Если не нашли подходящую директорию, возвращаем базовую
+            # If we haven't found a suitable directory, return the base one
             return base_dir
             
         except Exception as e:
-            logger.warning(f"Ошибка при определении папки игры: {str(e)}")
+            logger.warning(f"Error when detecting game folder: {str(e)}")
             return base_dir
     
     def _find_game_executable(self, game_dir: str) -> Optional[str]:
-        """Находит основной исполняемый файл игры, игнорируя служебные файлы
+        """Finds the main game executable, ignoring service files
         
         Args:
-            game_dir: Директория игры для поиска
+            game_dir: Game directory to search
             
         Returns:
-            Optional[str]: Полный путь к исполняемому файлу или None, если не найден
+            Optional[str]: Full path to the executable file or None if not found
         """
         try:
-            # Сначала создадим список всех исполняемых файлов
+            # First create a list of all executable files
             all_executables = []
             
-            # Рекурсивно ищем все .exe файлы
+            # Recursively search for all .exe files
             for root, _, files in os.walk(game_dir):
                 for file in files:
                     if file.lower().endswith('.exe'):
                         all_executables.append(os.path.join(root, file))
             
             if not all_executables:
-                logger.warning(f"Исполняемые файлы не найдены в {game_dir}")
+                logger.warning(f"Executable files not found in {game_dir}")
                 return None
             
-            # Фильтруем исполняемые файлы, исключая игнорируемые
+            # Filter executable files, excluding ignored
             valid_executables = []
             for exe_path in all_executables:
                 exe_name = os.path.basename(exe_path)
                 if exe_name not in IGNORED_EXECUTABLES:
-                    # Проверяем размер файла (маленькие файлы обычно не основные)
+                    # Check file size (small files usually not main)
                     file_size = os.path.getsize(exe_path)
-                    if file_size > 1024 * 100:  # Больше 100 КБ
+                    if file_size > 1024 * 100:  # More than 100 KB
                         valid_executables.append((exe_path, file_size))
             
             if not valid_executables:
-                # Если все файлы в игнорируемом списке, возьмем любой исполняемый файл
-                logger.warning("Все исполняемые файлы находятся в игнорируемом списке")
+                # If all files are in the ignored list, take any executable file
+                logger.warning("All executable files are in the ignored list")
                 return all_executables[0]
             
-            # Сортируем по размеру (больший файл вероятнее основной)
+            # Sort by size (larger file more likely main)
             valid_executables.sort(key=lambda x: x[1], reverse=True)
             
-            # Приоритет файлам в корневой директории
+            # Priority to files in the root directory
             root_executables = [exe for exe, _ in valid_executables if os.path.dirname(exe) == game_dir]
             if root_executables:
                 return root_executables[0]
             
-            # Возвращаем самый большой исполняемый файл
+            # Return the largest executable file
             return valid_executables[0][0]
             
         except Exception as e:
-            logger.error(f"Ошибка при поиске исполняемого файла: {str(e)}")
+            logger.error(f"Error when searching for executable file: {str(e)}")
             return None 

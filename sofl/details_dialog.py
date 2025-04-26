@@ -355,19 +355,19 @@ class DetailsDialog(Adw.Dialog):
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
         
-        # При закрытии диалога также закрываем все дочерние диалоги и сбрасываем флаг install_mode
+        # When closing the dialog, also close all child dialogs and reset install_mode flag
         if not is_open:
-            # Сбрасываем флаг install_mode
+            # Reset install_mode flag
             self.__class__.install_mode = False
             
-            # Закрываем все диалоги в корневом окне
+            # Close all dialogs in the root window
             root = self.get_root()
             if root:
-                # Получаем все дочерние виджеты и закрываем диалоги
+                # Get all child widgets and close dialogs
                 def close_dialogs(widget):
                     if isinstance(widget, (Adw.Dialog, Gtk.Dialog)) and widget != self:
                         widget.close()
-                    if hasattr(widget, 'get_first_child'):
+                    elif hasattr(widget, 'get_first_child'):
                         child = widget.get_first_child()
                         while child:
                             close_dialogs(child)
@@ -375,5 +375,5 @@ class DetailsDialog(Adw.Dialog):
                 
                 close_dialogs(root)
                 
-                # Возвращаем фокус основному окну
+                # Return focus to the main window
                 root.present()
