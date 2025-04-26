@@ -253,8 +253,6 @@ class SOFLApplication(Adw.Application):
         elif source_id == "imported":
             name = _("Added")
         else:
-            # Обрабатываем источник с дефисом (online-fix)
-            source_class_prefix = source_id
             if "-" in source_id:
                 # Преобразуем "online-fix" в "OnlineFix"
                 parts = source_id.split("-")

@@ -213,7 +213,6 @@ class InstallDialog(Adw.Dialog):
                     self.run_async(copy_file, after_copy)
                 else:
                     # Format path for display
-                    display_path = self.format_path_for_display(path)
                     self.game_path.set_text(path)
                     
                     # Asynchronously check file
@@ -339,28 +338,7 @@ class InstallDialog(Adw.Dialog):
             
             self.log_message(f"Copying file from Flatpak to: {new_path}")
             
-            # Method 1: Use GIO for file copying (preferred method)
-            try:
-                self.log_message("Method 1: Trying to copy via GIO...")
-                source_file = Gio.File.new_for_path(path)
-                dest_file = Gio.File.new_for_path(new_path)
-                
-                # Check if source file exists
-                if not source_file.query_exists():
-                    self.log_message(f"Source file does not exist via GIO: {path}", logging.WARNING)
-                else:
-                    # Copy file with overwrite flags
-                    source_file.copy(
-                        dest_file,
-                        Gio.FileCopyFlags.OVERWRITE,
-                        None, None  # No progress tracking and cancellation
-                    )
-                    self.log_message("GIO: File successfully copied")
-                    return new_path
-            except GLib.Error as e:
-                self.log_message(f"GIO: Copy error: {e.message}", logging.ERROR)
-            
-            # Method 2: Use flatpak-spawn to access host
+
             try:
                 self.log_message("Method 2: Trying to copy via flatpak-spawn...")
                 # For accessing host files through Flatpak
@@ -379,55 +357,6 @@ class InstallDialog(Adw.Dialog):
             except Exception as e:
                 self.log_message(f"flatpak-spawn: Error: {str(e)}", logging.ERROR)
             
-            # Method 3: Use xdg-document-portal
-            try:
-                self.log_message("Method 3: Trying to get real path to file via document portal...")
-                # Extract document ID from Flatpak path
-                match = re.search(r'/run/user/\d+/doc/([^/]+)/', path)
-                if match:
-                    doc_id = match.group(1)
-                    self.log_message(f"Document ID: {doc_id}")
-                    
-                    # Attempt to get path via FUSE or other methods
-                    # Here we assume the document might be accessible via system path
-                    # Check several possible locations
-                    potential_paths = [
-                        # Common path to documents on host
-                        f"/run/user/{os.getuid()}/doc/{doc_id}",
-                        f"/tmp/doc/{doc_id}" if os.access(f"/tmp/doc/{doc_id}", os.W_OK) else None,
-                        # Use relative path without prefix
-                        path.replace(f"/run/user/{os.getuid()}/doc/{doc_id}/", "")
-                    ]
-                    
-                    for alt_path in potential_paths:
-                        self.log_message(f"Checking path: {alt_path}")
-                        if os.path.exists(alt_path):
-                            self.log_message(f"Found file at path: {alt_path}")
-                            # Copy file the standard way
-                            with open(alt_path, "rb") as src, open(new_path, "wb") as dst:
-                                dst.write(src.read())
-                            self.log_message("File successfully copied via Python")
-                            return new_path
-            except Exception as e:
-                self.log_message(f"Method 3: Error: {str(e)}", logging.ERROR)
-            
-            # Method 4: Direct use of cp command
-            try:
-                self.log_message("Method 4: Trying direct copying via cp...")
-                result = subprocess.run(
-                    ["cp", path, new_path],
-                    capture_output=True,
-                    text=True,
-                    check=False
-                )
-                
-                if result.returncode == 0:
-                    self.log_message("cp: File successfully copied")
-                    return new_path
-                else:
-                    self.log_message(f"cp: Copy error: {result.stderr}", logging.ERROR)
-            except Exception as e:
-                self.log_message(f"cp: Error: {str(e)}", logging.ERROR)
             
             # All methods failed, return original path
             self.log_message("All copy methods failed. Proceeding with original file.", logging.WARNING)
@@ -540,94 +469,162 @@ class InstallDialog(Adw.Dialog):
 
     def on_install_clicked(self, button):
         """Handler for Install button click (Game installation)"""
-        # Get archive path and game name
-        archive_path = self.game_path.get_text()
-        game_name = self.game_title.get_text()
-        
-        if not archive_path or not game_name:
-            self.show_toast("Select an archive and specify game name")
-            return
-            
-        # Check if file exists
-        if not os.path.exists(archive_path):
-            self.show_toast("File does not exist")
+        # Validate input
+        if not self._validate_installation_input():
             return
             
         # Show progress
         self.show_progress(True, "Preparing for installation...")
         
         # Start installation asynchronously
-        def install_task():
-            def progress_update(progress, message):
-                GLib.idle_add(lambda: self.update_installation_progress(progress, message))
-                
-            # Call installation method from installer
-            success, result, executable = self.installer.install_game(
-                archive_path, 
-                game_name, 
-                progress_update
-            )
-            
-            return success, result, executable
-            
-        def after_install(result):
-            if not result:
-                self.show_toast("Error during game installation")
-                return
-                
-            success, install_path, executable = result
-            
-            if success:
-                self.show_toast(f"Game successfully installed in: {install_path}")
-                
-                # Create new game
-                try:
-                    # Incrementally create ID for new game
-                    source_id = "online-fix"
-                    numbers = [0]
-                    for game_id in shared.store.source_games.get(source_id, set()):
-                        prefix = "online-fix_"
-                        if not game_id.startswith(prefix):
-                            continue
-                        try:
-                            numbers.append(int(game_id.replace(prefix, "", 1)))
-                        except ValueError:
-                            pass
-                    
-                    game_number = max(numbers) + 1
-                    
-                    # Create new game
-                    new_game = Game({
-                        "game_id": f"online-fix_{game_number}",
-                        "hidden": False,
-                        "source": source_id,
-                        "name": game_name,
-                        "path": install_path,
-                        "executable":  str(Path(shared.home) / "Games" / "Online-Fix" / executable) if executable else "",
-                        "added": int(time()),
-                    })
-                    
-                    # Add game to store
-                    shared.store.add_game(new_game, {}, run_pipeline=False)
-                    new_game.save()
-                    
-                    # Hide current installation dialog
-                    self.hide()
-                    
-                    # Show game details dialog to complete setup
-                    GLib.idle_add(lambda: self.show_details_dialog(new_game))
-                    
-                except Exception as e:
-                    self.log_message(f"Error adding game: {str(e)}", logging.ERROR)
-                    self.show_toast(f"Game installed but not added to library: {str(e)}")
-                    
-                    # Close dialog after successful installation via timeout
-                    GLib.timeout_add(1500, lambda: self.hide() or False)
-            else:
-                self.show_toast(f"Error during game installation: {install_path}")
-        
-        self.run_async(install_task, after_install)
+        self.run_async(self._install_game_task, self._handle_installation_result)
     
+    def _validate_installation_input(self):
+        """Validates installation input parameters
+        
+        Returns:
+            bool: True if input is valid, False otherwise
+        """
+        # Get archive path and game name
+        archive_path = self.game_path.get_text()
+        game_name = self.game_title.get_text()
+        
+        if not archive_path or not game_name:
+            self.show_toast("Select an archive and specify game name")
+            return False
+            
+        # Check if file exists
+        if not os.path.exists(archive_path):
+            self.show_toast("File does not exist")
+            return False
+            
+        return True
+    
+    def _install_game_task(self):
+        """Task for game installation
+        
+        Returns:
+            tuple: (success, result, executable)
+        """
+        archive_path = self.game_path.get_text()
+        game_name = self.game_title.get_text()
+        
+        def progress_update(progress, message):
+            GLib.idle_add(lambda: self.update_installation_progress(progress, message))
+            
+        # Call installation method from installer
+        success, result, executable = self.installer.install_game(
+            archive_path, 
+            game_name, 
+            progress_update
+        )
+        
+        return success, result, executable
+    
+    def _handle_installation_result(self, result):
+        """Handles installation result
+        
+        Args:
+            result: Installation result tuple or None on error
+        """
+        if not result:
+            self.show_toast("Error during game installation")
+            return
+            
+        success, install_path, executable = result
+        
+        if success:
+            self.show_toast(f"Game successfully installed in: {install_path}")
+            self._add_game_to_library(install_path, executable)
+        else:
+            self.show_toast(f"Error during game installation: {install_path}")
+    
+    def _add_game_to_library(self, install_path, executable):
+        """Adds installed game to library
+        
+        Args:
+            install_path: Path where game was installed
+            executable: Path to game executable
+        """
+        game_name = self.game_title.get_text()
+        
+        try:
+            game_id = self._generate_game_id()
+            new_game = self._create_game_object(game_id, game_name, install_path, executable)
+            
+            # Add game to store
+            shared.store.add_game(new_game, {}, run_pipeline=False)
+            new_game.save()
+            
+            # Hide current installation dialog
+            self.hide()
+            
+            # Show game details dialog to complete setup
+            GLib.idle_add(lambda: self.show_details_dialog(new_game))
+            
+        except Exception as e:
+            self._handle_game_creation_error(e, install_path)
+    
+    def _generate_game_id(self):
+        """Generates a unique game ID for online-fix games
+        
+        Returns:
+            str: Generated game ID
+        """
+        source_id = "online-fix"
+        numbers = [0]
+        prefix = "online-fix_"
+        
+        for game_id in shared.store.source_games.get(source_id, set()):
+            if not game_id.startswith(prefix):
+                continue
+            try:
+                numbers.append(int(game_id.replace(prefix, "", 1)))
+            except ValueError:
+                pass
+        
+        game_number = max(numbers) + 1
+        return f"{prefix}{game_number}"
+    
+    def _create_game_object(self, game_id, game_name, install_path, executable):
+        """Creates a Game object for the installed game
+        
+        Args:
+            game_id: Generated game ID
+            game_name: Game name
+            install_path: Path where game was installed
+            executable: Path to game executable
+            
+        Returns:
+            Game: Created game object
+        """
+        executable_path = ""
+        if executable:
+            executable_path = str(Path(shared.home) / "Games" / "Online-Fix" / executable)
+            
+        return Game({
+            "game_id": game_id,
+            "hidden": False,
+            "source": "online-fix",
+            "name": game_name,
+            "path": install_path,
+            "executable": executable_path,
+            "added": int(time()),
+        })
+    
+    def _handle_game_creation_error(self, error, install_path):
+        """Handles error during game creation
+        
+        Args:
+            error: Exception that occurred
+            install_path: Path where game was installed
+        """
+        self.log_message(f"Error adding game: {str(error)}", logging.ERROR)
+        self.show_toast(f"Game installed but not added to library: {str(error)}")
+        
+        # Close dialog after successful installation via timeout
+        GLib.timeout_add(1500, lambda: self.hide() or False)
+        
     def show_details_dialog(self, game):
         """Shows dialog with game details for editing
         
