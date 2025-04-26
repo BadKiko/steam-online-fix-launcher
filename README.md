@@ -9,7 +9,7 @@
     <a href="https://sonarcloud.io/summary/new_code?id=BadKiko_steam-online-fix-launcher"><img src="https://sonarcloud.io/api/project_badges/measure?project=BadKiko_steam-online-fix-launcher&metric=alert_status" alt="Quality Gate Status"></a>
 </p>
 
-[Русская версия](https://github.com/BadKiko/steam-online-fix-launcher/docs/README_RU.md)
+[Русская версия](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/docs/README_RU.md)
 
 ## 📝 Description
 

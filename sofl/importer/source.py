@@ -139,7 +139,7 @@ class OnlineFixSource(Source):
     """Source for Online-Fix games"""
     
     source_id = "online-fix"
-    name = _("Online-Fix")
+    name = "Online-Fix"
     iterable_class = SourceIterable  # Используем базовый итератор, так как у нас нет специальной логики
     available_on = {"linux", "win32", "darwin"}  # Доступно на всех платформах
     

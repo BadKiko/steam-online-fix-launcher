@@ -47,7 +47,7 @@ class DetailsDialog(Adw.Dialog):
     cover_button_edit: Gtk.Button = Gtk.Template.Child()
     cover_button_delete_revealer: Gtk.Revealer = Gtk.Template.Child()
     cover_button_delete: Gtk.Button = Gtk.Template.Child()
-    spinner: Adw.Spinner = Gtk.Template.Child()
+    spinner: Gtk.Spinner = Gtk.Template.Child()
 
     name: Adw.EntryRow = Gtk.Template.Child()
     developer: Adw.EntryRow = Gtk.Template.Child()

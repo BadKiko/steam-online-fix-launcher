@@ -113,7 +113,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     sgdb_animated_switch: Adw.SwitchRow = Gtk.Template.Child()
     sgdb_fetch_button: Gtk.Button = Gtk.Template.Child()
     sgdb_stack: Gtk.Stack = Gtk.Template.Child()
-    sgdb_spinner: Adw.Spinner = Gtk.Template.Child()
+    sgdb_spinner: Gtk.Spinner = Gtk.Template.Child()
 
     danger_zone_group = Gtk.Template.Child()
     remove_all_games_button_row = Gtk.Template.Child()

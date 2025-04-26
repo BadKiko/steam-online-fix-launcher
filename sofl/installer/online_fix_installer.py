@@ -82,10 +82,11 @@ class OnlineFixInstaller:
         try:
             # Try to get the value if the key exists
             shared.schema.get_string("online-fix-install-path")
-        except:
+        except GLib.Error as e:
             # If the key doesn't exist, set the default value
             default_path = str(Path(shared.home) / "Games" / "Online-Fix")
             shared.schema.set_string("online-fix-install-path", default_path)
+            logger.warning(f"Online-Fix install path not found, using default: {default_path}")
     
     def get_install_path(self) -> str:
         """Gets the installation path from settings

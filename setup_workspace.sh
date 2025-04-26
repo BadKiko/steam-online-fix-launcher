@@ -139,7 +139,7 @@ EOF
 # Создание файла .gitignore, если его еще нет
 if [ ! -f ".gitignore" ]; then
     echo -e "${BLUE}Создание файла .gitignore...${NC}"
-    cat > .gitignore << EOF
+    cat > .gitignore << 'EOF'
 # Python
 __pycache__/
 *.py[cod]

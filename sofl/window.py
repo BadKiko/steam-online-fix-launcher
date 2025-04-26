@@ -59,7 +59,7 @@ class SOFLWindow(Adw.ApplicationWindow):
     details_page: Adw.NavigationPage = Gtk.Template.Child()
     details_view_toolbar_view: Adw.ToolbarView = Gtk.Template.Child()
     details_view_cover: Gtk.Picture = Gtk.Template.Child()
-    details_view_spinner: Adw.Spinner = Gtk.Template.Child()
+    details_view_spinner: Gtk.Spinner = Gtk.Template.Child()
     details_view_title: Gtk.Label = Gtk.Template.Child()
     details_view_blurred_cover: Gtk.Picture = Gtk.Template.Child()
     details_view_play_button: Gtk.Button = Gtk.Template.Child()

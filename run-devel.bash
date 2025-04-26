@@ -479,7 +479,7 @@ patch_blueprint_tests() {
         cp "$meson_file" "${meson_file}.bak"
         
         # Отключаем тесты в файле meson.build
-        sed -i 's/subdir(.tests.)/# Тесты отключены для WSL/' "$meson_file"
+        sed -i 's/^subdir(.*tests.*)$/# tests disabled for WSL/' "$meson_file"
         
         log_message "info" "Патч применен, тесты blueprint-compiler отключены"
     fi
@@ -610,7 +610,13 @@ if [ "$build_required" = true ]; then
     
     # Perform build
     log_message "info" "Starting build..."
-    if run_flatpak_builder "$BUILD_OPTS" "$BUILD_DIR" "$MANIFEST"; then
+    if [ -n "$BUILD_OPTS" ]; then
+        run_flatpak_builder $BUILD_OPTS "$BUILD_DIR" "$MANIFEST"
+    else
+        run_flatpak_builder "$BUILD_DIR" "$MANIFEST"
+    fi
+    
+    if [ $? -eq 0 ]; then
         log_message "info" "Build completed successfully"
         # Save build timestamp
         date > "$LAST_BUILD_TIMESTAMP_FILE"

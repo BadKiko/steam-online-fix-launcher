@@ -9,6 +9,8 @@
     <a href="https://sonarcloud.io/summary/new_code?id=BadKiko_steam-online-fix-launcher"><img src="https://sonarcloud.io/api/project_badges/measure?project=BadKiko_steam-online-fix-launcher&metric=alert_status" alt="Quality Gate Status"></a>
 </p>
 
+[Русская версия](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/docs/README_RU.md)
+
 ## 📝 Description
 
 **Steam Online Fix Launcher (SOFL)** is a tool for easily launching and organizing online-fix games on Linux. The application is a full-featured library manager that solves common problems with launching pirated games with online functionality support.

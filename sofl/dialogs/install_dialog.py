@@ -600,7 +600,7 @@ class InstallDialog(Adw.Dialog):
         """
         executable_path = ""
         if executable:
-            executable_path = str(Path(shared.home) / "Games" / "Online-Fix" / executable)
+            executable_path = str(Path(install_path) / executable) if executable else ""
             
         return Game({
             "game_id": game_id,
