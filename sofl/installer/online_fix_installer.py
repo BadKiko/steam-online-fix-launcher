@@ -231,7 +231,7 @@ class OnlineFixInstaller:
                 return False
                 
             # Паттерн для определения прогресса (процент и имя файла)
-            progress_pattern = re.compile(r"([0-9]+)%")
+            progress_pattern = re.compile(r"([0-9]{1,3})%")
             last_progress = 0
             
             for line in process.stdout:

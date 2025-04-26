@@ -394,8 +394,7 @@ class InstallDialog(Adw.Dialog):
                     potential_paths = [
                         # Общий путь к документам на хосте
                         f"/run/user/{os.getuid()}/doc/{doc_id}",
-                        # Попробуем получить доступ через /tmp
-                        f"/tmp/doc/{doc_id}",
+                        f"/tmp/doc/{doc_id}" if os.access(f"/tmp/doc/{doc_id}", os.W_OK) else None,
                         # Используем относительный путь без префикса
                         path.replace(f"/run/user/{os.getuid()}/doc/{doc_id}/", "")
                     ]
