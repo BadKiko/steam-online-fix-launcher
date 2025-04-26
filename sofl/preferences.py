@@ -487,11 +487,12 @@ class SOFLPreferences(Adw.PreferencesDialog):
         try:
             # Try to get the value if the key exists
             current_path = shared.schema.get_string("online-fix-install-path")
-        except:
+        except GLib.Error as e:
             # If the key does not exist, set the default value
             default_path = str(Path(shared.home) / "Games" / "Online-Fix")
             shared.schema.set_string("online-fix-install-path", default_path)
             current_path = default_path
+            logging.warning(f"Online-Fix install path not found, using default: {default_path}")
         
         # Fill the field with the last saved path
         self.online_fix_entry_row.set_text(current_path)
