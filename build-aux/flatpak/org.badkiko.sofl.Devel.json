@@ -11,7 +11,11 @@
     "--device=dri",
     "--socket=wayland",
     "--talk-name=org.freedesktop.Flatpak",
+    "--talk-name=org.freedesktop.portal.Documents",
+    "--talk-name=org.freedesktop.portal.FileChooser",
     "--filesystem=host",
+    "--filesystem=xdg-download",
+    "--filesystem=xdg-documents",
     "--filesystem=~/.var/app/com.valvesoftware.Steam/data/Steam/:ro",
     "--filesystem=~/.var/app/net.lutris.Lutris/:ro",
     "--filesystem=~/.var/app/com.heroicgameslauncher.hgl/config/heroic/:ro",
@@ -102,6 +106,20 @@
               "sha256": "ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac"
             }
           ]
+        },
+        {
+          "name": "python3-rarfile",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"rarfile\" --no-build-isolation"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/26/3f/3118a797444e7e30e784921c4bfafb6500fb288a0c84cb8c32ed15853c16/rarfile-4.2.tar.gz",
+              "sha256": "8e1c8e72d0845ad2b32a47ab11a719bc2e41165ec101fd4d3fe9e92aa3f469ef"
+            }
+          ]
         }
       ]
     },
@@ -116,6 +134,22 @@
         }
       ],
       "cleanup": ["*"]
+    },
+    {
+      "name": "unrar",
+      "buildsystem": "simple",
+      "build-commands": [
+        "make -f makefile",
+        "install -D -m755 unrar \"${FLATPAK_DEST}/bin/unrar\""
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://www.rarlab.com/rar/unrarsrc-7.0.9.tar.gz",
+          "sha256": "505c13f9e4c54c01546f2e29b2fcc2d7fabc856a060b81e5cdfe6012a9198326"
+        }
+      ],
+      "comment": "Необходим для работы библиотеки rarfile из Python, которая использует его для распаковки RAR-архивов"
     },
     {
       "name": "sofl",

@@ -113,11 +113,15 @@ class SOFLPreferences(Adw.PreferencesDialog):
     sgdb_animated_switch: Adw.SwitchRow = Gtk.Template.Child()
     sgdb_fetch_button: Gtk.Button = Gtk.Template.Child()
     sgdb_stack: Gtk.Stack = Gtk.Template.Child()
-    sgdb_spinner: Adw.Spinner = Gtk.Template.Child()
+    sgdb_spinner: Gtk.Spinner = Gtk.Template.Child()
 
     danger_zone_group = Gtk.Template.Child()
     remove_all_games_button_row = Gtk.Template.Child()
     reset_button_row = Gtk.Template.Child()
+
+    # Online-Fix
+    online_fix_entry_row: Adw.EntryRow = Gtk.Template.Child()
+    online_fix_file_chooser_button: Gtk.Button = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -190,6 +194,9 @@ class SOFLPreferences(Adw.PreferencesDialog):
                 '<a href="https://www.steamgriddb.com/profile/preferences/api">', "</a>"
             )
         )
+
+        # Online-Fix setup
+        self.setup_online_fix_settings()
 
         def update_sgdb(*_args: Any) -> None:
             counter = 0
@@ -418,7 +425,8 @@ class SOFLPreferences(Adw.PreferencesDialog):
             """Callback called when a dir picker button is clicked"""
             try:
                 path = Path(self.file_chooser.select_folder_finish(result).get_path())
-            except GLib.Error:
+            except GLib.Error as e:
+                logging.error("Error selecting directory: %s", e.message)
                 return
 
             # Good picked location
@@ -473,3 +481,40 @@ class SOFLPreferences(Adw.PreferencesDialog):
         # Set the source row subtitles
         self.resolve_locations(source)
         self.update_source_action_row_paths(source)
+    def setup_online_fix_settings(self) -> None:
+        """Setup parameters for Online-Fix"""
+        # Check for the key in settings
+        try:
+            # Try to get the value if the key exists
+            current_path = shared.schema.get_string("online-fix-install-path")
+        except GLib.Error as e:
+            # If the key does not exist, set the default value
+            default_path = str(Path(shared.home) / "Games" / "Online-Fix")
+            shared.schema.set_string("online-fix-install-path", default_path)
+            current_path = default_path
+            logging.warning(f"Online-Fix install path not found, using default: {default_path}")
+        
+        # Fill the field with the last saved path
+        self.online_fix_entry_row.set_text(current_path)
+        
+        # Handler for manual path change
+        def online_fix_path_changed(*_args: Any) -> None:
+            shared.schema.set_string("online-fix-install-path", self.online_fix_entry_row.get_text())
+        
+        self.online_fix_entry_row.connect("changed", online_fix_path_changed)
+        
+        # Handler for the folder selection button
+        self.online_fix_file_chooser_button.connect("clicked", self.online_fix_path_browse_handler)
+
+    def online_fix_path_browse_handler(self, *_args):
+        """Choose directory for Online-Fix games installation"""
+        
+        def set_online_fix_dir(_widget: Any, result: Gio.Task) -> None:
+            try:
+                path = Path(self.file_chooser.select_folder_finish(result).get_path())
+                shared.schema.set_string("online-fix-install-path", str(path))
+                self.online_fix_entry_row.set_text(str(path))
+            except GLib.Error as e:
+                logging.debug("Error selecting folder for Online-Fix: %s", e)
+        
+        self.file_chooser.select_folder(shared.win, None, set_online_fix_dir)

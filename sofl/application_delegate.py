@@ -17,7 +17,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""A set of methods that manage your app’s life cycle and its interaction
+"""A set of methods that manage your app's life cycle and its interaction
 with common system services."""
 
 from typing import Any
@@ -30,7 +30,7 @@ from sofl import shared
 
 
 class ApplicationDelegate(NSObject):  # type: ignore
-    """A set of methods that manage your app’s life cycle and its interaction
+    """A set of methods that manage your app's life cycle and its interaction
     with common system services."""
 
     def applicationDidFinishLaunching_(self, *_args: Any) -> None:
@@ -101,6 +101,12 @@ class ApplicationDelegate(NSObject):  # type: ignore
             return
 
         app.lookup_action("add_game").activate()
+
+    def install_(self, *_args: Any) -> None:
+        if (not shared.win) or (not (app := shared.win.get_application())):
+            return
+
+        app.lookup_action("install_game").activate()
 
     def import_(self, *_args: Any) -> None:
         if (not shared.win) or (not (app := shared.win.get_application())):

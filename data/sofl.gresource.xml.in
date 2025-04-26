@@ -7,12 +7,14 @@
     <file preprocess="xml-stripblanks">gtk/game.ui</file>
     <file preprocess="xml-stripblanks">gtk/preferences.ui</file>
     <file preprocess="xml-stripblanks">gtk/details-dialog.ui</file>
+    <file preprocess="xml-stripblanks">gtk/install-dialog.ui</file>
     <file alias="style.css">gtk/style.css</file>
     <file alias="style-dark.css">gtk/style-dark.css</file>
     <file>library_placeholder.svg</file>
     <file>library_placeholder_small.svg</file>
   </gresource>
   <gresource prefix="@PREFIX@/icons/scalable/categories/">
+  <file alias="cog-source-symbolic.svg">icons/sources/cog-source-symbolic.svg</file>
   <file alias="bottles-source-symbolic.svg">icons/sources/bottles-source-symbolic.svg</file>
   <file alias="flatpak-source-symbolic.svg">icons/sources/flatpak-source-symbolic.svg</file>
   <file alias="heroic-source-symbolic.svg">icons/sources/heroic-source-symbolic.svg</file>

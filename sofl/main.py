@@ -47,6 +47,8 @@ from sofl.importer.legendary_source import LegendarySource
 from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
+# Импорт необходим для доступа к классу через globals() в методе get_source_name
+from sofl.importer.source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences
 from sofl.store.managers.cover_manager import CoverManager
@@ -57,6 +59,7 @@ from sofl.store.managers.steam_api_manager import SteamAPIManager
 from sofl.store.store import Store
 from sofl.utils.run_executable import run_executable
 from sofl.window import SOFLWindow
+from sofl.dialogs.install_dialog import InstallDialog
 
 if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
@@ -158,6 +161,7 @@ class SOFLApplication(Adw.Application):
                 ("hide_game",),
                 ("edit_game",),
                 ("add_game", ("<primary>n",)),
+                ("install_game",),
                 ("import", ("<primary>i",)),
                 ("remove_game_details_view", ("Delete",)),
                 ("remove_game",),
@@ -250,7 +254,15 @@ class SOFLApplication(Adw.Application):
         elif source_id == "imported":
             name = _("Added")
         else:
-            name = globals()[f'{source_id.split("_")[0].title()}Source'].name
+            if "-" in source_id:
+                # Преобразуем "online-fix" в "OnlineFix"
+                parts = source_id.split("-")
+                source_class_prefix = "".join(part.title() for part in parts)
+            else:
+                # Обычная обработка для источников без дефиса
+                source_class_prefix = source_id.split("_")[0].title()
+                
+            name = globals()[f'{source_class_prefix}Source'].name
         return name
 
     def on_about_action(self, *_args: Any) -> None:
@@ -332,6 +344,12 @@ class SOFLApplication(Adw.Application):
             return
 
         DetailsDialog().present(shared.win)
+
+    def on_install_game_action(self, *_args: Any) -> None:
+        if InstallDialog.is_open:
+            return
+        
+        InstallDialog().present(shared.win)
 
     def on_import_action(self, *_args: Any) -> None:
         shared.importer = Importer()

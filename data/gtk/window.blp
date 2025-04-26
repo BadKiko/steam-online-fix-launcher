@@ -19,7 +19,7 @@ Adw.StatusPage hidden_notice_no_results {
 
 Adw.StatusPage notice_empty {
   title: _("No Games");
-  description: _("Use the + button to add games");
+  description: _("Use the + button to install or add games");
   vexpand: true;
   valign: center;
 
@@ -335,13 +335,13 @@ Adw.NavigationPage details_page {
           margin-end: 24;
           margin-top: 24;
           margin-bottom: 24;
-
+          
           Adw.Clamp {
             maximum-size: 200;
 
             Overlay {
               [overlay]
-              Adw.Spinner details_view_spinner {
+              Gtk.Spinner details_view_spinner {
                 visible: false;
               }
 
@@ -550,7 +550,9 @@ menu add_games {
   section {
     item (_("Add Game"), "app.add_game")
   }
-
+  section {
+    item (_("Install Game"), "app.install_game")
+  }
   section {
     item (_("Import"), "app.import")
   }

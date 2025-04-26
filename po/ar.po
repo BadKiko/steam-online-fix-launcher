@@ -628,7 +628,7 @@ msgstr "لم يُعثر على ألعاب جديدة"
 #: sofl/importer/importer.py:379
 #, fuzzy
 msgid "{} game imported"
-id_plural "{} games imported"
+msgid_plural "{} games imported"
 msgstr[0] "اُستوردت {} لعبة"
 msgstr[1] "اُستوردت {} لعبة"
 msgstr[2] "اُستوردت {} لعبة"

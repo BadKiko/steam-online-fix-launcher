@@ -59,7 +59,7 @@ class SOFLWindow(Adw.ApplicationWindow):
     details_page: Adw.NavigationPage = Gtk.Template.Child()
     details_view_toolbar_view: Adw.ToolbarView = Gtk.Template.Child()
     details_view_cover: Gtk.Picture = Gtk.Template.Child()
-    details_view_spinner: Adw.Spinner = Gtk.Template.Child()
+    details_view_spinner: Gtk.Spinner = Gtk.Template.Child()
     details_view_title: Gtk.Label = Gtk.Template.Child()
     details_view_blurred_cover: Gtk.Picture = Gtk.Template.Child()
     details_view_play_button: Gtk.Button = Gtk.Template.Child()
@@ -147,6 +147,7 @@ class SOFLWindow(Adw.ApplicationWindow):
                 Gtk.Image.new_from_icon_name(
                     "user-desktop-symbolic"
                     if (split_id := source_id.split("_")[0]) == "desktop"
+                    else "application-x-executable-symbolic" if source_id == "online-fix"
                     else f"{split_id}-source-symbolic"
                 )
             )

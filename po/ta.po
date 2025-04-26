@@ -835,9 +835,6 @@ msgstr "உங்கள் API விசையை விருப்பங்க
 #~ msgid "Search"
 #~ msgstr "தேடு"
 
-#~ msgid "Undo"
-#~ msgstr "செயல்தவிர்"
-
 #~ msgid "Couldn't Import Games"
 #~ msgstr "கேம்களை இறக்குமதி செய்ய முடியவில்லை"
 

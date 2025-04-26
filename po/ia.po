@@ -605,7 +605,7 @@ msgstr ""
 #. The variable is the number of games.
 #: sofl/importer/importer.py:379
 msgid "{} game imported"
-id_plural "{} games imported"
+msgid_plural "{} games imported"
 msgstr[0] ""
 msgstr[1] ""
 

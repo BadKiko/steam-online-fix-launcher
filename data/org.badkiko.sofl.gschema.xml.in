@@ -110,6 +110,9 @@
     <key name="library-rows" type="u">
       <default>0</default>
     </key>
+    <key name="online-fix-install-path" type="s">
+      <default>"~/Games/Online-Fix"</default>
+    </key>
   </schema>
 
   <schema id="@APP_ID@.State" path="@PREFIX@/State/">
