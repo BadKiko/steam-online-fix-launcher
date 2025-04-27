@@ -165,6 +165,7 @@ class SOFLApplication(Adw.Application):
                 ("import", ("<primary>i",)),
                 ("remove_game_details_view", ("Delete",)),
                 ("remove_game",),
+                ("uninstall_game",),
                 ("igdb_search",),
                 ("sgdb_search",),
                 ("protondb_search",),
@@ -385,6 +386,9 @@ class SOFLApplication(Adw.Application):
 
     def on_remove_game_action(self, *_args: Any) -> None:
         shared.win.active_game.remove_game()
+
+    def on_uninstall_game_action(self, *_args: Any) -> None:
+        shared.win.active_game.uninstall_game()
 
     def on_remove_game_details_view_action(self, *_args: Any) -> None:
         if shared.win.navigation_view.get_visible_page() == shared.win.details_page:
