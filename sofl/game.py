@@ -23,6 +23,7 @@ from time import time
 from typing import Any, Optional
 import shutil
 import os
+import logging
 
 from gi.repository import Adw, GObject, Gtk
 
@@ -31,6 +32,7 @@ from sofl.game_cover import GameCover
 from sofl.utils.run_executable import run_executable
 from sofl.utils.create_dialog import create_dialog
 
+from gettext import gettext as _
 
 # pylint: disable=too-many-instance-attributes
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/game.ui")
@@ -173,10 +175,9 @@ class Game(Gtk.Box):
             if not str(self.executable).startswith(str(onlinefix_root)):
                 self.log_and_toast(_("Game is not installed in Online-Fix directory"))
                 return
-                
-            # Determine the game's root folder (the first directory in the path after the online-fix root folder)
-            rel_path = Path(self.executable).relative_to(onlinefix_root)
-            game_root = onlinefix_root / rel_path.parts[0]
+            
+            # Get a more reliable game root folder
+            game_root = self._detect_game_root_folder(onlinefix_root)
             
             # Create a confirmation dialog
             dialog = create_dialog(
@@ -186,7 +187,7 @@ class Game(Gtk.Box):
                 "uninstall",
                 _("Uninstall")
             )
-
+ 
             dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
             
             def on_response(dialog, response):
@@ -211,6 +212,45 @@ class Game(Gtk.Box):
             
         except Exception as e:
             self.log_and_toast(_("Error: {}").format(str(e)))
+
+    def _detect_game_root_folder(self, onlinefix_root: Path) -> Path:
+        """
+        Detects the game's root folder more reliably
+        
+        Args:
+            onlinefix_root: Path to the online-fix installation directory
+            
+        Returns:
+            Path: Path to the detected game folder
+        """
+        try:
+            # Get the path to the executable
+            exec_path = Path(self.executable.split()[0])
+            
+            # Make sure it's relative to the online-fix root
+            if not str(exec_path).startswith(str(onlinefix_root)):
+                # Fallback to parent directory of executable
+                return exec_path.parent
+                
+            # Get relative path from online-fix root
+            rel_path = exec_path.relative_to(onlinefix_root)
+            
+            # First try to use first directory component
+            if len(rel_path.parts) > 0:
+                candidate = rel_path.parts[0]
+                game_dir = onlinefix_root / candidate
+                
+                # Verify that this is actually a directory
+                if game_dir.is_dir():
+                    return game_dir
+            
+            # If first component isn't suitable, fall back to executable's parent
+            return exec_path.parent
+            
+        except Exception as e:
+            logging.error(f"Error detecting game root folder: {str(e)}")
+            # Always fall back to parent directory of executable if something goes wrong
+            return Path(self.executable.split()[0]).parent
 
     def set_loading(self, state: int) -> None:
         self.loading += state
