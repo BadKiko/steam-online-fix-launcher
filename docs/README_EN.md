@@ -1,7 +1,7 @@
-# 🎮 Steam Online Fix Launcher (SOFL) 🎮
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/refs/heads/main/banner.svg" alt="banner" height="150" />
+    <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/main/data/icons/hicolor/scalable/apps/org.badkiko.sofl.svg" alt="SOFL Icon" height="150" />
+    <h1 align="center">SOFL</h1>
 </p>
 
 <p align="center">
