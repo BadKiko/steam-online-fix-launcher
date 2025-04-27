@@ -37,12 +37,12 @@ from sofl import shared
 from sofl.game import Game
 from sofl.installer.online_fix_installer import OnlineFixInstaller
 from sofl.details_dialog import DetailsDialog
+from sofl.utils.flatpak import is_flatpak_path, copy_flatpak_file, log_message
 
 # Constants
 ONLINE_FIX_PASSWORD = "online-fix.me"
 GAME_TITLE_REGEX = r"(^.*?)\.v"
 TOAST_DEBOUNCE_DELAY = 1000  # Milliseconds
-FLATPAK_PATH_PATTERN = r"/run/user/\d+/doc/"
 
 # Logging setup
 logger = logging.getLogger(__name__)
@@ -316,54 +316,11 @@ class InstallDialog(Adw.Dialog):
 
     def is_flatpak_path(self, path: str) -> bool:
         """Checks if the path is a Flatpak path"""
-        return bool(re.search(FLATPAK_PATH_PATTERN, path))
+        return is_flatpak_path(path)
 
     def copy_flatpak_file(self, path: str) -> str:
-        """Copies a file from Flatpak to an accessible directory
-        
-        Args:
-            path: Path to the file in Flatpak
-            
-        Returns:
-            str: Path to the copied file or original path in case of error
-        """
-        try:
-            # Create temporary directory if it doesn't exist yet
-            temp_dir = os.path.join(GLib.get_user_cache_dir(), "sofl-temp")
-            os.makedirs(temp_dir, exist_ok=True)
-            
-            # Get filename from path
-            filename = os.path.basename(path)
-            new_path = os.path.join(temp_dir, filename)
-            
-            self.log_message(f"Copying file from Flatpak to: {new_path}")
-            
-
-            try:
-                self.log_message("Method 2: Trying to copy via flatpak-spawn...")
-                # For accessing host files through Flatpak
-                result = subprocess.run(
-                    ["flatpak-spawn", "--host", "cp", path, new_path],
-                    capture_output=True,
-                    text=True,
-                    check=False
-                )
-                
-                if result.returncode == 0:
-                    self.log_message("flatpak-spawn: File successfully copied")
-                    return new_path
-                else:
-                    self.log_message(f"flatpak-spawn: Copy error: {result.stderr}", logging.ERROR)
-            except Exception as e:
-                self.log_message(f"flatpak-spawn: Error: {str(e)}", logging.ERROR)
-            
-            
-            # All methods failed, return original path
-            self.log_message("All copy methods failed. Proceeding with original file.", logging.WARNING)
-            return path
-        except Exception as e:
-            self.log_message(f"General error when copying file: {str(e)}", logging.ERROR)
-            return path
+        """Delegates to utility function"""
+        return copy_flatpak_file(path)
 
     def verify_rar_password(self, path: str) -> bool:
         """Quick verification of password-protected archive without extraction
@@ -446,8 +403,8 @@ class InstallDialog(Adw.Dialog):
         )
 
     def log_message(self, message, level=logging.INFO):
-        logger.log(level, message)
-        print(f"[SOFL] {message}")
+        """Delegates to utility function"""
+        log_message(message, level)
 
     def _do_show_toast(self):
         """Actually show toast after debouncing"""

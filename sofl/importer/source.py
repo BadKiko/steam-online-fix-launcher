@@ -133,20 +133,3 @@ class URLExecutableSource(ExecutableFormatSource):
         raise NotImplementedError(
             f"No URL handler command available for {sys.platform}"
         )
-
-
-class OnlineFixSource(Source):
-    """Source for Online-Fix games"""
-    
-    source_id = "online-fix"
-    name = "Online-Fix"
-    iterable_class = SourceIterable  # Используем базовый итератор, так как у нас нет специальной логики
-    available_on = {"linux", "win32", "darwin"}  # Доступно на всех платформах
-    
-    def __init__(self) -> None:
-        super().__init__()
-        self.locations = []  # У нас нет специальных локаций для проверки
-    
-    def make_executable(self, *args, **kwargs) -> str:
-        """Создает команду для запуска игры"""
-        return kwargs.get("executable", "")

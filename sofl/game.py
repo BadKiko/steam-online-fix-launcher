@@ -197,7 +197,11 @@ class Game(Gtk.Box):
                         # Remove the game's root folder
                         shutil.rmtree(game_root)
                         self.log_and_toast(_("{} uninstalled").format(self.name))
-                        
+                    
+                    except Exception as e:
+                        self.log_and_toast(_("Error uninstalling {}: {}").format(self.name, str(e)))
+
+                    finally:
                         # Mark the game as removed
                         self.removed = True
                         self.save()
@@ -205,12 +209,10 @@ class Game(Gtk.Box):
                         
                         if shared.win.navigation_view.get_visible_page() == shared.win.details_page:
                             shared.win.navigation_view.pop()
-                    except Exception as e:
-                        self.log_and_toast(_("Error uninstalling {}: {}").format(self.name, str(e)))
-            
             dialog.connect("response", on_response)
             
         except Exception as e:
+            
             self.log_and_toast(_("Error: {}").format(str(e)))
 
     def _detect_game_root_folder(self, onlinefix_root: Path) -> Path:

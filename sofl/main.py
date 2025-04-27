@@ -48,7 +48,7 @@ from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
 # Импорт необходим для доступа к классу через globals() в методе get_source_name
-from sofl.importer.source import OnlineFixSource
+from sofl.importer.onlinefix_source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences
 from sofl.store.managers.cover_manager import CoverManager
@@ -256,11 +256,11 @@ class SOFLApplication(Adw.Application):
             name = _("Added")
         else:
             if "-" in source_id:
-                # Преобразуем "online-fix" в "OnlineFix"
+                # Convert "online-fix" to "OnlineFix"
                 parts = source_id.split("-")
                 source_class_prefix = "".join(part.title() for part in parts)
             else:
-                # Обычная обработка для источников без дефиса
+                # Normal handling for sources without a hyphen
                 source_class_prefix = source_id.split("_")[0].title()
                 
             name = globals()[f'{source_class_prefix}Source'].name
@@ -306,7 +306,7 @@ class SOFLApplication(Adw.Application):
         about.set_debug_info_filename("sofl.log")
         about.add_legal_section(
             "Steam Branding",
-            "© 2023 Valve Corporation",
+            "© 2025 Valve Corporation",
             Gtk.License.CUSTOM,
             "Steam and the Steam logo are trademarks and/or registered trademarks of Valve Corporation in the U.S. and/or other countries.",  # pylint: disable=line-too-long
         )

@@ -147,7 +147,7 @@ class SOFLWindow(Adw.ApplicationWindow):
                 Gtk.Image.new_from_icon_name(
                     "user-desktop-symbolic"
                     if (split_id := source_id.split("_")[0]) == "desktop"
-                    else "application-x-executable-symbolic" if source_id == "online-fix"
+                    else "online-fix-source-symbolic" if source_id == "online-fix"
                     else f"{split_id}-source-symbolic"
                 )
             )
