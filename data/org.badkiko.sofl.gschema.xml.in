@@ -113,6 +113,36 @@
     <key name="online-fix-install-path" type="s">
       <default>"~/Games/Online-Fix"</default>
     </key>
+    <key name="online-fix-launcher-type" type="i">
+      <default>0</default>
+      <summary>Online-Fix launcher type</summary>
+      <description>Type of launcher to use (0 = Steam API, 1 = UMU Launcher)</description>
+    </key>
+    <key name="online-fix-auto-patch" type="b">
+      <default>true</default>
+      <summary>Auto apply patches</summary>
+      <description>Automatically apply required patches for games</description>
+    </key>
+    <key name="online-fix-dll-overrides" type="s">
+      <default>"d3d11=n,b;d3d12=n,b;dxgi=n,b"</default>
+      <summary>DLL overrides</summary>
+      <description>DLL overrides for Wine/Proton in format: dll1=n,b;dll2=n,b</description>
+    </key>
+    <key name="online-fix-steam-api-patch" type="b">
+      <default>true</default>
+      <summary>Steam API patch</summary>
+      <description>Apply Steam API patch</description>
+    </key>
+    <key name="online-fix-network-patch" type="b">
+      <default>true</default>
+      <summary>Network patch</summary>
+      <description>Apply network patch</description>
+    </key>
+    <key name="online-fix-anticheat-patch" type="b">
+      <default>true</default>
+      <summary>Anti-cheat patch</summary>
+      <description>Apply anti-cheat patch</description>
+    </key>
   </schema>
 
   <schema id="@APP_ID@.State" path="@PREFIX@/State/">
