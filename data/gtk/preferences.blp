@@ -31,6 +31,7 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         subtitle: _("Save game covers losslessly at the cost of storage");
       }
     }
+
     Adw.PreferencesGroup danger_zone_group {
       title: _("Danger Zone");
 
@@ -457,47 +458,6 @@ template $SOFLPreferences: Adw.PreferencesDialog {
       Adw.EntryRow online_fix_dll_override_entry {
         title: _("DLL Overrides");
         tooltip-text: _("Format: dll1=n,b;dll2=n,b");
-      }
-    }
-
-    Adw.PreferencesGroup online_fix_patches_group {
-      title: _("Manual Patches");
-      description: _("Configure manual patches for specific games");
-
-      Adw.SwitchRow online_fix_steam_api_switch {
-        title: _("Steam API Patch");
-        subtitle: _("Apply Steam API patch");
-      }
-
-      Adw.SwitchRow online_fix_network_switch {
-        title: _("Network Patch");
-        subtitle: _("Apply network patch");
-      }
-
-      Adw.SwitchRow online_fix_anticheat_switch {
-        title: _("Anti-Cheat Patch");
-        subtitle: _("Apply anti-cheat patch");
-      }
-    }
-
-    Adw.PreferencesGroup online_fix_shared_prefs_group {
-      title: _("Shared Preferences");
-      description: _("Configure shared preferences for games");
-
-      Adw.EntryRow online_fix_shared_prefs_entry {
-        title: _("Shared Prefs Path");
-        tooltip-text: _("Path to shared preferences folder");
-      }
-
-      [suffix]
-      Button online_fix_shared_prefs_button {
-        valign: center;
-        icon-name: "folder-symbolic";
-        tooltip-text: _("Select Folder");
-
-        styles [
-          "flat",
-        ]
       }
     }
   }

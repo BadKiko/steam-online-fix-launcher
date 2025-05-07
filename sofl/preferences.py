@@ -125,11 +125,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
     online_fix_launcher_combo: Adw.ComboRow = Gtk.Template.Child()
     online_fix_auto_patch_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_dll_override_entry: Adw.EntryRow = Gtk.Template.Child()
-    online_fix_steam_api_switch: Adw.SwitchRow = Gtk.Template.Child()
-    online_fix_network_switch: Adw.SwitchRow = Gtk.Template.Child()
-    online_fix_anticheat_switch: Adw.SwitchRow = Gtk.Template.Child()
-    online_fix_shared_prefs_entry: Adw.EntryRow = Gtk.Template.Child()
-    online_fix_shared_prefs_button: Gtk.Button = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -533,31 +528,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
         self.online_fix_dll_override_entry.set_text(shared.schema.get_string("online-fix-dll-overrides"))
         self.online_fix_dll_override_entry.connect("changed", self.on_dll_overrides_changed)
 
-        # Setup manual patches
-        shared.schema.bind(
-            "online-fix-steam-api-patch",
-            self.online_fix_steam_api_switch,
-            "active",
-            Gio.SettingsBindFlags.DEFAULT,
-        )
-        shared.schema.bind(
-            "online-fix-network-patch",
-            self.online_fix_network_switch,
-            "active",
-            Gio.SettingsBindFlags.DEFAULT,
-        )
-        shared.schema.bind(
-            "online-fix-anticheat-patch",
-            self.online_fix_anticheat_switch,
-            "active",
-            Gio.SettingsBindFlags.DEFAULT,
-        )
-
-        # Setup shared prefs
-        self.online_fix_shared_prefs_entry.set_text(shared.schema.get_string("online-fix-shared-prefs-path"))
-        self.online_fix_shared_prefs_entry.connect("changed", self.on_shared_prefs_changed)
-        self.online_fix_shared_prefs_button.connect("clicked", self.on_shared_prefs_browse)
-
     def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
         """Handler for launcher type change"""
         shared.schema.set_int("online-fix-launcher-type", combo.get_selected())
@@ -565,22 +535,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
     def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
         """Handler for DLL overrides change"""
         shared.schema.set_string("online-fix-dll-overrides", entry.get_text())
-
-    def on_shared_prefs_changed(self, entry: Adw.EntryRow) -> None:
-        """Handler for shared prefs path change"""
-        shared.schema.set_string("online-fix-shared-prefs-path", entry.get_text())
-
-    def on_shared_prefs_browse(self, *_args: Any) -> None:
-        """Handler for shared prefs folder selection"""
-        def set_shared_prefs_dir(_widget: Any, result: Gio.Task) -> None:
-            try:
-                path = Path(self.file_chooser.select_folder_finish(result).get_path())
-                shared.schema.set_string("online-fix-shared-prefs-path", str(path))
-                self.online_fix_shared_prefs_entry.set_text(str(path))
-            except GLib.Error as e:
-                logging.debug("Error selecting folder for shared prefs: %s", e)
-        
-        self.file_chooser.select_folder(shared.win, None, set_shared_prefs_dir)
 
     def online_fix_path_browse_handler(self, *_args):
         """Choose directory for Online-Fix games installation"""
