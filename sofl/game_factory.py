@@ -17,11 +17,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from typing import Any, Type
+from typing import Any
 
 from sofl.game import Game
-# Удаляем импорт OnlineFixGame, так как он вызывает проблемы при наследовании
-# from sofl.onlinefix_game import OnlineFixGame
+from sofl.game_data import GameData
+from sofl.onlinefix_game import OnlineFixGameData
 
 class GameFactory:
     """Factory for creating the appropriate game type based on source"""
@@ -29,24 +29,22 @@ class GameFactory:
     @staticmethod
     def create_game(data: dict[str, Any], **kwargs: Any) -> Game:
         """
-        Create a game instance of the appropriate type and set its game type.
+        Create a game instance of the appropriate type.
         
         Args:
             data: Dictionary with game data
             kwargs: Additional keyword arguments
             
         Returns:
-            An instance of Game with appropriate game_type set
+            An instance of Game with appropriate GameData
         """
         source = data.get("source", "")
         
-        # Create standard Game instance
-        game = Game(data, **kwargs)
-        
-        # Set game type based on source
+        # Create the appropriate GameData instance based on source
         if source == "online-fix" or source.startswith("online-fix_"):
-            game.game_type = "online-fix"
+            game_data = OnlineFixGameData(data)
         else:
-            game.game_type = "standard"
+            game_data = GameData(data)
         
-        return game 
+        # Create Game instance with appropriate GameData
+        return Game(game_data, **kwargs) 

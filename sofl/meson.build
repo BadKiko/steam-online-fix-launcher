@@ -25,6 +25,8 @@ install_data(
     'game.py',
     'game_cover.py',
     'game_factory.py',
+    'onlinefix_game.py',
+    'game_data.py',
     configure_file(input: 'shared.py.in', output: 'shared.py', configuration: conf),
   ],
   install_dir: moduledir,
