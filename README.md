@@ -47,10 +47,16 @@ We're excited to announce that **SOFL** and **Dark Cartridges** projects are mer
 
 A huge thank you to [@kra-mo/cartridges](https://github.com/kra-mo/cartridges) project! Their excellent work has been a great inspiration and resource for our launcher.
 
-## 📋 TODO
+## Roadmap & What’s Missing
 
-- 📥 Add FreeTP support and auto-installation
-- 🚀 More features coming soon...
+* 🔄 FreeTP Auto-Installer: Automatically set up FreeTP games
+* 🔗 SteamGridDB Integration: Fetch cover art for your games automatically
+* 🐞 Bug Fixes and UI Polish: Improve stability and user experience
+* ❓ Online Integration with Online-Fix Servers: (Idea) Maybe something like Hydra for direct updates and news?
+* ❓ UI for SteamDeck: (Idea) Maybe something like RetroDeck but for pirates game?
+* 🛠️ Automatic Fixes for Common Online-Fix Errors: Implement scripted solutions for issues listed in [my manual guide](https://www.reddit.com/r/LinuxCrackSupport/comments/1cw7v8j/onlinefix_a_complete_guide_to_running_games_with/) (like Steam environment errors, missing DLLs, etc.)
+* 🚀 Automatic Steam Launch and Session End: Launch Steam automatically before starting games and close it after the session ends
+* 🎮 Runner Selection: Choose to launch games via Steam or [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
 
 ## 📜 License
 
