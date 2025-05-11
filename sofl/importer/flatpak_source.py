@@ -25,6 +25,7 @@ from gi.repository import GLib, Gtk
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import ExecutableFormatSource, SourceIterable
 
@@ -103,13 +104,13 @@ class FlatpakSourceIterable(SourceIterable):
                 continue
 
             values = {
-                "source": self.source.source_id,
-                "added": shared.import_time,
                 "name": name,
+                "source": self.source.source_id,
                 "game_id": self.source.game_id_format.format(game_id=flatpak_id),
                 "executable": self.source.make_executable(flatpak_id=flatpak_id),
+                "added": shared.import_time,
             }
-            game = Game(values)
+            game = GameFactory.create_game(values)
 
             additional_data = {}
 

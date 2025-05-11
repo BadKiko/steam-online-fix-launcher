@@ -66,6 +66,7 @@ class Game(Gtk.Box):
     blacklisted: bool = False
     game_cover: GameCover = None
     version: int = 0
+    game_type: str = "standard"
 
     def __init__(self, data: dict[str, Any], **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -127,8 +128,11 @@ class Game(Gtk.Box):
         if shared.schema.get_boolean("exit-after-launch"):
             self.app.quit()
 
-        # The variable is the title of the game
-        self.create_toast(_("{} launched"))
+        # Show different toast message based on game type
+        if self.game_type == "online-fix":
+            self.create_toast(_("{} launched with Online-Fix"))
+        else:
+            self.create_toast(_("{} launched"))
 
     def toggle_hidden(self, toast: bool = True) -> None:
         self.hidden = not self.hidden
@@ -286,11 +290,19 @@ class Game(Gtk.Box):
             shared.win.show_details_page(self)
 
     def set_play_icon(self) -> None:
-        self.play_button.set_icon_name(
-            "help-about-symbolic"
-            if shared.schema.get_boolean("cover-launches-game")
-            else "media-playback-start-symbolic"
-        )
+        self.play_button.set_icon_name(self.get_play_button_icon())
+        # Set button tooltip
+        self.play_button.set_tooltip_text(self.get_play_button_label())
+
+    def get_play_button_label(self) -> str:
+        """Return the label text for the play button"""
+        if self.game_type == "online-fix":
+            return _("Play with Online-Fix")
+        return _("Play")
+    
+    def get_play_button_icon(self) -> str:
+        """Return the icon name for the play button"""
+        return "help-about-symbolic" if shared.schema.get_boolean("cover-launches-game") else "media-playback-start-symbolic"
 
     def schema_changed(self, _settings: Any, key: str) -> None:
         if key == "cover-launches-game":

@@ -25,6 +25,7 @@ import yaml
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import SourceIterable, URLExecutableSource
 
@@ -41,16 +42,16 @@ class BottlesSourceIterable(SourceIterable):
         for entry in library.values():
             # Build game
             values = {
-                "source": self.source.source_id,
-                "added": shared.import_time,
                 "name": entry["name"],
+                "source": self.source.source_id,
                 "game_id": self.source.game_id_format.format(game_id=entry["id"]),
                 "executable": self.source.make_executable(
                     bottle_name=entry["bottle"]["name"],
                     game_name=entry["name"],
                 ),
+                "added": shared.import_time,
             }
-            game = Game(values)
+            game = GameFactory.create_game(values)
 
             # Get official cover path
             try:

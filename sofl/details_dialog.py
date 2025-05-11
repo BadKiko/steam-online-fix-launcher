@@ -38,6 +38,7 @@ from sofl.store.managers.sgdb_manager import SgdbManager
 from sofl.utils.create_dialog import create_dialog
 from sofl.utils.save_cover import convert_cover, save_cover
 from sofl.utils.flatpak import is_flatpak_path, copy_flatpak_file, log_message
+from sofl.game_factory import GameFactory
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/details-dialog.ui")
@@ -214,7 +215,7 @@ class DetailsDialog(Adw.Dialog):
 
             game_number = max(numbers) + 1
 
-            self.game = Game(
+            self.game = GameFactory.create_game(
                 {
                     "game_id": f"imported_{game_number}",
                     "hidden": False,

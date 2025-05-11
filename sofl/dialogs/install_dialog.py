@@ -35,6 +35,7 @@ from gi.repository import Adw, Gtk, GLib, Gio
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.installer.online_fix_installer import OnlineFixInstaller
 from sofl.details_dialog import DetailsDialog
 from sofl.utils.flatpak import is_flatpak_path, copy_flatpak_file, log_message
@@ -559,7 +560,7 @@ class InstallDialog(Adw.Dialog):
         if executable:
             executable_path = str(Path(install_path) / executable)
             
-        return Game({
+        return GameFactory.create_game({
             "game_id": game_id,
             "hidden": False,
             "source": "online-fix",
