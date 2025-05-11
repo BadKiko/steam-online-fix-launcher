@@ -17,7 +17,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# pyright: reportAssignmentType=none
 
 import logging
 import re
@@ -125,6 +124,10 @@ class SOFLPreferences(Adw.PreferencesDialog):
     online_fix_launcher_combo: Adw.ComboRow = Gtk.Template.Child()
     online_fix_auto_patch_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_dll_override_entry: Adw.EntryRow = Gtk.Template.Child()
+    online_fix_dll_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_patches_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -523,10 +526,36 @@ class SOFLPreferences(Adw.PreferencesDialog):
             "active",
             Gio.SettingsBindFlags.DEFAULT,
         )
-
+        
+        # Connect auto-patch switch to show/hide manual options
+        self.online_fix_auto_patch_switch.connect("notify::active", self.on_auto_patch_changed)
+        
         # Setup DLL overrides
         self.online_fix_dll_override_entry.set_text(shared.schema.get_string("online-fix-dll-overrides"))
         self.online_fix_dll_override_entry.connect("changed", self.on_dll_overrides_changed)
+        
+        # Setup manual patches
+        shared.schema.bind(
+            "online-fix-steam-appid-patch",
+            self.online_fix_steam_appid_switch, 
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        shared.schema.bind(
+            "online-fix-steamfix64-patch",
+            self.online_fix_patch_steam_fix_64,
+            "active", 
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        # Set initial visibility
+        self.on_auto_patch_changed(self.online_fix_auto_patch_switch, None)
+
+    def on_auto_patch_changed(self, switch: Adw.SwitchRow, _param: Any) -> None:
+        """Show/hide manual settings based on auto-patch switch"""
+        is_auto = switch.get_active()
+        self.online_fix_patches_group.set_visible(not is_auto)
 
     def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
         """Handler for launcher type change"""

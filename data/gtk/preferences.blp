@@ -460,5 +460,19 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         tooltip-text: _("Format: dll1=n,b;dll2=n,b");
       }
     }
+
+    Adw.PreferencesGroup online_fix_patches_group {
+      title: _("Manual Patches");
+      description: _("Configure manual patches for specific games");
+
+      Adw.SwitchRow online_fix_steam_appid_switch {
+        title: _("Steam AppID Patch");
+      }
+
+      Adw.SwitchRow online_fix_patch_steam_fix_64 {
+        title: _("SteamFix64 Patch");
+      }
+    }
+    
   }
 }

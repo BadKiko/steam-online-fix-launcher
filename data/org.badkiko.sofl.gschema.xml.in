@@ -124,7 +124,7 @@
       <description>Automatically apply required patches for games</description>
     </key>
     <key name="online-fix-dll-overrides" type="s">
-      <default>"d3d11=n,b;d3d12=n,b;dxgi=n,b"</default>
+      <default>"OnlineFix64=n,b;SteamOverlay64=n,b;winmm=n,b;dnet=n,b;steam_api64=n,b;winhttp=n,b"</default>
       <summary>DLL overrides</summary>
       <description>DLL overrides for Wine/Proton in format: dll1=n,b;dll2=n,b</description>
     </key>
@@ -142,6 +142,16 @@
       <default>true</default>
       <summary>Anti-cheat patch</summary>
       <description>Apply anti-cheat patch</description>
+    </key>
+    <key name="online-fix-steam-appid-patch" type="b">
+      <default>false</default>
+      <summary>Steam AppID patch</summary>
+      <description>Apply Steam AppID patch</description>
+    </key>
+    <key name="online-fix-steamfix64-patch" type="b">
+      <default>false</default>
+      <summary>SteamFix64 patch</summary>
+      <description>Apply SteamFix64 patch</description>
     </key>
   </schema>
 
