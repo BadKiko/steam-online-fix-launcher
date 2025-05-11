@@ -17,7 +17,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# pyright: reportAssignmentType=none
 
 import logging
 import re
@@ -122,6 +121,13 @@ class SOFLPreferences(Adw.PreferencesDialog):
     # Online-Fix
     online_fix_entry_row: Adw.EntryRow = Gtk.Template.Child()
     online_fix_file_chooser_button: Gtk.Button = Gtk.Template.Child()
+    online_fix_launcher_combo: Adw.ComboRow = Gtk.Template.Child()
+    online_fix_auto_patch_switch: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_dll_override_entry: Adw.EntryRow = Gtk.Template.Child()
+    online_fix_dll_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_patches_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -481,6 +487,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
         # Set the source row subtitles
         self.resolve_locations(source)
         self.update_source_action_row_paths(source)
+
     def setup_online_fix_settings(self) -> None:
         """Setup parameters for Online-Fix"""
         # Check for the key in settings
@@ -505,6 +512,58 @@ class SOFLPreferences(Adw.PreferencesDialog):
         
         # Handler for the folder selection button
         self.online_fix_file_chooser_button.connect("clicked", self.online_fix_path_browse_handler)
+
+        # Setup launcher selection
+        launcher_model = Gtk.StringList.new(["Steam API", "UMU Launcher"])
+        self.online_fix_launcher_combo.set_model(launcher_model)
+        self.online_fix_launcher_combo.set_selected(shared.schema.get_int("online-fix-launcher-type"))
+        self.online_fix_launcher_combo.connect("notify::selected", self.on_launcher_changed)
+
+        # Setup auto patch switch
+        shared.schema.bind(
+            "online-fix-auto-patch",
+            self.online_fix_auto_patch_switch,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        # Connect auto-patch switch to show/hide manual options
+        self.online_fix_auto_patch_switch.connect("notify::active", self.on_auto_patch_changed)
+        
+        # Setup DLL overrides
+        self.online_fix_dll_override_entry.set_text(shared.schema.get_string("online-fix-dll-overrides"))
+        self.online_fix_dll_override_entry.connect("changed", self.on_dll_overrides_changed)
+        
+        # Setup manual patches
+        shared.schema.bind(
+            "online-fix-steam-appid-patch",
+            self.online_fix_steam_appid_switch, 
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        shared.schema.bind(
+            "online-fix-steamfix64-patch",
+            self.online_fix_patch_steam_fix_64,
+            "active", 
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        # Set initial visibility
+        self.on_auto_patch_changed(self.online_fix_auto_patch_switch, None)
+
+    def on_auto_patch_changed(self, switch: Adw.SwitchRow, _param: Any) -> None:
+        """Show/hide manual settings based on auto-patch switch"""
+        is_auto = switch.get_active()
+        self.online_fix_patches_group.set_visible(not is_auto)
+
+    def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
+        """Handler for launcher type change"""
+        shared.schema.set_int("online-fix-launcher-type", combo.get_selected())
+
+    def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
+        """Handler for DLL overrides change"""
+        shared.schema.set_string("online-fix-dll-overrides", entry.get_text())
 
     def online_fix_path_browse_handler(self, *_args):
         """Choose directory for Online-Fix games installation"""
