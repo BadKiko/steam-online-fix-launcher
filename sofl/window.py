@@ -260,8 +260,25 @@ class SOFLWindow(Adw.ApplicationWindow):
         self.sidebar.connect("row-selected", self.row_selected)
 
         style_manager = Adw.StyleManager.get_default()
-        style_manager.connect("notify::dark", self.set_details_view_opacity)
-        style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
+        # Закомментируем автоматическое определение темы
+        # style_manager.connect("notify::dark", self.set_details_view_opacity)
+        # style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
+
+        # Загружаем сохраненную тему
+        saved_theme = shared.schema.get_string("force-theme")
+        style_manager.set_color_scheme(
+            Adw.ColorScheme.FORCE_DARK if saved_theme == "dark"
+            else Adw.ColorScheme.FORCE_LIGHT
+        )
+
+        # Добавляем действие для переключения темы
+        action = Gio.SimpleAction.new_stateful(
+            "toggle_theme",
+            None,
+            GLib.Variant.new_boolean(style_manager.get_dark())
+        )
+        action.connect("activate", self.on_toggle_theme_action)
+        self.add_action(action)
 
         # Allow for a custom number of rows for the library
         if shared.schema.get_uint("library-rows"):
@@ -535,3 +552,19 @@ class SOFLWindow(Adw.ApplicationWindow):
 
     def on_close_action(self, *_args: Any) -> None:
         self.close()
+
+    def on_toggle_theme_action(self, action: Gio.SimpleAction, state: GLib.Variant) -> None:
+        """Обработчик переключения темы"""
+        style_manager = Adw.StyleManager.get_default()
+        is_dark = state.get_boolean()
+        style_manager.set_color_scheme(
+            Adw.ColorScheme.FORCE_DARK if is_dark 
+            else Adw.ColorScheme.FORCE_LIGHT
+        )
+        # Сохраняем выбранную тему
+        shared.schema.set_string(
+            "force-theme",
+            "dark" if is_dark else "light"
+        )
+        # Обновляем прозрачность для детального вида
+        self.set_details_view_opacity()
