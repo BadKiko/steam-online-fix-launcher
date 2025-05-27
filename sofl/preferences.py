@@ -59,6 +59,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     exit_after_launch_switch: Adw.SwitchRow = Gtk.Template.Child()
     cover_launches_game_switch: Adw.SwitchRow = Gtk.Template.Child()
     high_quality_images_switch: Adw.SwitchRow = Gtk.Template.Child()
+    force_theme_switch: Adw.SwitchRow = Gtk.Template.Child()
 
     auto_import_switch: Adw.SwitchRow = Gtk.Template.Child()
     remove_missing_switch: Adw.SwitchRow = Gtk.Template.Child()
@@ -260,6 +261,21 @@ class SOFLPreferences(Adw.PreferencesDialog):
                 "desktop",
             }
         )
+
+        # Синхронизация переключателя темы с настройкой force-theme
+        theme = shared.schema.get_string("force-theme")
+        self.force_theme_switch.set_active(theme == "dark")
+
+        def on_theme_switch(row, _param):
+            shared.schema.set_string("force-theme", "dark" if row.get_active() else "light")
+            # (опционально) сразу применить тему:
+            from gi.repository import Adw
+            style_manager = Adw.StyleManager.get_default()
+            style_manager.set_color_scheme(
+                Adw.ColorScheme.FORCE_DARK if row.get_active() else Adw.ColorScheme.FORCE_LIGHT
+            )
+
+        self.force_theme_switch.connect("notify::active", on_theme_switch)
 
         def set_sgdb_sensitive(widget: Adw.EntryRow) -> None:
             if not widget.get_text():
