@@ -22,6 +22,7 @@ import shutil
 import os
 import subprocess
 import tempfile
+import struct
 from typing import Any, Optional
 from pathlib import Path
 from time import time
@@ -54,10 +55,17 @@ class OnlineFixGameData(GameData):
         
         # Check if we should use Steam/Proton for launching
         launcher_type = shared.schema.get_int("online-fix-launcher-type")
-        if launcher_type == 1:  # Steam API option
-            self.launch_with_steam_proton()
-        else:
-            # Run the online-fix executable with default handling
+        print(f"launcher_type: {launcher_type}")
+        
+        # Сначала пробуем запустить через Steam/Proton
+        success = self.launch_with_steam_proton()
+        
+        # Если метод не сработал, используем альтернативный метод запуска
+        if not success and launcher_type == 0:  # Если выбран Steam API, но основной метод не сработал
+            success = self.launch_with_direct_proton()
+        
+        # Если оба метода не сработали, используем стандартный запуск
+        if not success:
             run_executable(self.executable)
         
         if shared.schema.get_boolean("exit-after-launch"):
@@ -66,8 +74,94 @@ class OnlineFixGameData(GameData):
         # Create toast notification
         self.create_toast(_("{} launched with Online-Fix").format(self.name))
     
-    def launch_with_steam_proton(self) -> None:
-        """Launch the game through Steam with Proton"""
+    def launch_with_direct_proton(self) -> bool:
+        """
+        Запускает игру напрямую с Proton через скрипт
+        
+        Returns:
+            bool: True если запуск успешен, False в противном случае
+        """
+        try:
+            # Get the path to the executable
+            exec_path = Path(self.executable.split()[0])
+            
+            # Prepare environment variables
+            env_vars = {}
+            
+            # Add WINEDLLOVERRIDES if auto-patch is disabled
+            if not shared.schema.get_boolean("online-fix-auto-patch"):
+                dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
+                if dll_overrides:
+                    env_vars["WINEDLLOVERRIDES"] = dll_overrides
+            
+            # Add SteamAppID environment variable if enabled
+            if shared.schema.get_boolean("online-fix-steam-appid-patch"):
+                env_vars["SteamAppId"] = "480"  # Use generic AppID 480 (Spacewar)
+                
+            # Add Steam-Fix-64 patch if enabled
+            if shared.schema.get_boolean("online-fix-steamfix64-patch"):
+                # Set path to Steam installation - adjust path if needed
+                steam_path = os.path.expanduser("~/.steam/steam")
+                env_vars["STEAM_COMPAT_CLIENT_INSTALL_PATH"] = steam_path
+            
+            # Найдем Steam Runtime и Proton
+            steam_path = os.path.expanduser("~/.steam/steam")
+            proton_path = None
+            
+            # Поиск последней версии Proton
+            proton_dirs = list(Path(f"{steam_path}/steamapps/common").glob("Proton*"))
+            if proton_dirs:
+                # Сортируем по номерам версий
+                proton_dirs.sort(reverse=True)
+                proton_path = str(proton_dirs[0] / "proton")
+            
+            if not proton_path:
+                self.log_and_toast(_("Proton not found. Install Proton in Steam first."))
+                return False
+            
+            # Создадим временный скрипт для запуска
+            with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.sh') as script_file:
+                script_path = script_file.name
+                
+                script_content = "#!/bin/bash\n\n"
+                
+                # Добавляем переменные окружения
+                for var, value in env_vars.items():
+                    script_content += f'export {var}="{value}"\n'
+                
+                # Путь к Steam Runtime
+                script_content += f'export STEAM_RUNTIME="{steam_path}/ubuntu12_32/steam-runtime"\n'
+                
+                # Команда запуска с Proton
+                script_content += f'"{proton_path}" run "{exec_path}" "$@"\n'
+                
+                script_file.write(script_content)
+            
+            # Делаем скрипт исполняемым
+            os.chmod(script_path, 0o755)
+            
+            # Запускаем скрипт
+            subprocess.Popen(
+                [script_path],
+                cwd=exec_path.parent,
+                start_new_session=True,
+                shell=False
+            )
+            
+            self.log_and_toast(_("Launching game directly with Proton"))
+            return True
+            
+        except Exception as e:
+            self.log_and_toast(_("Error launching with direct Proton: {}").format(str(e)))
+            return False
+
+    def launch_with_steam_proton(self) -> bool:
+        """
+        Launch the game through Steam with Proton
+        
+        Returns:
+            bool: True if successful, False otherwise
+        """
         try:
             # Get the path to the executable
             exec_path = Path(self.executable.split()[0])
@@ -77,6 +171,7 @@ class OnlineFixGameData(GameData):
             import hashlib
             game_hash = hashlib.md5(str(exec_path).encode()).hexdigest()
             shortcut_id = int(game_hash[:8], 16) % 1000000  # Create a shorter number for AppID
+            app_id = shortcut_id + 989400000  # AppID для non-Steam игр
             
             # Prepare launch options with DLL overrides
             launch_options = ""
@@ -97,7 +192,7 @@ class OnlineFixGameData(GameData):
                 steam_path = "~/.steam/steam"
                 launch_options += f"STEAM_COMPAT_CLIENT_INSTALL_PATH=\"{steam_path}\" "
             
-            # Create Steam directories if they don't exist
+            # Пути к конфигурационным файлам Steam
             steam_config_dir = Path(os.path.expanduser("~/.steam/steam/userdata"))
             if not steam_config_dir.exists():
                 # Try alternative path for Flatpak
@@ -107,7 +202,7 @@ class OnlineFixGameData(GameData):
             user_dirs = [d for d in steam_config_dir.glob("*") if d.is_dir() and d.name.isdigit()]
             if not user_dirs:
                 self.log_and_toast(_("Could not find Steam user directory"))
-                raise Exception("Steam user directory not found")
+                return False
                 
             user_config_dir = user_dirs[0] / "config"
             
@@ -117,43 +212,26 @@ class OnlineFixGameData(GameData):
             # Create a temporary VDF file to add the game to Steam
             vdf_path = user_config_dir / "shortcuts.vdf"
             
-            # Create a simple VDF structure to add the non-Steam game
-            vdf_content = f"""
-            "shortcuts"
-            {{
-                "{shortcut_id}"
-                {{
-                    "AppName"		"{self.name}"
-                    "Exe"		"{str(exec_path)}"
-                    "StartDir"		"{str(exec_path.parent)}"
-                    "LaunchOptions"		"{launch_options} %command%"
-                    "IsHidden"		"0"
-                    "AllowDesktopConfig"		"1"
-                    "AllowOverlay"		"1"
-                    "OpenVR"		"0"
-                    "Devkit"       "0"
-                    "DevkitGameID" ""
-                    "LastPlayTime" "{self.last_played}"
-                    "ShortcutID"   "{shortcut_id}"
-                    "appid"        "{shortcut_id + 989400000}"
-                    "Tags"
-                    {{
-                        "0"		"Online-Fix"
-                    }}
-                }}
-            }}
-            """
-            
-            # First, back up the original shortcuts.vdf if it exists
+            # Back up the original shortcuts.vdf if it exists
             backup_path = None
             if vdf_path.exists():
                 backup_path = vdf_path.with_suffix('.vdf.bak')
                 shutil.copy2(vdf_path, backup_path)
-                
-            # Write the new shortcuts.vdf
-            with open(vdf_path, 'w') as f:
-                f.write(vdf_content)
+            else:
+                # Если файла нет, создадим пустой бинарный файл с базовой структурой
+                with open(vdf_path, 'wb') as f:
+                    f.write(b'\0shortcuts\0\x08')
             
+            # Create a binary VDF file for Steam shortcuts
+            try:
+                self._create_binary_vdf(vdf_path, shortcut_id, launch_options, exec_path)
+            except Exception as e:
+                self.log_and_toast(_("Error creating shortcuts.vdf: {}").format(str(e)))
+                # Restore backup if creation failed
+                if backup_path and backup_path.exists():
+                    shutil.copy2(backup_path, vdf_path)
+                return False
+                
             # Set Proton compatibility in config.vdf
             config_vdf_path = user_config_dir / "config.vdf"
             
@@ -170,7 +248,7 @@ class OnlineFixGameData(GameData):
                         {{
                             "CompatToolMapping"
                             {{
-                                "{shortcut_id + 989400000}"
+                                "{app_id}"
                                 {{
                                     "name"		"{proton_id}"
                                     "config"		""
@@ -193,15 +271,28 @@ class OnlineFixGameData(GameData):
             with open(config_vdf_path, 'w') as f:
                 f.write(config_content)
                 
+            # Проверяем, что файл был создан с правильными правами доступа
+            os.chmod(vdf_path, 0o644)
+            os.chmod(config_vdf_path, 0o644)
+            
             # Find Steam executable
             steam_exe = "steam"
                 
             # Log the launch attempt
-            logging.info(f"Added {self.name} to Steam with shortcut ID: {shortcut_id}")
+            logging.info(f"Added {self.name} to Steam with shortcut ID: {shortcut_id}, AppID: {app_id}")
             logging.info(f"Launch options: {launch_options}")
             
-            # Restart Steam and launch the game
-            cmd = [steam_exe, "-silent"]
+            # Полностью закрываем Steam если он запущен
+            try:
+                self.log_and_toast(_("Closing Steam to apply changes..."))
+                subprocess.run(["killall", "-9", "steam", "steamwebhelper"], check=False)
+                import time
+                time.sleep(3)  # Даем Steam время полностью закрыться
+            except Exception as e:
+                logging.warning(f"Error stopping Steam: {str(e)}")
+            
+            # Запускаем Steam с непосредственным запуском игры
+            cmd = [steam_exe, f"-applaunch", str(app_id)]
             
             # Use Flatpak spawn if running in Flatpak
             if os.getenv("FLATPAK_ID") == shared.APP_ID:
@@ -215,7 +306,7 @@ class OnlineFixGameData(GameData):
             )
             
             # Show toast notification
-            self.log_and_toast(_("Game added to Steam, start it from your Steam library"))
+            self.log_and_toast(_("Game added to Steam and launch requested"))
             
             # Schedule restoration of the original files after some time
             if backup_path or config_backup_path:
@@ -243,10 +334,107 @@ class OnlineFixGameData(GameData):
                     shell=False
                 )
             
+            return True
+            
         except Exception as e:
             self.log_and_toast(_("Error launching with Steam: {}").format(str(e)))
-            # Fallback to standard launch method
-            run_executable(self.executable)
+            return False
+    
+    def _create_binary_vdf(self, vdf_path: Path, shortcut_id: int, launch_options: str, exec_path: Path) -> None:
+        """
+        Creates a binary VDF file for Steam shortcuts
+        
+        Args:
+            vdf_path: Path to write the VDF file
+            shortcut_id: Unique ID for the shortcut
+            launch_options: Launch options string
+            exec_path: Path to the game executable
+        """
+        with open(vdf_path, 'wb') as f:
+            # Работаем с Valve's binary VDF (KeyValues) format
+            # Начало файла
+            f.write(b'\0shortcuts\0')
+            
+            # Идентификатор для начала записи
+            f.write(struct.pack('<L', shortcut_id))
+            
+            # Запись App Name
+            self._write_vdf_key_string(f, "AppName", self.name)
+            
+            # Запись пути к exe файлу
+            self._write_vdf_key_string(f, "Exe", str(exec_path))
+            
+            # Стартовая директория
+            self._write_vdf_key_string(f, "StartDir", str(exec_path.parent))
+            
+            # Иконка (пустая)
+            self._write_vdf_key_string(f, "icon", "")
+            
+            # Путь к ярлыку (пустой)
+            self._write_vdf_key_string(f, "ShortcutPath", "")
+            
+            # Параметры запуска
+            self._write_vdf_key_string(f, "LaunchOptions", f"{launch_options} %command%")
+            
+            # IsHidden = 0 (не скрыто)
+            self._write_vdf_key_int(f, "IsHidden", 0)
+            
+            # AllowDesktopConfig = 1 (разрешить конфигурацию)
+            self._write_vdf_key_int(f, "AllowDesktopConfig", 1)
+            
+            # AllowOverlay = 1 (разрешить оверлей)
+            self._write_vdf_key_int(f, "AllowOverlay", 1)
+            
+            # Открывать без VR
+            self._write_vdf_key_int(f, "OpenVR", 0)
+            
+            # Последнее время запуска
+            self._write_vdf_key_int(f, "LastPlayTime", self.last_played)
+            
+            # Разработка отключена
+            self._write_vdf_key_int(f, "Devkit", 0)
+            
+            # ID для разработки (пустое)
+            self._write_vdf_key_string(f, "DevkitGameID", "")
+            
+            # Уникальный ID ярлыка (для Steam)
+            app_id = shortcut_id + 989400000
+            self._write_vdf_key_int(f, "appid", app_id)
+            
+            # Теги
+            f.write(b'\0tags\0')
+            self._write_vdf_key_string(f, "0", "Online-Fix")
+            f.write(b'\x08\x08')  # Конец тегов
+            
+            # Конец записи
+            f.write(b'\x08')
+            
+            # Конец файла
+            f.write(b'\x08')
+    
+    def _write_vdf_key_string(self, file, key: str, value: str) -> None:
+        """
+        Writes a string key-value pair to the binary VDF file
+        
+        Args:
+            file: Open binary file object
+            key: Key name
+            value: String value
+        """
+        file.write(key.encode('utf-8') + b'\0' + value.encode('utf-8') + b'\0')
+    
+    def _write_vdf_key_int(self, file, key: str, value: int) -> None:
+        """
+        Writes an integer key-value pair to the binary VDF file
+        
+        Args:
+            file: Open binary file object
+            key: Key name
+            value: Integer value
+        """
+        file.write(key.encode('utf-8') + b'\0')
+        file.write(struct.pack('<I', value))
+        file.write(b'\0\0\0\0')
     
     def uninstall_game(self) -> None:
         """Uninstall the game by removing its root directory after confirmation"""
