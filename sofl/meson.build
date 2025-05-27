@@ -13,6 +13,8 @@ install_subdir('utils', install_dir: moduledir)
 install_subdir('store', install_dir: moduledir)
 install_subdir('logging', install_dir: moduledir)
 install_subdir('errors', install_dir: moduledir)
+install_subdir('dialogs', install_dir: moduledir)
+install_subdir('installer', install_dir: moduledir)
 install_data(
   [
     'application_delegate.py',

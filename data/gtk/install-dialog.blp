@@ -1,0 +1,103 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $InstallDialog: Adw.Dialog {
+  content-width: 480;
+  content-height: 300;
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar HeaderBar {
+      show-start-title-buttons: false;
+      show-end-title-buttons: false;
+
+      title-widget: Adw.WindowTitle {
+        title: _("Install Game");
+      };
+
+      [start]
+      Button cancel_button {
+        label: _("Cancel");
+        action-name: "window.close";
+      }
+
+      [end]
+      Button apply_button {
+        label: _("Install");
+        sensitive: false;
+
+        styles [
+          "suggested-action",
+        ]
+      }
+    }
+
+    content: Adw.ToastOverlay toast_overlay {
+      child: Stack main_stack {
+        transition-type: crossfade;
+        
+        StackPage {
+          name: "content";
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              Adw.EntryRow game_path {
+                title: _("Game Path");
+
+                [suffix]
+                Button file_chooser_button {
+                  valign: center;
+                  icon-name: "document-open-symbolic";
+                  tooltip-text: _("Select File");
+                  clicked => $on_file_chooser_clicked();
+
+                  styles [
+                    "flat",
+                  ]
+                }
+              }
+
+              Adw.EntryRow game_title {
+                title: _("Game Title");
+              }
+
+              // Status page is hidden but we keep it in UI for compatibility
+              Adw.StatusPage status_page {
+                title: _("Status");
+                description: _("Select a game file to check");
+                icon-name: "dialog-question-symbolic";
+                visible: false;
+              }
+            }
+          };
+        }
+        
+        StackPage {
+          name: "loading";
+          child: Box {
+            orientation: vertical;
+            valign: center;
+            halign: center;
+            spacing: 16;
+            
+            Box {
+              orientation: horizontal;
+              halign: center;
+              spacing: 12;
+              
+              Spinner progress_spinner {
+                spinning: true;
+                width-request: 32;
+                height-request: 32;
+              }
+              
+              Label progress_label {
+                label: _("Loading...");
+                ellipsize: end;
+                styles ["title-3"]
+              }
+            }
+          };
+        }
+      };
+    };
+  }
+}

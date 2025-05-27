@@ -47,6 +47,8 @@ from sofl.importer.legendary_source import LegendarySource
 from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
+# Импорт необходим для доступа к классу через globals() в методе get_source_name
+from sofl.importer.onlinefix_source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences
 from sofl.store.managers.cover_manager import CoverManager
@@ -57,6 +59,7 @@ from sofl.store.managers.steam_api_manager import SteamAPIManager
 from sofl.store.store import Store
 from sofl.utils.run_executable import run_executable
 from sofl.window import SOFLWindow
+from sofl.dialogs.install_dialog import InstallDialog
 
 if sys.platform.startswith("darwin"):
     from AppKit import NSApp  # type: ignore
@@ -162,6 +165,7 @@ class SOFLApplication(Adw.Application):
                 ("import", ("<primary>i",)),
                 ("remove_game_details_view", ("Delete",)),
                 ("remove_game",),
+                ("uninstall_game",),
                 ("igdb_search",),
                 ("sgdb_search",),
                 ("protondb_search",),
@@ -251,7 +255,15 @@ class SOFLApplication(Adw.Application):
         elif source_id == "imported":
             name = _("Added")
         else:
-            name = globals()[f'{source_id.split("_")[0].title()}Source'].name
+            if "-" in source_id:
+                # Convert "online-fix" to "OnlineFix"
+                parts = source_id.split("-")
+                source_class_prefix = "".join(part.title() for part in parts)
+            else:
+                # Normal handling for sources without a hyphen
+                source_class_prefix = source_id.split("_")[0].title()
+                
+            name = globals()[f'{source_class_prefix}Source'].name
         return name
 
     def on_about_action(self, *_args: Any) -> None:
@@ -294,7 +306,7 @@ class SOFLApplication(Adw.Application):
         about.set_debug_info_filename("sofl.log")
         about.add_legal_section(
             "Steam Branding",
-            "© 2023 Valve Corporation",
+            "© 2025 Valve Corporation",
             Gtk.License.CUSTOM,
             "Steam and the Steam logo are trademarks and/or registered trademarks of Valve Corporation in the U.S. and/or other countries.",  # pylint: disable=line-too-long
         )
@@ -338,8 +350,7 @@ class SOFLApplication(Adw.Application):
         if InstallDialog.is_open:
             return
         
-        dialog = InstallDialog()
-        dialog.present(shared.win)
+        InstallDialog().present(shared.win)
 
     def on_import_action(self, *_args: Any) -> None:
         shared.importer = Importer()
@@ -375,6 +386,9 @@ class SOFLApplication(Adw.Application):
 
     def on_remove_game_action(self, *_args: Any) -> None:
         shared.win.active_game.remove_game()
+
+    def on_uninstall_game_action(self, *_args: Any) -> None:
+        shared.win.active_game.uninstall_game()
 
     def on_remove_game_details_view_action(self, *_args: Any) -> None:
         if shared.win.navigation_view.get_visible_page() == shared.win.details_page:

@@ -335,13 +335,13 @@ Adw.NavigationPage details_page {
           margin-end: 24;
           margin-top: 24;
           margin-bottom: 24;
-
+          
           Adw.Clamp {
             maximum-size: 200;
 
             Overlay {
               [overlay]
-              Adw.Spinner details_view_spinner {
+              Gtk.Spinner details_view_spinner {
                 visible: false;
               }
 
@@ -462,6 +462,17 @@ Adw.NavigationPage details_page {
                   icon-name: "user-trash-symbolic";
                   action-name: "app.remove_game";
                   tooltip-text: _("Remove");
+
+                  styles [
+                    "raised",
+                    "circular",
+                  ]
+                }
+
+                Button {
+                  icon-name: "system-run-symbolic";
+                  action-name: "app.uninstall_game";
+                  tooltip-text: _("Uninstall");
 
                   styles [
                     "raised",

@@ -37,9 +37,14 @@ class DisplayManager(Manager):
             if game.get_parent():
                 game.get_parent().set_child()
 
-        game.menu_button.set_menu_model(
-            game.hidden_game_options if game.hidden else game.game_options
-        )
+        if game.source == "online-fix":
+            game.menu_button.set_menu_model(
+                game.hidden_game_options if game.hidden else game.online_fix_options
+            )
+        else:
+            game.menu_button.set_menu_model(
+                game.hidden_game_options if game.hidden else game.game_options
+            )
 
         game.title.set_label(game.name)
 

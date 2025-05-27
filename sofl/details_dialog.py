@@ -24,6 +24,7 @@ from pathlib import Path
 from sys import platform
 from time import time
 from typing import Any, Optional
+import logging
 
 from gi.repository import Adw, Gio, GLib, Gtk
 from PIL import Image, UnidentifiedImageError
@@ -36,6 +37,7 @@ from sofl.store.managers.cover_manager import CoverManager
 from sofl.store.managers.sgdb_manager import SgdbManager
 from sofl.utils.create_dialog import create_dialog
 from sofl.utils.save_cover import convert_cover, save_cover
+from sofl.utils.flatpak import is_flatpak_path, copy_flatpak_file, log_message
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/details-dialog.ui")
@@ -47,7 +49,7 @@ class DetailsDialog(Adw.Dialog):
     cover_button_edit: Gtk.Button = Gtk.Template.Child()
     cover_button_delete_revealer: Gtk.Revealer = Gtk.Template.Child()
     cover_button_delete: Gtk.Button = Gtk.Template.Child()
-    spinner: Adw.Spinner = Gtk.Template.Child()
+    spinner: Gtk.Spinner = Gtk.Template.Child()
 
     name: Adw.EntryRow = Gtk.Template.Child()
     developer: Adw.EntryRow = Gtk.Template.Child()
@@ -63,6 +65,9 @@ class DetailsDialog(Adw.Dialog):
 
     is_open: bool = False
     install_mode: bool = False
+    
+    # Logger setup
+    logger = logging.getLogger(__name__)
 
     def __init__(self, game: Optional[Game] = None, **kwargs: Any):
         super().__init__(**kwargs)
@@ -91,6 +96,13 @@ class DetailsDialog(Adw.Dialog):
 
         if self.install_mode:
             self.set_title(_("Install Game"))
+            # В режиме установки делаем все поля редактируемыми
+            self.name.set_sensitive(True)
+            self.developer.set_sensitive(True)
+            self.executable.set_sensitive(True)
+            self.apply_button.set_sensitive(True)
+            self.cover_button_edit.set_sensitive(True)
+            self.file_chooser_button.set_sensitive(True)
 
         image_filter = Gtk.FileFilter(name=_("Images"))
 
@@ -253,7 +265,6 @@ class DetailsDialog(Adw.Dialog):
         self.game.save()
         self.game.update()
 
-        # TODO: this is fucked up (less than before)
         # Get a cover from SGDB if none is present
         if not self.game_cover.get_texture():
             self.game.set_loading(1)
@@ -263,8 +274,12 @@ class DetailsDialog(Adw.Dialog):
 
         self.game_cover.pictures.remove(self.cover)
 
-        self.close()
-        shared.win.show_details_page(self.game)
+        # В режиме установки не показываем страницу деталей
+        if not self.install_mode:
+            self.close()
+            shared.win.show_details_page(self.game)
+        else:
+            self.close()
 
     def update_cover_callback(self, manager: SgdbManager) -> None:
         # Set the game as not loading
@@ -296,13 +311,30 @@ class DetailsDialog(Adw.Dialog):
         self.cover_overlay.set_opacity(not self.cover_overlay.get_opacity())
 
     def set_cover(self, _source: Any, result: Gio.Task, *_args: Any) -> None:
+        path = None
         try:
-            path = self.image_file_dialog.open_finish(result).get_path()
+            file = self.image_file_dialog.open_finish(result)
+            if file:
+                path = file.get_path()
         except GLib.Error:
+            log_message("Error getting file path", logging.ERROR)
+            return
+            
+        if not path:
+            log_message("No valid path selected", logging.WARNING)
             return
 
         def thread_func() -> None:
+            nonlocal path
             new_path = None
+            
+            # Check if we need to handle Flatpak path
+            if is_flatpak_path(path):
+                log_message(f"Detected Flatpak path: {path}")
+                copied_path = copy_flatpak_file(path)
+                if copied_path and copied_path != path:
+                    log_message(f"Using copied file: {copied_path}")
+                    path = copied_path
 
             try:
                 with Image.open(path) as image:
@@ -310,13 +342,20 @@ class DetailsDialog(Adw.Dialog):
                         new_path = convert_cover(path)
             except UnidentifiedImageError:
                 pass
+            except FileNotFoundError as e:
+                log_message(f"File not found: {str(e)}", logging.ERROR)
+            except Exception as e:
+                log_message(f"Error opening image: {str(e)}", logging.ERROR)
 
             if not new_path:
-                new_path = convert_cover(
-                    pixbuf=shared.store.managers[CoverManager].composite_cover(
-                        Path(path)
+                try:
+                    new_path = convert_cover(
+                        pixbuf=shared.store.managers[CoverManager].composite_cover(
+                            Path(path)
+                        )
                     )
-                )
+                except Exception as e:
+                    log_message(f"Error creating cover: {str(e)}", logging.ERROR)
 
             if new_path:
                 self.game_cover.new_cover(new_path)
@@ -327,7 +366,7 @@ class DetailsDialog(Adw.Dialog):
 
         self.toggle_loading()
         GLib.Thread.new(None, thread_func)
-
+        
     def set_executable(self, _source: Any, result: Gio.Task, *_args: Any) -> None:
         try:
             path = self.exec_file_dialog.open_finish(result).get_path()
@@ -344,3 +383,26 @@ class DetailsDialog(Adw.Dialog):
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
+        
+        # When closing the dialog, also close all child dialogs and reset install_mode flag
+        if not is_open:
+            # Reset install_mode flag
+            self.__class__.install_mode = False
+            
+            # Close all dialogs in the root window
+            root = self.get_root()
+            if root:
+                # Get all child widgets and close dialogs
+                def close_dialogs(widget):
+                    if isinstance(widget, (Adw.Dialog, Gtk.Dialog)) and widget != self:
+                        widget.close()
+                    elif hasattr(widget, 'get_first_child'):
+                        child = widget.get_first_child()
+                        while child:
+                            close_dialogs(child)
+                            child = child.get_next_sibling()
+                
+                close_dialogs(root)
+                
+                # Return focus to the main window
+                root.present()

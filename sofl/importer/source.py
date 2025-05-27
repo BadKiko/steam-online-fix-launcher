@@ -20,10 +20,11 @@
 import sys
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Any, Collection, Generator, Optional
+from typing import Any, Collection, Generator, Optional, TypeVar
 
 from sofl.game import Game
 from sofl.importer.location import Location, UnresolvableLocationError
+from sofl.errors.friendly_error import FriendlyError
 
 # Type of the data returned by iterating on a Source
 SourceIterationResult = Optional[Game | tuple[Game, tuple[Any]]]

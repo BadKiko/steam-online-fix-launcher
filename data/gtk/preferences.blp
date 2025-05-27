@@ -3,6 +3,7 @@ using Adw 1;
 
 template $SOFLPreferences: Adw.PreferencesDialog {
   search-enabled: true;
+  content-width: 800;
 
   Adw.PreferencesPage general_page {
     name: "general";
@@ -34,26 +35,36 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         subtitle: _("Save game covers losslessly at the cost of storage");
       }
     }
-
     Adw.PreferencesGroup danger_zone_group {
       title: _("Danger Zone");
-      separate-rows: true;
 
-      Adw.ButtonRow remove_all_games_button_row {
+      Adw.ActionRow remove_all_games_button_row {
         title: _("Remove All Games");
 
-        styles [
-          "destructive-action"
-        ]
+        [suffix]
+        Button {
+          valign: center;
+          label: _("Remove");
+
+          styles [
+            "destructive-action",
+          ]
+        }
       }
 
-      Adw.ButtonRow reset_button_row {
+      Adw.ActionRow reset_button_row {
         visible: false;
-        title: "Reset App";
+        title: _("Reset App");
 
-        styles [
-          "destructive-action"
-        ]
+        [suffix]
+        Button {
+          valign: center;
+          label: _("Reset");
+
+          styles [
+            "destructive-action",
+          ]
+        }
       }
     }
   }
@@ -77,7 +88,6 @@ template $SOFLPreferences: Adw.PreferencesDialog {
 
     Adw.PreferencesGroup sources_group {
       title: _("Sources");
-      separate-rows: true;
 
       Adw.ExpanderRow steam_expander_row {
         title: _("Steam");
@@ -96,12 +106,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -123,12 +133,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -158,12 +168,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -201,12 +211,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -228,12 +238,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -255,12 +265,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -282,12 +292,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
       }
@@ -310,12 +320,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -328,12 +338,12 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
 
             styles [
-              "flat"
+              "flat",
             ]
           }
 
           styles [
-            "property"
+            "property",
           ]
         }
 
@@ -395,10 +405,36 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             valign: center;
           }
 
-          Adw.Spinner sgdb_spinner {
+          Gtk.Spinner sgdb_spinner {
             visible: false;
             valign: center;
           }
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesPage online_fix_page {
+    name: "online-fix";
+    title: _("Online-Fix");
+    icon-name: "online-fix-source-symbolic";
+
+    Adw.PreferencesGroup online_fix_group {
+      title: _("Installation");
+      description: _("Set your installation settings for online-fix games");
+
+      Adw.EntryRow online_fix_entry_row {
+        title: _("Default path");
+
+        [suffix]
+        Button online_fix_file_chooser_button {
+          valign: center;
+          icon-name: "folder-symbolic";
+          tooltip-text: _("Select File");
+
+          styles [
+            "flat",
+          ]
         }
       }
     }
