@@ -445,6 +445,11 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         selected: 0;
       }
 
+      Adw.EntryRow online_fix_proton_entry {
+        title: _("Proton Version");
+        tooltip-text: _("Version of Proton to use with Steam launcher (e.g. GE-Proton9-26)");
+      }
+
       Adw.SwitchRow online_fix_auto_patch_switch {
         title: _("Auto Apply Patches");
         subtitle: _("Automatically apply required patches for games");
@@ -473,6 +478,5 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         title: _("SteamFix64 Patch");
       }
     }
-    
   }
 }

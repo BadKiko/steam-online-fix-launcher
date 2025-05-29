@@ -43,6 +43,11 @@ import tempfile
 from pathlib import Path
 import logging
 
+import vdf
+import struct
+import binascii
+import subprocess
+                
 class OnlineFixGameData(GameData):
     """Класс данных для игр Online-Fix с расширенной функциональностью"""
     
@@ -64,49 +69,107 @@ class OnlineFixGameData(GameData):
         logging.info(f"[SOFL] Launcher type: {launcher_type}")
         
         game_exec = Path(self.executable.split()[0])
-
-        proton_path = os.environ.get("SOFL_PROTON_PATH", "~/.local/share/Steam/compatibilitytools.d/GE-Proton9-26")
-        proton_path = os.path.expanduser(proton_path)
-
-        prefix_path = os.environ.get("SOFL_WINEPREFIX", "~/.local/share/Steam/steamapps/compatdata/480")
-        prefix_path = os.path.expanduser(prefix_path)
-
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
-        # Путь к umu-run внутри Flatpak
-        flatpak_umu_path = f"{os.getenv('FLATPAK_DEST')}/bin/umu/umu-run"
-        # Копируем umu-run во временную папку на хосте (в /tmp)
-        temp_dir = tempfile.gettempdir()
-        
-        logging.info(flatpak_umu_path)
-        logging.info(temp_dir)
-        shutil.copy(flatpak_umu_path, temp_dir)
-        
-        host_umu_path = os.path.join(temp_dir, f"umu-run-{os.getuid()}")
-    
+        if launcher_type == 0:
+            logging.info("Steam Runner")
+            
+            steam_home = os.path.expanduser("~/.local/share/Steam")
+            user_id = next((d for d in os.listdir(os.path.join(steam_home, "userdata")) if d.isdigit()), None)
+            if not user_id:
+                self.log_and_toast(_("No Steam user data found"))
+                return
+            
+            shortcuts_vdf_path = os.path.join(steam_home, "userdata", user_id, "config", "shortcuts.vdf")
+            game_exe = f'"{str(game_exec)}"'
+            app_id_int = binascii.crc32(str(game_exec).encode('utf-8')) & 0xFFFFFFFF
+            shortcut_id = (app_id_int << 32) | 0x02000000
+            
+            shortcuts = {}
+            if os.path.exists(shortcuts_vdf_path):
+                with open(shortcuts_vdf_path, "rb") as f:
+                    shortcuts = vdf.binary_loads(f.read(), raise_on_remaining=False).get("shortcuts", {})
+            
+            shortcut_index = next((idx for idx, shortcut in shortcuts.items() if shortcut.get("exe", "").strip('"') == str(game_exec)), None)
+            if shortcut_index is None:
+                shortcuts[str(len(shortcuts))] = {
+                    "appid": f"{app_id_int}",
+                    "AppName": self.name,
+                    "Exe": game_exe,
+                    "StartDir": f'"{str(game_exec.parent)}"',
+                    "LaunchOptions": f"WINEDLLOVERRIDES=\"{dll_overrides}\" %command%"
+                }
+            else:
+                shortcuts[shortcut_index]["AppName"] = self.name
+                shortcuts[shortcut_index]["Exe"] = game_exe
+            
+            with open(shortcuts_vdf_path, "wb") as f:
+                f.write(vdf.binary_dumps({"shortcuts": shortcuts}))
+            logging.info(f"[SOFL] Saved shortcuts.vdf")
+            
+            proton_version = shared.schema.get_string("online-fix-proton-version")
+            
+            logging.info(f"[SOFL] Proton version: {proton_version}")
+            
+            config_vdf_path = os.path.join(steam_home, "config", "config.vdf")
+            if os.path.exists(config_vdf_path):
+                with open(config_vdf_path, "r") as f:
+                    config_data = vdf.loads(f.read())
+                config_data.setdefault("CompatToolMapping", {})[str(shortcut_id)] = {
+                    "name": proton_version,
+                    "config": "",
+                    "Priority": "250"
+                }
+                with open(config_vdf_path, "w") as f:
+                    vdf.dump(config_data, f)
+                logging.info(f"[SOFL] Updated config.vdf with Proton {proton_version}")
+            
+            run_executable(f"xdg-open steam://rungameid/{shortcut_id}")
+            self.create_toast(_("{} launched via Steam with {}").format(self.name, proton_version))
+            
+        elif launcher_type == 1:     
+            logging.info("Umu Runner")
+            proton_path = os.environ.get("SOFL_PROTON_PATH", "~/.local/share/Steam/compatibilitytools.d/GE-Proton9-26")
+            proton_path = os.path.expanduser(proton_path)
 
-        # Копируем только если файл отсутствует или отличается
-        if not os.path.exists(host_umu_path) or \
-           os.path.getmtime(host_umu_path) < os.path.getmtime(flatpak_umu_path):
-            shutil.copy2(flatpak_umu_path, host_umu_path)
-            os.chmod(host_umu_path, os.stat(host_umu_path).st_mode | stat.S_IXUSR)
-        # Формируем команду с вызовом через flatpak-spawn --host
-        cmd = [
-            f"WINEPREFIX='{prefix_path}'",
-            f"WINEDLLOVERRIDES=\"{dll_overrides}\"",
-            "GAMEID=480",
-            f"PROTONPATH={proton_path}",
-            host_umu_path,
-            f"'{game_exec}'"
-        ]
-        cmd_str = " ".join(cmd)
-    
-        run_executable(cmd_str)
+            prefix_path = os.environ.get("SOFL_WINEPREFIX", "~/.local/share/Steam/steamapps/compatdata/480")
+            prefix_path = os.path.expanduser(prefix_path)
 
-        if shared.schema.get_boolean("exit-after-launch"):
-            shared.win.get_application().quit()
 
-        self.create_toast(_("{} launched").format(self.name))
+            # Путь к umu-run внутри Flatpak
+            flatpak_umu_path = f"{os.getenv('FLATPAK_DEST')}/bin/umu/umu-run"
+            # Копируем umu-run во временную папку на хосте (в /tmp)
+            temp_dir = tempfile.gettempdir()
+
+            logging.info(flatpak_umu_path)
+            logging.info(temp_dir)
+            shutil.copy(flatpak_umu_path, temp_dir)
+
+            host_umu_path = os.path.join(temp_dir, f"umu-run-{os.getuid()}")
+
+
+            # Копируем только если файл отсутствует или отличается
+            if not os.path.exists(host_umu_path) or \
+               os.path.getmtime(host_umu_path) < os.path.getmtime(flatpak_umu_path):
+                shutil.copy2(flatpak_umu_path, host_umu_path)
+                os.chmod(host_umu_path, os.stat(host_umu_path).st_mode | stat.S_IXUSR)
+            # Формируем команду с вызовом через flatpak-spawn --host
+            cmd = [
+                f"WINEPREFIX='{prefix_path}'",
+                f"WINEDLLOVERRIDES=\"{dll_overrides}\"",
+                "GAMEID=480",
+                f"PROTONPATH={proton_path}",
+                host_umu_path,
+                f"'{game_exec}'"
+            ]
+            cmd_str = " ".join(cmd)
+
+            run_executable(cmd_str)
+
+            if shared.schema.get_boolean("exit-after-launch"):
+                shared.win.get_application().quit()
+
+            self.create_toast(_("{} launched").format(self.name))
 
 
     def uninstall_game(self) -> None:

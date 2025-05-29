@@ -128,6 +128,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     online_fix_patches_group: Adw.PreferencesGroup = Gtk.Template.Child()
     online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_proton_entry: Adw.EntryRow = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -519,6 +520,22 @@ class SOFLPreferences(Adw.PreferencesDialog):
         self.online_fix_launcher_combo.set_selected(shared.schema.get_int("online-fix-launcher-type"))
         self.online_fix_launcher_combo.connect("notify::selected", self.on_launcher_changed)
 
+        # Setup Proton version field
+        try:
+            current_proton = shared.schema.get_string("online-fix-proton-version")
+            self.online_fix_proton_entry.set_text(current_proton)
+        except GLib.Error as e:
+            default_proton = "GE-Proton9-26"
+            shared.schema.set_string("online-fix-proton-version", default_proton)
+            self.online_fix_proton_entry.set_text(default_proton)
+            
+
+        # Handler for Proton version change
+        def on_proton_version_changed(*_args: Any) -> None:
+            shared.schema.set_string("online-fix-proton-version", self.online_fix_proton_entry.get_text())
+            
+        self.online_fix_proton_entry.connect("changed", on_proton_version_changed)
+        
         # Setup auto patch switch
         shared.schema.bind(
             "online-fix-auto-patch",
@@ -559,7 +576,11 @@ class SOFLPreferences(Adw.PreferencesDialog):
 
     def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
         """Handler for launcher type change"""
-        shared.schema.set_int("online-fix-launcher-type", combo.get_selected())
+        launcher_type = combo.get_selected()
+        shared.schema.set_int("online-fix-launcher-type", launcher_type)
+        
+        # Show Proton version field only when Steam launcher is selected (type 0)
+        self.online_fix_proton_entry.set_visible(launcher_type == 0)
 
     def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
         """Handler for DLL overrides change"""
