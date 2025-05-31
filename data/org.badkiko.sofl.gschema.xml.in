@@ -123,6 +123,11 @@
       <summary>Proton version for Steam launcher</summary>
       <description>Version of Proton to use with Steam launcher (format: GE-ProtonX-Y)</description>
     </key>
+    <key name="online-fix-umu-proton-version" type="s">
+      <default>"GE-Proton10-3"</default>
+      <summary>Proton version for UMU launcher</summary>
+      <description>Version of Proton to use with UMU launcher</description>
+    </key>
     <key name="online-fix-auto-patch" type="b">
       <default>true</default>
       <summary>Auto apply patches</summary>

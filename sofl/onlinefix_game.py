@@ -129,8 +129,15 @@ class OnlineFixGameData(GameData):
             
         elif launcher_type == 1:     
             logging.info("Umu Runner")
-            proton_path = os.environ.get("SOFL_PROTON_PATH", "~/.local/share/Steam/compatibilitytools.d/GE-Proton9-26")
-            proton_path = os.path.expanduser(proton_path)
+            # Get selected Proton version from settings
+            proton_version = shared.schema.get_string("online-fix-umu-proton-version")
+            proton_path = os.path.expanduser(f"~/.local/share/Steam/compatibilitytools.d/{proton_version}")
+            
+            # Check if Proton exists, fall back to default if not
+            if not os.path.exists(proton_path):
+                default_proton = "GE-Proton10-3"
+                proton_path = os.path.expanduser(f"~/.local/share/Steam/compatibilitytools.d/{default_proton}")
+                self.log_and_toast(_("Proton version not found, using {}").format(default_proton))
 
             prefix_path = os.environ.get("SOFL_WINEPREFIX", "~/.local/share/Steam/steamapps/compatdata/480")
             prefix_path = os.path.expanduser(prefix_path)
@@ -141,6 +148,7 @@ class OnlineFixGameData(GameData):
             # Копируем umu-run во временную папку на хосте (в /tmp)
             temp_dir = tempfile.gettempdir()
 
+            logging.info(f"Using Proton: {proton_path}")
             logging.info(flatpak_umu_path)
             logging.info(temp_dir)
             shutil.copy(flatpak_umu_path, temp_dir)
