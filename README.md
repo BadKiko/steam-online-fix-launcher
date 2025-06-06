@@ -62,3 +62,13 @@ A huge thank you to [@kra-mo/cartridges](https://github.com/kra-mo/cartridges) p
 
 This project is licensed under GPL-3.0. See the [LICENSE](LICENSE) file for details. 
 
+## Star History
+
+<a href="https://www.star-history.com/#BadKiko/steam-online-fix-launcher&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
+ </picture>
+</a>
+
