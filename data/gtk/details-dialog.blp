@@ -40,21 +40,6 @@ template $DetailsDialog: Adw.Dialog {
               valign: center;
 
               [overlay]
-              Button cover_button_edit {
-                icon-name: "document-edit-symbolic";
-                tooltip-text: _("New Cover");
-                halign: end;
-                valign: end;
-                margin-bottom: 6;
-                margin-end: 6;
-
-                styles [
-                  "circular",
-                  "osd"
-                ]
-              }
-
-              [overlay]
               Revealer cover_button_delete_revealer {
                 transition-type: crossfade;
                 margin-end: 40;
@@ -73,14 +58,44 @@ template $DetailsDialog: Adw.Dialog {
                   ]
                 }
               }
+              
+              
+              Box cover_ovr {
+                orientation: vertical;
+                styles ["card"]
+                Adw.Carousel cover_car {
+                  Overlay {
+                    Picture cover {
+                      width-request: 200;
+                      height-request: 300;
+                      styles ["card"]
+                    }
 
-              Picture cover {
-                width-request: 200;
-                height-request: 300;
+                    [overlay]
+                    Button cover_button_edit {
+                      icon-name: "document-edit-symbolic";
+                      tooltip-text: _("New Cover");
+                      halign: end;
+                      valign: end;
+                      margin-bottom: 6;
+                      margin-end: 6;
 
-                styles [
-                  "card"
-                ]
+                      styles ["circular","osd"]
+                    }
+                  }
+                  
+                  Box box2 {
+                    Picture cover_sgdb {
+                      width-request: 200;
+                      height-request: 300;
+                      styles ["card"]
+                    }
+                  }
+                }
+                
+                Adw.CarouselIndicatorDots covers-indicator {
+                  carousel: cover_car;
+                }
               }
             }
           }
