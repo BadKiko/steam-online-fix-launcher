@@ -6,6 +6,23 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Параметры командной строки
+SKIP_INTERNET_CHECK=false
+
+# Обработка параметров командной строки
+while getopts ":o" opt; do
+  case ${opt} in
+    o ) # offline режим
+      SKIP_INTERNET_CHECK=true
+      ;;
+    \? )
+      echo "Использование: $0 [-o]"
+      echo "-o: запуск в offline режиме (без проверки интернет-соединения)"
+      exit 1
+      ;;
+  esac
+done
+
 # Конфигурация
 BUILD_DIR="build-dir"
 MANIFEST="build-aux/flatpak/org.badkiko.sofl.Devel.json"
@@ -295,6 +312,12 @@ log_message() {
 
 # Проверка доступности интернета
 check_internet() {
+    # Если установлен флаг пропуска проверки интернета, возвращаем успешный статус
+    if [ "$SKIP_INTERNET_CHECK" = true ]; then
+        log_message "info" "Проверка интернет-соединения пропущена (offline режим)"
+        return 0
+    fi
+    
     log_message "info" "Проверка интернет-соединения..."
     if ping -c 1 google.com &> /dev/null || ping -c 1 8.8.8.8 &> /dev/null; then
         log_message "info" "Интернет-соединение доступно"
@@ -327,6 +350,12 @@ fi
 
 # Функция для проверки и установки необходимых SDK Flatpak
 check_install_sdk() {
+    # Если установлен флаг пропуска проверки интернета, проверяем только локально
+    if [ "$SKIP_INTERNET_CHECK" = true ]; then
+        log_message "info" "Работа в offline режиме, пропуск установки SDK"
+        return 0
+    fi
+    
     # Extracting runtime and SDK info from manifest
     if [ ! -f "$MANIFEST" ]; then
         log_message "error" "Manifest $MANIFEST not found"
@@ -423,6 +452,17 @@ check_install_sdk() {
 # Предварительная загрузка blueprint-compiler
 prepare_blueprint_compiler() {
     log_message "info" "Проверка наличия blueprint-compiler..."
+    
+    # Если установлен флаг пропуска проверки интернета и директория существует, пропускаем обновление
+    if [ "$SKIP_INTERNET_CHECK" = true ]; then
+        if [ -d "$BLUEPRINT_DIR" ] && [ -f "$BLUEPRINT_DIR/meson.build" ]; then
+            log_message "info" "Работа в offline режиме, используем существующий blueprint-compiler"
+            return 0
+        else
+            log_message "warn" "Работа в offline режиме, но blueprint-compiler отсутствует"
+            return 1
+        fi
+    fi
     
     # Создаем директорию subprojects, если её нет
     mkdir -p "subprojects"
@@ -549,10 +589,18 @@ setup_dbus_for_wsl() {
 check_internet
 
 # Проверяем наличие SDK перед началом сборки
-check_install_sdk
+if [ "$SKIP_INTERNET_CHECK" = false ]; then
+    check_install_sdk
+else
+    log_message "info" "Пропуск проверки SDK в offline режиме"
+fi
 
 # Подготавливаем blueprint-compiler
-prepare_blueprint_compiler
+if [ "$SKIP_INTERNET_CHECK" = false ]; then
+    prepare_blueprint_compiler
+else
+    log_message "info" "Пропуск подготовки blueprint-compiler в offline режиме"
+fi
 
 # Патчим тесты blueprint-compiler для WSL, если необходимо
 patch_blueprint_tests

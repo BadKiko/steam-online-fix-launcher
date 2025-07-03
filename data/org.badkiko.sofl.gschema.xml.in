@@ -116,7 +116,7 @@
     <key name="online-fix-launcher-type" type="i">
       <default>0</default>
       <summary>Online-Fix launcher type</summary>
-      <description>Type of launcher to use (0 = Steam API, 1 = UMU Launcher)</description>
+      <description>Type of launcher to use (0 = Direct Steam API, 1 = UMU Launcher)</description>
     </key>
     <key name="online-fix-proton-version" type="s">
       <default>"GE-Proton9-26"</default>
@@ -162,6 +162,31 @@
       <default>false</default>
       <summary>SteamFix64 patch</summary>
       <description>Apply SteamFix64 patch</description>
+    </key>
+    <key name="online-fix-use-steam-overlay" type="b">
+      <default>true</default>
+      <summary>Use Steam Overlay</summary>
+      <description>Enable Steam Overlay when launching games directly</description>
+    </key>
+    <key name="online-fix-use-steam-runtime" type="b">
+      <default>true</default>
+      <summary>Use Steam Runtime</summary>
+      <description>Use Steam Runtime when launching games directly</description>
+    </key>
+    <key name="online-fix-args-before" type="s">
+      <default>""</default>
+      <summary>Arguments before command</summary>
+      <description>Additional arguments to add before the launch command</description>
+    </key>
+    <key name="online-fix-args-after" type="s">
+      <default>""</default>
+      <summary>Arguments after command</summary>
+      <description>Additional arguments to add after the launch command</description>
+    </key>
+    <key name="online-fix-debug-mode" type="b">
+      <default>false</default>
+      <summary>Debug mode</summary>
+      <description>Enable Wine debug output</description>
     </key>
   </schema>
 

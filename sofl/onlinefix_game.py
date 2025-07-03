@@ -23,6 +23,7 @@ import os
 import subprocess
 import tempfile
 import struct
+import threading
 from typing import Any, Optional
 from pathlib import Path
 from time import time
@@ -72,61 +73,183 @@ class OnlineFixGameData(GameData):
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
         if launcher_type == 0:
-            logging.info("Steam Runner")
+            logging.info("Direct Steam API Runner")
             
-            steam_home = os.path.expanduser("~/.local/share/Steam")
-            user_id = next((d for d in os.listdir(os.path.join(steam_home, "userdata")) if d.isdigit()), None)
-            if not user_id:
-                self.log_and_toast(_("No Steam user data found"))
-                return
+            # Проверяем, запущен ли Steam (с учетом flatpak)
+            try:
+                # В flatpak окружении используем flatpak-spawn для проверки
+                if os.path.exists("/.flatpak-info"):
+                    steam_process = subprocess.run(['flatpak-spawn', '--host', 'pidof', 'steam'], capture_output=True, text=True)
+                else:
+                    steam_process = subprocess.run(['pidof', 'steam'], capture_output=True, text=True)
+                
+                if steam_process.returncode == 1:
+                    self.log_and_toast(_("Steam is not running"))
+                    return
+            except Exception as e:
+                logging.error(f"[SOFL] Failed to check Steam status: {str(e)}")
+                # Продолжаем выполнение, даже если не удалось проверить статус Steam
+                
+            # Путь к исполняемому файлу игры
+            game_exec_str = str(game_exec)
             
-            shortcuts_vdf_path = os.path.join(steam_home, "userdata", user_id, "config", "shortcuts.vdf")
-            game_exe = f'"{str(game_exec)}"'
-            app_id_int = binascii.crc32(str(game_exec).encode('utf-8')) & 0xFFFFFFFF
-            shortcut_id = (app_id_int << 32) | 0x02000000
-            
-            shortcuts = {}
-            if os.path.exists(shortcuts_vdf_path):
-                with open(shortcuts_vdf_path, "rb") as f:
-                    shortcuts = vdf.binary_loads(f.read(), raise_on_remaining=False).get("shortcuts", {})
-            
-            shortcut_index = next((idx for idx, shortcut in shortcuts.items() if shortcut.get("exe", "").strip('"') == str(game_exec)), None)
-            if shortcut_index is None:
-                shortcuts[str(len(shortcuts))] = {
-                    "appid": f"{app_id_int}",
-                    "AppName": self.name,
-                    "Exe": game_exe,
-                    "StartDir": f'"{str(game_exec.parent)}"',
-                    "LaunchOptions": f"WINEDLLOVERRIDES=\"{dll_overrides}\" %command%"
-                }
-            else:
-                shortcuts[shortcut_index]["AppName"] = self.name
-                shortcuts[shortcut_index]["Exe"] = game_exe
-            
-            with open(shortcuts_vdf_path, "wb") as f:
-                f.write(vdf.binary_dumps({"shortcuts": shortcuts}))
-            logging.info(f"[SOFL] Saved shortcuts.vdf")
-            
+            # Получаем путь к Proton из настроек
             proton_version = shared.schema.get_string("online-fix-proton-version")
+            steam_home = os.path.expanduser("~/.local/share/Steam")
+            proton_path = os.path.join(steam_home, "compatibilitytools.d", proton_version, "proton")
             
-            logging.info(f"[SOFL] Proton version: {proton_version}")
+            # Проверяем существование Proton
+            if not os.path.exists(proton_path):
+                self.log_and_toast(_("Proton version not found: {}").format(proton_version))
+                return
+                
+            # Настраиваем переменные окружения
+            user_home = os.path.expanduser("~")
+            dx_overrides = "d3d11=n;d3d10=n;d3d10core=n;dxgi=n;openvr_api_dxvk=n;d3d12=n;d3d12core=n;d3d9=n;d3d8=n;"
             
-            config_vdf_path = os.path.join(steam_home, "config", "config.vdf")
-            if os.path.exists(config_vdf_path):
-                with open(config_vdf_path, "r") as f:
-                    config_data = vdf.loads(f.read())
-                config_data.setdefault("CompatToolMapping", {})[str(shortcut_id)] = {
-                    "name": proton_version,
-                    "config": "",
-                    "Priority": "250"
-                }
-                with open(config_vdf_path, "w") as f:
-                    vdf.dump(config_data, f)
-                logging.info(f"[SOFL] Updated config.vdf with Proton {proton_version}")
+            # Создаем директорию для префикса, если она не существует
+            prefix_path = os.path.join(game_exec.parent, "OFME Prefix")
+            os.makedirs(prefix_path, exist_ok=True)
             
-            run_executable(f"xdg-open steam://rungameid/{shortcut_id}")
-            self.create_toast(_("{} launched via Steam with {}").format(self.name, proton_version))
+            # Создаем структуру префикса для совместимости с оригинальным кодом
+            pfx_user_path = os.path.join(prefix_path, "pfx", "drive_c", "users", "steamuser")
+            for dir_name in ["AppData", "Saved Games", "Documents"]:
+                os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
             
+            # Проверяем, включен ли режим отладки
+            debug_mode = shared.schema.get_boolean("online-fix-debug-mode")
+            
+            # Настраиваем переменные окружения точно как в оригинальном коде
+            env = {
+                "WINEDLLOVERRIDES": f"{dx_overrides}{dll_overrides}",
+                "WINEDEBUG": "+warn,+err,+trace" if debug_mode else "-all",
+                "STEAM_COMPAT_DATA_PATH": prefix_path,
+                "STEAM_COMPAT_CLIENT_INSTALL_PATH": f"{user_home}/.steam/steam"
+            }
+            
+            # Опционально добавляем Steam Overlay
+            use_steam_overlay = shared.schema.get_boolean("online-fix-use-steam-overlay")
+            if use_steam_overlay:
+                env["LD_PRELOAD"] = f":{user_home}/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so:{user_home}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so"
+                logging.info(f"[SOFL] Steam Overlay enabled with LD_PRELOAD={env['LD_PRELOAD']}")
+            
+            # Опционально используем Steam Runtime
+            use_steam_runtime = shared.schema.get_boolean("online-fix-use-steam-runtime")
+            steam_runtime_path = ""
+            if use_steam_runtime:
+                # Пытаемся найти Steam Runtime в библиотеках Steam, как в оригинальном коде
+                try:
+                    # Путь к файлу libraryfolders.vdf
+                    library_folders_path = os.path.join(user_home, ".steam/steam/steamapps/libraryfolders.vdf")
+                    if os.path.exists(library_folders_path):
+                        with open(library_folders_path, 'r') as f:
+                            library_folders_data = vdf.load(f)
+                        
+                        # Ищем SteamLinuxRuntime_sniper в библиотеках
+                        if 'libraryfolders' in library_folders_data:
+                            for folder_id, folder_data in library_folders_data['libraryfolders'].items():
+                                if 'apps' in folder_data and '1628350' in folder_data['apps']:
+                                    runtime_path = os.path.join(folder_data['path'], 'steamapps/common/SteamLinuxRuntime_sniper/run')
+                                    if os.path.isfile(runtime_path):
+                                        steam_runtime_path = runtime_path
+                                        logging.info(f"[SOFL] Found Steam Runtime at {steam_runtime_path}")
+                                        break
+                except Exception as e:
+                    logging.error(f"[SOFL] Error finding Steam Runtime: {str(e)}")
+                
+                # Если не нашли, используем стандартный путь
+                if not steam_runtime_path:
+                    steam_runtime_path = os.path.join(steam_home, "ubuntu12_32", "steam-runtime", "run.sh")
+                    if not os.path.exists(steam_runtime_path):
+                        steam_runtime_path = ""
+                        self.log_and_toast(_("Steam Runtime not found"))
+            
+            # Формируем команду запуска
+            cmd = f"\"{proton_path}\" run \"{game_exec_str}\""
+            
+            if steam_runtime_path:
+                cmd = f"\"{steam_runtime_path}\" {cmd}"
+                
+            # Добавляем аргументы перед и после исполняемого файла
+            args_before = shared.schema.get_string("online-fix-args-before")
+            args_after = shared.schema.get_string("online-fix-args-after")
+            
+            if args_before:
+                cmd = f"{args_before} {cmd}"
+            if args_after:
+                cmd = f"{cmd} {args_after}"
+                
+            # Если отладка отключена, перенаправляем вывод в /dev/null
+            if not debug_mode:
+                cmd = f"{cmd} > /dev/null 2>&1"
+            
+            # Запускаем через bash
+            if os.path.exists("/.flatpak-info"):
+                # В flatpak окружении создаем временный скрипт для запуска
+                with tempfile.NamedTemporaryFile(mode='w', prefix='sofl_launch_', suffix='.sh', delete=False) as script_file:
+                    script_path = script_file.name
+                    
+                    # Записываем скрипт с экспортом всех переменных окружения
+                    script_file.write("#!/bin/bash\n\n")
+                    
+                    # Экспортируем все переменные окружения
+                    for key, value in env.items():
+                        # Убедимся, что пути правильно экранированы
+                        value = value.replace('"', '\\"')
+                        script_file.write(f'export {key}="{value}"\n')
+                    
+                    # Создаем директорию для префикса на хосте
+                    script_file.write(f'\nmkdir -p "{prefix_path}"\n')
+                    
+                    # Создаем структуру префикса для совместимости с оригинальным кодом
+                    pfx_user_path = os.path.join(prefix_path, "pfx", "drive_c", "users", "steamuser")
+                    for dir_name in ["AppData", "Saved Games", "Documents"]:
+                        script_file.write(f'mkdir -p "{os.path.join(pfx_user_path, dir_name)}"\n')
+                    
+                    # Добавляем команду запуска
+                    script_file.write(f"\n{cmd}\n")
+                
+                # Делаем скрипт исполняемым
+                os.chmod(script_path, os.stat(script_path).st_mode | stat.S_IXUSR)
+                
+                # Запускаем скрипт через flatpak-spawn
+                full_cmd = ["flatpak-spawn", "--host", script_path]
+                logging.info(f"[SOFL] Created launch script: {script_path}")
+            else:
+                full_cmd = ["bash", "-c", cmd]
+            
+            try:
+                logging.info(f"[SOFL] Executing command: {' '.join(full_cmd)}")
+                if os.path.exists("/.flatpak-info"):
+                    subprocess.Popen(full_cmd, 
+                                    cwd=str(game_exec.parent),
+                                    start_new_session=True)
+                    
+                    # Планируем удаление временного файла через некоторое время
+                    def delayed_delete():
+                        import time
+                        time.sleep(10)  # Даем время на запуск скрипта
+                        try:
+                            if os.path.exists(script_path):
+                                os.unlink(script_path)
+                        except Exception as e:
+                            logging.error(f"[SOFL] Failed to delete temp script: {str(e)}")
+                    
+                    # Запускаем удаление в отдельном потоке
+                    threading.Thread(target=delayed_delete, daemon=True).start()
+                else:
+                    subprocess.Popen(full_cmd, 
+                                    cwd=str(game_exec.parent), 
+                                    env={**os.environ, **env},
+                                    start_new_session=True)
+                
+                self.create_toast(_("{} launched directly with Proton {}").format(self.name, proton_version))
+                
+                if shared.schema.get_boolean("exit-after-launch"):
+                    shared.win.get_application().quit()
+                    
+            except Exception as e:
+                self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
         elif launcher_type == 1:     
             logging.info("Umu Runner")
             # Get selected Proton version from settings
@@ -139,9 +262,18 @@ class OnlineFixGameData(GameData):
                 proton_path = os.path.expanduser(f"~/.local/share/Steam/compatibilitytools.d/{default_proton}")
                 self.log_and_toast(_("Proton version not found, using {}").format(default_proton))
 
-            prefix_path = os.environ.get("SOFL_WINEPREFIX", "~/.local/share/Steam/steamapps/compatdata/480")
-            prefix_path = os.path.expanduser(prefix_path)
+            # Создаем директорию для префикса, если она не существует
+            prefix_path = os.path.join(game_exec.parent, "OFME Prefix")
+            os.makedirs(prefix_path, exist_ok=True)
+            
+            # Создаем структуру префикса для совместимости с оригинальным кодом
+            pfx_user_path = os.path.join(prefix_path, "pfx", "drive_c", "users", "steamuser")
+            for dir_name in ["AppData", "Saved Games", "Documents"]:
+                os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
 
+            # Используем этот префикс вместо стандартного
+            prefix_path = os.environ.get("SOFL_WINEPREFIX", prefix_path)
+            prefix_path = os.path.expanduser(prefix_path)
 
             # Путь к umu-run внутри Flatpak
             flatpak_umu_path = f"{os.getenv('FLATPAK_DEST')}/bin/umu/umu-run"

@@ -129,7 +129,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     online_fix_patches_group: Adw.PreferencesGroup = Gtk.Template.Child()
     online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
-    online_fix_proton_entry: Adw.EntryRow = Gtk.Template.Child()
+    online_fix_proton_combo: Adw.ComboRow = Gtk.Template.Child()
     online_fix_umu_proton_combo: Adw.ComboRow = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
@@ -522,23 +522,14 @@ class SOFLPreferences(Adw.PreferencesDialog):
         self.online_fix_launcher_combo.set_selected(shared.schema.get_int("online-fix-launcher-type"))
         self.online_fix_launcher_combo.connect("notify::selected", self.on_launcher_changed)
 
-        # Setup Proton version field for Steam API
-        try:
-            current_proton = shared.schema.get_string("online-fix-proton-version")
-            self.online_fix_proton_entry.set_text(current_proton)
-        except GLib.Error as e:
-            default_proton = "GE-Proton9-26"
-            shared.schema.set_string("online-fix-proton-version", default_proton)
-            self.online_fix_proton_entry.set_text(default_proton)
-            
-        # Handler for Proton version change (Steam API)
-        def on_proton_version_changed(*_args: Any) -> None:
-            shared.schema.set_string("online-fix-proton-version", self.online_fix_proton_entry.get_text())
-            
-        self.online_fix_proton_entry.connect("changed", on_proton_version_changed)
+        # Get available Proton versions
+        proton_versions = self.get_proton_versions()
+        
+        # Setup Proton version selection for Steam API
+        self.setup_proton_combo(self.online_fix_proton_combo, proton_versions, "online-fix-proton-version")
         
         # Setup Proton version selection for UMU Launcher
-        self.setup_umu_proton_combo()
+        self.setup_proton_combo(self.online_fix_umu_proton_combo, proton_versions, "online-fix-umu-proton-version")
         
         # Setup auto patch switch
         shared.schema.bind(
@@ -574,36 +565,50 @@ class SOFLPreferences(Adw.PreferencesDialog):
         self.on_auto_patch_changed(self.online_fix_auto_patch_switch, None)
         self.on_launcher_changed(self.online_fix_launcher_combo, None)
 
-    def setup_umu_proton_combo(self) -> None:
-        """Setup Proton version selection for UMU launcher"""
-        # Get available Proton versions from compatibility.d directory
-        proton_versions = self.get_proton_versions()
-        
+    def setup_proton_combo(self, combo: Adw.ComboRow, proton_versions: list[str], schema_key: str) -> None:
+        """Setup Proton version selection combo box"""
         # Create model for combo box
         proton_model = Gtk.StringList.new([version for version in proton_versions])
-        self.online_fix_umu_proton_combo.set_model(proton_model)
+        combo.set_model(proton_model)
         
-        # Set current selection
-        current_umu_proton = shared.schema.get_string("online-fix-umu-proton-version")
+        # Get current selection from settings
+        try:
+            current_proton = shared.schema.get_string(schema_key)
+        except GLib.Error as e:
+            # If setting doesn't exist, use default
+            current_proton = "GE-Proton9-26" if schema_key == "online-fix-proton-version" else "GE-Proton10-3"
+            shared.schema.set_string(schema_key, current_proton)
+        
+        # Find index of current selection
         selected_idx = 0
-        
         for idx, version in enumerate(proton_versions):
-            if version == current_umu_proton:
+            if version == current_proton:
                 selected_idx = idx
                 break
         
-        self.online_fix_umu_proton_combo.set_selected(selected_idx)
+        # Set selected item
+        combo.set_selected(selected_idx)
         
         # Connect signal for selection change
-        self.online_fix_umu_proton_combo.connect("notify::selected", self.on_umu_proton_changed)
+        combo.connect("notify::selected", lambda c, _: self.on_proton_changed(c, schema_key))
+
+    def on_proton_changed(self, combo: Adw.ComboRow, schema_key: str) -> None:
+        """Handler for Proton version change"""
+        selected_idx = combo.get_selected()
+        if selected_idx >= 0:
+            model = combo.get_model()
+            if model and selected_idx < model.get_n_items():
+                selected_version = model.get_string(selected_idx)
+                shared.schema.set_string(schema_key, selected_version)
+                logging.info(f"Proton version set to: {selected_version} for {schema_key}")
         
     def get_proton_versions(self) -> list[str]:
         """Get available Proton versions from compatibility.d directory"""
         proton_path = Path(os.path.expanduser("~/.local/share/Steam/compatibilitytools.d"))
         versions = []
         
-        # Default version if no others found
-        default_version = "GE-Proton10-3"
+        # Default versions if no others found
+        default_versions = ["GE-Proton10-3", "GE-Proton9-26", "Proton-8.0"]
         
         if proton_path.exists() and proton_path.is_dir():
             for item in proton_path.iterdir():
@@ -611,24 +616,14 @@ class SOFLPreferences(Adw.PreferencesDialog):
                                      item.name.startswith("Proton")):
                     versions.append(item.name)
         
-        # If no versions found, add default
+        # If no versions found, add defaults
         if not versions:
-            versions.append(default_version)
+            versions = default_versions
             
         # Sort versions
         versions.sort(reverse=True)
             
         return versions
-        
-    def on_umu_proton_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
-        """Handler for UMU Proton version change"""
-        selected_idx = combo.get_selected()
-        if selected_idx >= 0:
-            model = combo.get_model()
-            if model and selected_idx < model.get_n_items():
-                selected_version = model.get_string(selected_idx)
-                shared.schema.set_string("online-fix-umu-proton-version", selected_version)
-                logging.info(f"UMU Proton version set to: {selected_version}")
 
     def on_auto_patch_changed(self, switch: Adw.SwitchRow, _param: Any) -> None:
         """Show/hide manual settings based on auto-patch switch"""
@@ -641,9 +636,9 @@ class SOFLPreferences(Adw.PreferencesDialog):
         shared.schema.set_int("online-fix-launcher-type", launcher_type)
         
         # Show appropriate Proton selection control based on launcher type
-        # 0 = Steam API (show text entry)
-        # 1 = UMU Launcher (show combo box)
-        self.online_fix_proton_entry.set_visible(launcher_type == 0)
+        # 0 = Steam API
+        # 1 = UMU Launcher
+        self.online_fix_proton_combo.set_visible(launcher_type == 0)
         self.online_fix_umu_proton_combo.set_visible(launcher_type == 1)
 
     def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
