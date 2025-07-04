@@ -147,7 +147,7 @@ class SOFLWindow(Adw.ApplicationWindow):
                 Gtk.Image.new_from_icon_name(
                     "user-desktop-symbolic"
                     if (split_id := source_id.split("_")[0]) == "desktop"
-                    else "application-x-executable-symbolic" if source_id == "online-fix"
+                    else "online-fix-source-symbolic" if source_id == "online-fix"
                     else f"{split_id}-source-symbolic"
                 )
             )
@@ -365,6 +365,9 @@ class SOFLWindow(Adw.ApplicationWindow):
 
         self.details_view_hide_button.set_icon_name(icon)
         self.details_view_hide_button.set_tooltip_text(text)
+
+        # Set play button label and icon based on game type
+        self.details_view_play_button.set_label(game.get_play_button_label())
 
         if self.details_view_game_cover:
             self.details_view_game_cover.pictures.remove(self.details_view_cover)

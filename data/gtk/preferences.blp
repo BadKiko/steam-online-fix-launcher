@@ -31,6 +31,7 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         subtitle: _("Save game covers losslessly at the cost of storage");
       }
     }
+
     Adw.PreferencesGroup danger_zone_group {
       title: _("Danger Zone");
 
@@ -413,7 +414,7 @@ template $SOFLPreferences: Adw.PreferencesDialog {
   Adw.PreferencesPage online_fix_page {
     name: "online-fix";
     title: _("Online-Fix");
-    icon-name: "image-x-generic-symbolic";
+    icon-name: "online-fix-source-symbolic";
 
     Adw.PreferencesGroup online_fix_group {
       title: _("Installation");
@@ -432,6 +433,54 @@ template $SOFLPreferences: Adw.PreferencesDialog {
             "flat",
           ]
         }
+      }
+    }
+
+    Adw.PreferencesGroup online_fix_launcher_group {
+      title: _("Launcher Settings");
+      description: _("Configure how games should be launched");
+
+      Adw.ComboRow online_fix_launcher_combo {
+        title: _("Launcher Type");
+        selected: 0;
+      }
+
+      Adw.ComboRow online_fix_proton_combo {
+        title: _("Proton Version");
+        tooltip-text: _("Version of Proton to use with Steam launcher");
+      }
+
+      Adw.ComboRow online_fix_umu_proton_combo {
+        title: _("UMU Proton Version");
+        tooltip-text: _("Version of Proton to use with UMU launcher");
+      }
+
+      Adw.SwitchRow online_fix_auto_patch_switch {
+        title: _("Auto Apply Patches");
+        subtitle: _("Automatically apply required patches for games");
+      }
+    }
+
+    Adw.PreferencesGroup online_fix_dll_group {
+      title: _("DLL Overrides");
+      description: _("Configure DLL overrides for Wine/Proton");
+
+      Adw.EntryRow online_fix_dll_override_entry {
+        title: _("DLL Overrides");
+        tooltip-text: _("Format: dll1=n,b;dll2=n,b");
+      }
+    }
+
+    Adw.PreferencesGroup online_fix_patches_group {
+      title: _("Manual Patches");
+      description: _("Configure manual patches for specific games");
+
+      Adw.SwitchRow online_fix_steam_appid_switch {
+        title: _("Steam AppID Patch");
+      }
+
+      Adw.SwitchRow online_fix_patch_steam_fix_64 {
+        title: _("SteamFix64 Patch");
       }
     }
   }

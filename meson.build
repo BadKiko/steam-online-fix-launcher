@@ -1,6 +1,6 @@
 project(
   'sofl',
-  version: '2.12.1',
+  version: '0.0.2',
   meson_version: '>= 0.59.0',
   default_options: [
     'warning_level=2',

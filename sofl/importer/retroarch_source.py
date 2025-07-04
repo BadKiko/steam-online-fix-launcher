@@ -29,6 +29,7 @@ from typing import NamedTuple
 from sofl import shared
 from sofl.errors.friendly_error import FriendlyError
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import (
     Location,
     LocationSubPath,
@@ -97,17 +98,16 @@ class RetroarchSourceIterable(SourceIterable):
                 game_id = sha256(item["path"].encode("utf-8")).hexdigest()
 
                 values = {
-                    "source": self.source.source_id,
-                    "added": shared.import_time,
                     "name": item["label"],
+                    "source": self.source.source_id,
                     "game_id": self.source.game_id_format.format(game_id=game_id),
                     "executable": self.source.make_executable(
                         core_path=core_path,
                         rom_path=item["path"],
                     ),
+                    "added": shared.import_time,
                 }
-
-                game = Game(values)
+                game = GameFactory.create_game(values)
 
                 # Get boxart
                 boxart_image_name = item["label"] + ".png"
@@ -217,9 +217,6 @@ class RetroarchSource(Source):
     def make_executable(self, core_path: Path, rom_path: Path) -> str:
         """
         Generate an executable command from the rom path and core path,
-        depending on the source's location.
-
-        The format depends on RetroArch's installation method,
         detected from the source config location
 
         :param Path rom_path: the game's rom path

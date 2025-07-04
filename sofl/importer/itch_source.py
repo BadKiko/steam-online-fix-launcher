@@ -24,6 +24,7 @@ from typing import NamedTuple
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import SourceIterable, URLExecutableSource
 from sofl.utils.sqlite import copy_db
@@ -58,14 +59,14 @@ class ItchSourceIterable(SourceIterable):
         # Create games from the db results
         for row in cursor:
             values = {
-                "added": shared.import_time,
-                "source": self.source.source_id,
                 "name": row[1],
+                "source": self.source.source_id,
                 "game_id": self.source.game_id_format.format(game_id=row[0]),
                 "executable": self.source.make_executable(cave_id=row[4]),
+                "added": shared.import_time,
             }
             additional_data = {"online_cover_url": row[3] or row[2]}
-            game = Game(values)
+            game = GameFactory.create_game(values)
             yield (game, additional_data)
 
         # Cleanup

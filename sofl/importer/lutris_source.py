@@ -23,6 +23,7 @@ from typing import NamedTuple
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import SourceIterable, URLExecutableSource
 from sofl.utils.sqlite import copy_db
@@ -78,11 +79,11 @@ class LutrisSourceIterable(SourceIterable):
                 "name": row[1],
                 "source": f"{self.source.source_id}_{row[3]}",
                 "game_id": self.source.game_id_format.format(
-                    runner=row[3], game_id=row[0]
+                   runner=row[3], game_id=row[0]
                 ),
                 "executable": self.source.make_executable(game_id=row[0]),
             }
-            game = Game(values)
+            game = GameFactory.create_game(values)
             additional_data = {}
 
             # Get official image path

@@ -23,5 +23,6 @@
   <file alias="lutris-source-symbolic.svg">icons/sources/lutris-source-symbolic.svg</file>
   <file alias="retroarch-source-symbolic.svg">icons/sources/retroarch-source-symbolic.svg</file>
   <file alias="steam-source-symbolic.svg">icons/sources/steam-source-symbolic.svg</file>
+  <file alias="online-fix-source-symbolic.svg">icons/sources/online-fix-source-symbolic.svg</file>
   </gresource>
 </gresources>

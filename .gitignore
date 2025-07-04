@@ -12,3 +12,4 @@ build-aux/flatpak/org.badkiko.sofl.json
 .env/
 venv/
 .vscode/
+build-aux/

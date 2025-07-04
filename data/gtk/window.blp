@@ -469,6 +469,17 @@ Adw.NavigationPage details_page {
                   ]
                 }
 
+                Button {
+                  icon-name: "system-run-symbolic";
+                  action-name: "app.uninstall_game";
+                  tooltip-text: _("Uninstall");
+
+                  styles [
+                    "raised",
+                    "circular",
+                  ]
+                }
+
                 MenuButton {
                   icon-name: "system-search-symbolic";
                   menu-model: search;

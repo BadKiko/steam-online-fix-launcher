@@ -27,6 +27,7 @@ from gi.repository import GLib, Gtk
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.source import Source, SourceIterable
 
 
@@ -135,13 +136,13 @@ class DesktopSourceIterable(SourceIterable):
                 launch_arg = shlex.quote(str(entry if full_path else entry.stem))
 
                 values = {
-                    "source": self.source.source_id,
-                    "added": shared.import_time,
                     "name": name,
+                    "source": self.source.source_id,
                     "game_id": f"desktop_{entry.stem}",
                     "executable": f"{launch_command} {launch_arg}",
+                    "added": shared.import_time,
                 }
-                game = Game(values)
+                game = GameFactory.create_game(values)
 
                 additional_data = {}
 
