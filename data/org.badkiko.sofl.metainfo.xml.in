@@ -55,9 +55,9 @@
   </screenshots>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="0.0.2" date="2025-04-27">
+    <release version="0.0.3" date="2025-08-24">
       <description translate="no">
-        <p>Started versioning.</p>
+        <p>Added Online-Fix support.</p>
       </description>
     </release>
   </releases>
