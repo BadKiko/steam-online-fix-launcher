@@ -141,10 +141,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v5.0.0@634f93cb2916e3fdff6788551b99b062d0335ce0
+        uses: actions/download-artifact@v4
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2.3.2@72f2c25fcb47643c292f7107632f7a47c1df5cd8
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.get-version.outputs.version }}
           name: SOFL v${{ needs.get-version.outputs.version }}
