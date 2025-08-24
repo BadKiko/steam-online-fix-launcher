@@ -55,7 +55,7 @@
   </screenshots>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="0.0.3" date="2025-08-24">
+    <release version="flatpak" date="2025-08-24">
       <description translate="no">
         <p>Added Online-Fix support.</p>
       </description>

@@ -9,21 +9,30 @@ VERSION=${1:-"0.0.3"}
 PACKAGE_NAME="sofl"
 BUILD_DIR="deb-build"
 DEBIAN_DIR="packaging/debian"
+OUTPUT_DIR=${2:-"."}
 
 echo "Building Debian package for $PACKAGE_NAME version $VERSION..."
 
-# Check if required tools are installed
-if ! command -v dpkg-deb &> /dev/null; then
-    echo "Error: dpkg-deb is not installed."
-    echo "Install it with: sudo apt install dpkg"
-    exit 1
-fi
+# Install required dependencies
+echo "Installing required dependencies..."
+sudo apt update
+
+# Check and install required tools
+REQUIRED_TOOLS="dpkg-deb meson ninja"
+for tool in $REQUIRED_TOOLS; do
+    if ! command -v $tool &> /dev/null; then
+        echo "Installing $tool..."
+        sudo apt install -y $tool
+    fi
+done
+
+# Install build dependencies
+BUILD_DEPS="python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg libgtk-4-dev libadwaita-1-dev"
+echo "Installing build dependencies..."
+sudo apt install -y $BUILD_DEPS
 
 # Clean previous build
 rm -rf "$BUILD_DIR" *.deb
-
-# Update version in control file
-sed -i "s/Version: .*/Version: $VERSION/" "$DEBIAN_DIR/DEBIAN/control"
 
 # Build the application using meson
 echo "Building application with Meson..."
@@ -35,6 +44,9 @@ meson install --destdir="$BUILD_DIR" -C build-dir
 # Copy debian control files
 mkdir -p "$BUILD_DIR/DEBIAN"
 cp "$DEBIAN_DIR/DEBIAN/control" "$BUILD_DIR/DEBIAN/"
+
+# Update version in control file
+sed -i "s/Version: .*/Version: $VERSION/" "$BUILD_DIR/DEBIAN/control"
 
 # Create postinst script for desktop database update
 cat > "$BUILD_DIR/DEBIAN/postinst" << 'EOF'
@@ -81,10 +93,18 @@ dpkg-deb --build "$BUILD_DIR" "${PACKAGE_NAME}_${VERSION}_all.deb"
 
 echo "Debian package created: ${PACKAGE_NAME}_${VERSION}_all.deb"
 
+# Move package to output directory
+if [ "$OUTPUT_DIR" != "." ]; then
+    mkdir -p "$OUTPUT_DIR"
+    mv "${PACKAGE_NAME}_${VERSION}_all.deb" "$OUTPUT_DIR/"
+    echo "Package moved to: $OUTPUT_DIR/${PACKAGE_NAME}_${VERSION}_all.deb"
+fi
+
 # Optional: Check package with lintian
 if command -v lintian &> /dev/null; then
+    PACKAGE_PATH="${OUTPUT_DIR}/${PACKAGE_NAME}_${VERSION}_all.deb"
     echo "Checking package with lintian..."
-    lintian "${PACKAGE_NAME}_${VERSION}_all.deb" || true
+    lintian "$PACKAGE_PATH" || true
 fi
 
 echo "Build completed successfully!"

@@ -1,35 +1,196 @@
-build-aux/flatpak/org.badkiko.sofl.json
-/subprojects/blueprint-compiler
-/build-aux/macos/build
-/build-aux/macos/dist
-/.flatpak
-/.flatpak-builder
-/.vscode
-.DS_Store
-.prettierignore
-.last_build_timestamp
-.venv/
-.env/
-venv/
-.vscode/
-build-aux/
+# ============================================================================
+# SOFL Project .gitignore
+# ============================================================================
 
-# Package build artifacts
+# ============================================================================
+# Development Environment
+# ============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.ENV/
+.env/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+
+# ============================================================================
+# Build Artifacts and Distributions
+# ============================================================================
+
+# Package build artifacts (keep README.md in dist/)
 *.deb
 *.flatpak
 *.pkg.tar.zst
 *.tar.gz
 *.tar.xz
+*.pkg.tar.*
+*.tar.bz2
+*.whl
+*.rpm
 
 # Build directories
+build-aux/
+build-dir/
 flatpak-build/
 sofl-repo/
 deb-build/
 pkg-build/
+meson-private/
+build/
+dist-packages/
 
-# Packaging temp files
-packaging/flatpak/flatpak-build/
-packaging/flatpak/sofl-repo/
-packaging/debian/*.deb
-packaging/arch/*.pkg.tar.zst
-packaging/arch/*.tar.gz
+# Dist directory (keep README.md, ignore packages)
+dist/
+!dist/README.md
+
+# Flatpak and containers
+.flatpak/
+.flatpak-builder/
+*.flatpakref
+flatpak-builder/
+
+# ============================================================================
+# Project Specific
+# ============================================================================
+
+# Subprojects
+subprojects/blueprint-compiler
+subprojects/blueprint-compiler-*
+
+# Build artifacts
+build-aux/flatpak/org.badkiko.sofl.json
+build-aux/macos/build
+build-aux/macos/dist
+.last_build_timestamp
+
+# ============================================================================
+# Temporary and Cache Files
+# ============================================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.log
+
+# Cache directories
+.cache/
+.cache-*/
+.cache-*
+
+# ============================================================================
+# OS Generated Files
+# ============================================================================
+
+# Linux
+*~
+.directory
+.Trash-*
+.nfs*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ============================================================================
+# CI/CD and Deployment
+# ============================================================================
+
+# GitHub Actions
+.github/workflows/secrets/
+
+# Docker
+Dockerfile.*
+docker-compose*.yml
+.dockerignore
+
+# ============================================================================
+# Sensitive Files
+# ============================================================================
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Private keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# API keys, tokens, secrets
+*secret*
+*key*
+*token*
+*password*

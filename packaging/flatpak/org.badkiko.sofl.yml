@@ -1,6 +1,6 @@
 app-id: org.badkiko.sofl
 runtime: org.gnome.Platform
-runtime-version: '47'
+runtime-version: '48'
 sdk: org.gnome.Sdk
 command: sofl
 finish-args:
@@ -34,7 +34,5 @@ modules:
       - -Dprofile=release
       - -Dtiff_compression=webp
     sources:
-      - type: git
-        url: https://github.com/BadKiko/steam-online-fix-launcher.git
-        tag: v0.0.3
-        commit: HEAD
+      - type: dir
+        path: ../..

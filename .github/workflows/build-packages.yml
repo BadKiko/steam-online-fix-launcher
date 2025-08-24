@@ -37,12 +37,25 @@ jobs:
   build-flatpak:
     needs: get-version
     runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-47
-      options: --privileged
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install flatpak dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y flatpak flatpak-builder
+
+      - name: Setup flatpak
+        run: |
+          flatpak --version
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak update --appstream --user || true
+
+      - name: Install flatpak runtimes
+        run: |
+          flatpak install --user --noninteractive flathub org.gnome.Platform//48
+          flatpak install --user --noninteractive flathub org.gnome.Sdk//48
 
       - name: Update version
         run: |
@@ -51,18 +64,13 @@ jobs:
       - name: Build Flatpak
         run: |
           cd packaging/flatpak
-          flatpak-builder --repo=sofl-repo --force-clean flatpak-build org.badkiko.sofl.yml
-
-      - name: Create Flatpak bundle
-        run: |
-          cd packaging/flatpak
-          flatpak build-bundle sofl-repo org.badkiko.sofl.flatpak org.badkiko.sofl
+          ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
 
       - name: Upload Flatpak artifact
         uses: actions/upload-artifact@v4
         with:
           name: sofl-flatpak-${{ needs.get-version.outputs.version }}
-          path: packaging/flatpak/org.badkiko.sofl.flatpak
+          path: dist/org.badkiko.sofl.flatpak
 
   build-deb:
     needs: get-version
@@ -74,7 +82,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev
+          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev libgtk-4-dev libadwaita-1-dev
 
       - name: Update version
         run: |
@@ -83,39 +91,52 @@ jobs:
       - name: Build Debian package
         run: |
           cd packaging/debian
-          ./build.sh ${{ needs.get-version.outputs.version }}
+          ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
 
       - name: Upload Debian artifact
         uses: actions/upload-artifact@v4
         with:
           name: sofl-deb-${{ needs.get-version.outputs.version }}
-          path: packaging/debian/sofl_${{ needs.get-version.outputs.version }}_all.deb
+          path: dist/sofl_${{ needs.get-version.outputs.version }}_all.deb
 
-  build-arch-source:
+  build-arch:
     needs: get-version
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Update system and install dependencies
+        run: |
+          pacman -Sy --noconfirm
+          pacman -S --noconfirm --needed base-devel git meson ninja python python-gobject gtk4 libadwaita python-requests python-pillow python-cairo python-psutil python-pyxdg gobject-introspection
 
       - name: Update version
         run: |
           ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
 
-      - name: Create source tarball
+      - name: Fix git safe directory
         run: |
-          git archive --format=tar.gz --prefix="sofl-${{ needs.get-version.outputs.version }}/" -o sofl-${{ needs.get-version.outputs.version }}.tar.gz HEAD
+          git config --global --add safe.directory /__w/steam-online-fix-launcher/steam-online-fix-launcher
 
-      - name: Upload Arch source artifact
+      - name: Build Arch Linux package
+        run: |
+          mkdir -p dist
+          cd packaging/arch
+          ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
+
+      - name: Upload Arch package artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sofl-arch-source-${{ needs.get-version.outputs.version }}
+          name: sofl-arch-${{ needs.get-version.outputs.version }}
           path: |
-            sofl-${{ needs.get-version.outputs.version }}.tar.gz
-            packaging/arch/PKGBUILD
+            dist/*.pkg.tar.zst
+            dist/*.tar.gz
 
   release:
-    needs: [get-version, build-flatpak, build-deb, build-arch-source]
+    needs: [get-version, build-flatpak, build-deb, build-arch]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
@@ -153,13 +174,13 @@ jobs:
 
             **Arch Linux:**
             ```bash
-            # Download PKGBUILD and source tarball, then run:
+            # Download source tarball and PKGBUILD, then run:
             makepkg -si
             ```
           files: |
             sofl-flatpak-${{ needs.get-version.outputs.version }}/org.badkiko.sofl.flatpak
             sofl-deb-${{ needs.get-version.outputs.version }}/sofl_${{ needs.get-version.outputs.version }}_all.deb
-            sofl-arch-source-${{ needs.get-version.outputs.version }}/sofl-${{ needs.get-version.outputs.version }}.tar.gz
-            sofl-arch-source-${{ needs.get-version.outputs.version }}/PKGBUILD
+            sofl-arch-${{ needs.get-version.outputs.version }}/sofl-${{ needs.get-version.outputs.version }}.tar.gz
+            packaging/arch/PKGBUILD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -16,8 +16,18 @@ NEW_VERSION=${1:-$CURRENT_VERSION}
 
 echo "Updating version to: $NEW_VERSION"
 
-# Update meson.build
-sed -i "s/version: '[^']*'/version: '$NEW_VERSION'/" "$PROJECT_DIR/meson.build"
+# Update meson.build - only project version, not meson_version or dependencies
+# First, backup the original file
+cp "$PROJECT_DIR/meson.build" "$PROJECT_DIR/meson.build.backup"
+
+# Replace only the project version line (first version line after project()
+sed -i '1,/^)/ {
+    /^  version: / {
+        s/version: '\''[^'\'']+'\''/version: '\'''"$NEW_VERSION"''\''/
+        b done
+    }
+    :done
+}' "$PROJECT_DIR/meson.build"
 
 # Update Flatpak manifest
 FLATPAK_MANIFEST="$PROJECT_DIR/packaging/flatpak/org.badkiko.sofl.yml"

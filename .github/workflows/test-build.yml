@@ -9,17 +9,29 @@ on:
 jobs:
   test-flatpak:
     runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-47
-      options: --privileged
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install flatpak dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y flatpak flatpak-builder
+
+      - name: Setup flatpak
+        run: |
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak update --appstream --user || true
+
+      - name: Install flatpak runtimes
+        run: |
+          flatpak install --user --noninteractive flathub org.gnome.Platform//48
+          flatpak install --user --noninteractive flathub org.gnome.Sdk//48
+
       - name: Test Flatpak build
         run: |
           cd packaging/flatpak
-          flatpak-builder --repo=test-repo --force-clean flatpak-build org.badkiko.sofl.yml --build-only
+          flatpak-builder --force-clean --user --repo=test-repo --install-deps-from=flathub flatpak-build org.badkiko.sofl.yml --build-only
 
       - name: Verify Flatpak bundle creation
         run: |
@@ -36,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev
+          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev libgtk-4-dev libadwaita-1-dev
 
       - name: Test Debian build
         run: |
@@ -53,6 +65,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Fix git safe directory
+        run: |
+          git config --global --add safe.directory /home/runner/work/steam-online-fix-launcher/steam-online-fix-launcher
 
       - name: Test Arch source package creation
         run: |

@@ -9,13 +9,20 @@ license=('GPL-3.0-or-later')
 depends=(
     'python>=3.8'
     'python-gobject'
-    'gtk4>=4.15.0'
-    'libadwaita>=1.6'
+    'gtk4>=4.14.0'
+    'libadwaita>=1.4'
     'python-requests'
     'python-pillow'
     'python-cairo'
     'python-psutil'
     'python-pyxdg'
+    'glib2'
+    'gobject-introspection'
+    'cairo'
+    'pango'
+    'gdk-pixbuf2'
+    'glibc'
+    'gcc-libs'
 )
 makedepends=(
     'meson'
@@ -27,11 +34,15 @@ optdepends=(
     'lutris: For Lutris game integration'
     'heroic-games-launcher: For Heroic game integration'
 )
-source=("$pkgname-$pkgver.tar.gz::https://github.com/BadKiko/steam-online-fix-launcher/archive/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-    cd "$srcdir/steam-online-fix-launcher-$pkgver"
+    cd "$srcdir/steam-online-fix-launcher-$pkgver" || {
+        echo "Directory $srcdir/steam-online-fix-launcher-$pkgver not found"
+        ls -la "$srcdir"
+        exit 1
+    }
     meson setup build --prefix=/usr --buildtype=release -Dprofile=release -Dtiff_compression=webp
     meson compile -C build
 }
