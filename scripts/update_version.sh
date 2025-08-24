@@ -5,7 +5,9 @@
 
 set -e
 
-PROJECT_DIR="/home/kiko/Work/steam-online-fix-launcher"
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 SCRIPTS_DIR="$PROJECT_DIR/scripts"
 
 # Get current version from meson.build

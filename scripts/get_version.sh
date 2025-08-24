@@ -3,7 +3,9 @@
 # Get version from meson.build
 # Usage: ./get_version.sh
 
-PROJECT_DIR="/home/kiko/Work/steam-online-fix-launcher"
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 MESON_FILE="$PROJECT_DIR/meson.build"
 
 if [ ! -f "$MESON_FILE" ]; then
