@@ -13,3 +13,23 @@ build-aux/flatpak/org.badkiko.sofl.json
 venv/
 .vscode/
 build-aux/
+
+# Package build artifacts
+*.deb
+*.flatpak
+*.pkg.tar.zst
+*.tar.gz
+*.tar.xz
+
+# Build directories
+flatpak-build/
+sofl-repo/
+deb-build/
+pkg-build/
+
+# Packaging temp files
+packaging/flatpak/flatpak-build/
+packaging/flatpak/sofl-repo/
+packaging/debian/*.deb
+packaging/arch/*.pkg.tar.zst
+packaging/arch/*.tar.gz

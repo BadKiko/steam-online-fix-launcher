@@ -1,0 +1,165 @@
+name: Build and Release Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build (leave empty for auto from meson.build)'
+        required: false
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: get-version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            VERSION=$(grep -o "version: '[^']*'" meson.build | sed "s/version: '\([^']*\)'/\1/")
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+  build-flatpak:
+    needs: get-version
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-47
+      options: --privileged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update version
+        run: |
+          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+
+      - name: Build Flatpak
+        run: |
+          cd packaging/flatpak
+          flatpak-builder --repo=sofl-repo --force-clean flatpak-build org.badkiko.sofl.yml
+
+      - name: Create Flatpak bundle
+        run: |
+          cd packaging/flatpak
+          flatpak build-bundle sofl-repo org.badkiko.sofl.flatpak org.badkiko.sofl
+
+      - name: Upload Flatpak artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofl-flatpak-${{ needs.get-version.outputs.version }}
+          path: packaging/flatpak/org.badkiko.sofl.flatpak
+
+  build-deb:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev
+
+      - name: Update version
+        run: |
+          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+
+      - name: Build Debian package
+        run: |
+          cd packaging/debian
+          ./build.sh ${{ needs.get-version.outputs.version }}
+
+      - name: Upload Debian artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofl-deb-${{ needs.get-version.outputs.version }}
+          path: packaging/debian/sofl_${{ needs.get-version.outputs.version }}_all.deb
+
+  build-arch-source:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update version
+        run: |
+          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+
+      - name: Create source tarball
+        run: |
+          git archive --format=tar.gz --prefix="sofl-${{ needs.get-version.outputs.version }}/" -o sofl-${{ needs.get-version.outputs.version }}.tar.gz HEAD
+
+      - name: Upload Arch source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofl-arch-source-${{ needs.get-version.outputs.version }}
+          path: |
+            sofl-${{ needs.get-version.outputs.version }}.tar.gz
+            packaging/arch/PKGBUILD
+
+  release:
+    needs: [get-version, build-flatpak, build-deb, build-arch-source]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.get-version.outputs.version }}
+          name: SOFL v${{ needs.get-version.outputs.version }}
+          body: |
+            ## Changes
+
+            ### New Features
+            - Automatic package building for multiple Linux distributions
+
+            ### Package Downloads
+            - **Flatpak**: `org.badkiko.sofl.flatpak`
+            - **Debian/Ubuntu**: `sofl_${{ needs.get-version.outputs.version }}_all.deb`
+            - **Arch Linux**: Source package available for building with `makepkg`
+
+            ### Installation Instructions
+
+            **Flatpak:**
+            ```bash
+            flatpak install --user org.badkiko.sofl.flatpak
+            ```
+
+            **Debian/Ubuntu:**
+            ```bash
+            sudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb
+            sudo apt install -f
+            ```
+
+            **Arch Linux:**
+            ```bash
+            # Download PKGBUILD and source tarball, then run:
+            makepkg -si
+            ```
+          files: |
+            sofl-flatpak-${{ needs.get-version.outputs.version }}/org.badkiko.sofl.flatpak
+            sofl-deb-${{ needs.get-version.outputs.version }}/sofl_${{ needs.get-version.outputs.version }}_all.deb
+            sofl-arch-source-${{ needs.get-version.outputs.version }}/sofl-${{ needs.get-version.outputs.version }}.tar.gz
+            sofl-arch-source-${{ needs.get-version.outputs.version }}/PKGBUILD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
