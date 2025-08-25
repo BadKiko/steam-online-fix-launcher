@@ -36,6 +36,10 @@ else:
     LOCALEDIR = "@localedir@"
 
 sys.path.insert(1, PKGDATADIR)
+# Prefer vendored third-party libraries when present
+VENDOR_DIR = os.path.join(PKGDATADIR, "vendor")
+if os.path.isdir(VENDOR_DIR):
+    sys.path.insert(1, VENDOR_DIR)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 if system() == "Linux":

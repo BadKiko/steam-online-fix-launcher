@@ -23,7 +23,6 @@ depends=(
     'gdk-pixbuf2'
     'glibc'
     'gcc-libs'
-    'python-vdf'
     'python-rarfile'
 )
 makedepends=(
@@ -53,4 +52,8 @@ build() {
 package() {
     cd "$srcdir/steam-online-fix-launcher-$pkgver"
     meson install --destdir="$pkgdir" -C build
+
+    # Vendor python 'vdf' module into /usr/share/sofl/vendor
+    install -d "$pkgdir/usr/share/sofl/vendor"
+    PYTHONUSERBASE="$pkgdir/usr/share/sofl/vendor" pip install --no-compile --no-cache-dir --no-input --disable-pip-version-check --no-warn-script-location --root "$pkgdir" --target "$pkgdir/usr/share/sofl/vendor" vdf
 }
