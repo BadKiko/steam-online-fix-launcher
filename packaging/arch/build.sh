@@ -50,25 +50,25 @@ git config --global --add safe.directory "$PROJECT_DIR" || true
 
 # Check if we're in a git repository
 if git rev-parse --git-dir > /dev/null 2>&1; then
-    # Create source tarball for makepkg (write to arch directory)
+    # Create source tarball for makepkg (write to dist/output directory)
     echo "Creating source tarball from git repository..."
     git -C "$PROJECT_DIR" archive --format=tar.gz \
-        --prefix="$PACKAGE_NAME-$VERSION/" \
-        -o "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" HEAD
+        --prefix="steam-online-fix-launcher-$VERSION/" \
+        -o "$OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" HEAD
 else
     echo "Not in a git repository, creating tarball from current directory..."
     # Create tarball from current directory if not in git repo
     # Use a temporary directory to avoid issues with changing files
     TMP_DIR=$(mktemp -d)
-    cp -r . "$TMP_DIR/$PACKAGE_NAME-$VERSION"
+    cp -r . "$TMP_DIR/steam-online-fix-launcher-$VERSION"
     cd "$TMP_DIR"
 
     # Clean up build artifacts and temporary files
-    cd "$PACKAGE_NAME-$VERSION"
+    cd "steam-online-fix-launcher-$VERSION"
     rm -rf build* dist .git* *.log *.tmp cache __pycache__ *.pyc build-dir flatpak-build *.flatpak *.deb *.pkg.tar.zst .ninja* compile_commands.json meson-private meson-info meson-logs subprojects *.so *.o
 
-    # Create the tarball from the cleaned directory (write to arch directory)
-    tar -czf "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," .
+    # Create the tarball from the cleaned directory (write to dist/output directory)
+    tar -czf "$OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,steam-online-fix-launcher-$VERSION/," .
 
     cd "$PROJECT_DIR"
     rm -rf "$TMP_DIR"
@@ -78,18 +78,15 @@ fi
 echo "Updating PKGBUILD..."
 sed -i "s/pkgver=.*/pkgver=$VERSION/" "$ARCH_DIR/PKGBUILD"
 
-# Ensure tarball exists in arch directory
-echo "Ensuring source tarball is in build directory..."
-if [ ! -f "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" ] && [ -f "$PACKAGE_NAME-$VERSION.tar.gz" ]; then
-    cp "$PACKAGE_NAME-$VERSION.tar.gz" "$ARCH_DIR/"
-fi
+echo "Using source tarball from output directory: $OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz"
 
 # Build the package
 echo "Building package with makepkg..."
 cd "$ARCH_DIR"
 
-# Set PKGDEST to current directory so makepkg puts the package here
-export PKGDEST="$PWD"
+# Direct makepkg to use output directory for sources and packages
+export SRCDEST="$OUTPUT_DIR"
+export PKGDEST="$OUTPUT_DIR"
 
 # Ensure we have an unprivileged user for makepkg
 if id -u builder &>/dev/null; then
@@ -115,21 +112,22 @@ fi
 
 # Run makepkg as unprivileged user
 if [ "$(id -u)" -eq 0 ] && [ "$BUILD_USER" != "root" ]; then
-    runuser -u "$BUILD_USER" -- bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    runuser -u "$BUILD_USER" -- bash -c "cd '$ARCH_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
 else
-    bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    bash -c "cd '$ARCH_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
 fi
 
 echo "Arch Linux package built successfully!"
 
-# Move created packages to output directory
-if [ "$OUTPUT_DIR" != "." ]; then
-    mkdir -p "$OUTPUT_DIR"
-    mv *.pkg.tar.zst *.tar.gz "$OUTPUT_DIR/" 2>/dev/null || true
-    echo "Packages moved to: $OUTPUT_DIR"
-else
-    # If no output directory specified, move to project root
-    mv *.pkg.tar.zst *.tar.gz ../ 2>/dev/null || true
+# Move created packages if any were dropped in arch dir (fallback)
+if ls *.pkg.tar.zst *.tar.gz 1>/dev/null 2>&1; then
+    if [ "$OUTPUT_DIR" != "." ]; then
+        mkdir -p "$OUTPUT_DIR"
+        mv *.pkg.tar.zst *.tar.gz "$OUTPUT_DIR/" 2>/dev/null || true
+        echo "Packages moved to: $OUTPUT_DIR"
+    else
+        mv *.pkg.tar.zst *.tar.gz ../ 2>/dev/null || true
+    fi
 fi
 
 # List created files
@@ -139,8 +137,7 @@ else
     ls -la ../*.pkg.tar.zst ../*.tar.gz 2>/dev/null || echo "No packages found"
 fi
 
-# Clean up tarball from arch directory
-rm -f "$PACKAGE_NAME-$VERSION.tar.gz"
+# No cleanup needed in arch directory when using SRCDEST
 
 echo "Arch Linux package build completed!"
 echo "Created packages in: $OUTPUT_DIR"
