@@ -74,15 +74,20 @@ else
     rm -rf "$TMP_DIR"
 fi
 
-# Update version in PKGBUILD
-echo "Updating PKGBUILD..."
-sed -i "s/pkgver=.*/pkgver=$VERSION/" "$ARCH_DIR/PKGBUILD"
+# Prepare working directory for PKGBUILD edits
+BUILD_WORK_DIR="$OUTPUT_DIR/arch-build-$VERSION"
+mkdir -p "$BUILD_WORK_DIR"
+
+# Copy PKGBUILD and update version there (avoid writing to repo directory)
+echo "Preparing PKGBUILD in working directory: $BUILD_WORK_DIR"
+cp "$ARCH_DIR/PKGBUILD" "$BUILD_WORK_DIR/PKGBUILD"
+sed -i "s/pkgver=.*/pkgver=$VERSION/" "$BUILD_WORK_DIR/PKGBUILD"
 
 echo "Using source tarball from output directory: $OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz"
 
 # Build the package
 echo "Building package with makepkg..."
-cd "$ARCH_DIR"
+cd "$BUILD_WORK_DIR"
 
 # Direct makepkg to use output directory for sources and packages
 export SRCDEST="$OUTPUT_DIR"
