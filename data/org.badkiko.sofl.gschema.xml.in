@@ -110,9 +110,6 @@
     <key name="library-rows" type="u">
       <default>0</default>
     </key>
-    <key name="show-sidebar" type="b">
-      <default>false</default>
-    </key>
     <key name="force-theme" type="s">
       <choices>
         <choice value="light"/>
@@ -222,6 +219,9 @@
     </key>
     <key name="steam-limiter-tokens-history" type="s">
       <default>"[]"</default>
+    </key>
+    <key name="show-sidebar" type="b">
+      <default>false</default>
     </key>
   </schema>
 </schemalist> 
