@@ -23,6 +23,8 @@ depends=(
     'gdk-pixbuf2'
     'glibc'
     'gcc-libs'
+    'python-vdf'
+    'python-rarfile'
 )
 makedepends=(
     'meson'

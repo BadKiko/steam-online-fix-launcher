@@ -84,64 +84,88 @@ jobs:
             fi
           fi
 
-          # Build release body into a variable, then write it to the single
-          # GitHub Actions output with one redirection to avoid multiple appends
-          RELEASE_BODY=""
+          # Build release body into a temporary file using real newlines,
+          # then write it once to the GitHub Actions output to avoid
+          # literal "\n" sequences appearing in the final release body.
+          TMP_RELEASE=$(mktemp)
+          # Ensure cleanup on exit
+          trap 'rm -f "$TMP_RELEASE"' EXIT
 
           case "$SOURCE" in
             "changelog")
               if [ -f "CHANGELOG.md" ]; then
-                RELEASE_BODY="${RELEASE_BODY}## Changes\n\n"
+                printf '%s\n\n' "## Changes" >> "$TMP_RELEASE"
                 # Extract latest version section from CHANGELOG.md
-                RELEASE_BODY="${RELEASE_BODY}$(awk '
+                awk '
                   /^## \[v.*\]/ { if (++count > 1) exit; next }
                   count == 1 && /^###/ { in_section = 1 }
                   count == 1 && in_section && /^---/ { exit }
                   count == 1 && in_section { print }
-                ' CHANGELOG.md)"
+                ' CHANGELOG.md >> "$TMP_RELEASE"
               else
-                RELEASE_BODY="${RELEASE_BODY}CHANGELOG.md not found, falling back to git commits\n"
+                printf '%s\n' "CHANGELOG.md not found, falling back to git commits" >> "$TMP_RELEASE"
                 SOURCE="git_commits"
               fi
               ;;
           esac
 
           if [ "$SOURCE" = "git_commits" ]; then
-            RELEASE_BODY="${RELEASE_BODY}## Changes\n\n"
+            printf '%s\n\n' "## Changes" >> "$TMP_RELEASE"
 
             # Get previous tag
             PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
 
             if [ -n "$PREVIOUS_TAG" ]; then
-              RELEASE_BODY="${RELEASE_BODY}### New Features\n"
-              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" --grep="^feat:" --grep="^add:" --grep="^new:" $PREVIOUS_TAG..HEAD | sed 's/^/- /')\n\n"
+              printf '%s\n' "### New Features" >> "$TMP_RELEASE"
+              git log --pretty=format:"%s" --grep="^feat:" --grep="^add:" --grep="^new:" $PREVIOUS_TAG..HEAD | sed 's/^/- /' >> "$TMP_RELEASE"
+              printf '\n' >> "$TMP_RELEASE"
 
-              RELEASE_BODY="${RELEASE_BODY}### Bug Fixes\n"
-              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" --grep="^fix:" --grep="^bug:" $PREVIOUS_TAG..HEAD | sed 's/^/- /')\n\n"
+              printf '%s\n' "### Bug Fixes" >> "$TMP_RELEASE"
+              git log --pretty=format:"%s" --grep="^fix:" --grep="^bug:" $PREVIOUS_TAG..HEAD | sed 's/^/- /' >> "$TMP_RELEASE"
+              printf '\n' >> "$TMP_RELEASE"
 
-              RELEASE_BODY="${RELEASE_BODY}### Other Changes\n"
-              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD | grep -v -E "^(feat|add|new|fix|bug):" | sed 's/^/- /')\n\n"
+              printf '%s\n' "### Other Changes" >> "$TMP_RELEASE"
+              git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD | grep -v -E "^(feat|add|new|fix|bug):" | sed 's/^/- /' >> "$TMP_RELEASE"
+              printf '\n' >> "$TMP_RELEASE"
             else
-              RELEASE_BODY="${RELEASE_BODY}### Recent Changes\n"
-              RELEASE_BODY="${RELEASE_BODY}$(git log --oneline --since="1 week ago" --pretty=format:"%s" | sed 's/^/- /')\n\n"
+              printf '%s\n' "### Recent Changes" >> "$TMP_RELEASE"
+              git log --oneline --since="1 week ago" --pretty=format:"%s" | sed 's/^/- /' >> "$TMP_RELEASE"
+              printf '\n' >> "$TMP_RELEASE"
             fi
           fi
 
           # Add package information
-          RELEASE_BODY="${RELEASE_BODY}### Package Downloads\n"
-          RELEASE_BODY="${RELEASE_BODY}- **Flatpak**: \`org.badkiko.sofl.flatpak\`\n"
-          RELEASE_BODY="${RELEASE_BODY}- **Debian/Ubuntu**: \`sofl_${{ needs.get-version.outputs.version }}_all.deb\`\n"
-          RELEASE_BODY="${RELEASE_BODY}- **Arch Linux**: Source package available for building with \`makepkg\`\n\n"
+          printf '%s\n' "### Package Downloads" >> "$TMP_RELEASE"
+          printf '%s\n' "- **Flatpak**: \`org.badkiko.sofl.flatpak\`" >> "$TMP_RELEASE"
+          printf '%s\n' "- **Debian/Ubuntu**: \`sofl_${{ needs.get-version.outputs.version }}_all.deb\`" >> "$TMP_RELEASE"
+          printf '%s\n\n' "- **Arch Linux**: Source package available for building with \`makepkg\`" >> "$TMP_RELEASE"
 
-          RELEASE_BODY="${RELEASE_BODY}### Installation Instructions\n\n"
-          RELEASE_BODY="${RELEASE_BODY}**Flatpak:**\n\`\`\`bash\nflatpak install --user org.badkiko.sofl.flatpak\n\`\`\`\n\n"
-          RELEASE_BODY="${RELEASE_BODY}**Debian/Ubuntu:**\n\`\`\`bash\nsudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb\nsudo apt install -f\n\`\`\`\n\n"
-          RELEASE_BODY="${RELEASE_BODY}**Arch Linux:**\n\`\`\`bash\n# Download source tarball and PKGBUILD, then run:\nmakepkg -si\n\`\`\`\n"
+          # Installation instructions block
+          cat >> "$TMP_RELEASE" <<'EOT'
+          ### Installation Instructions
+
+          **Flatpak:**
+          ```bash
+          flatpak install --user org.badkiko.sofl.flatpak
+          ```
+
+          **Debian/Ubuntu:**
+          ```bash
+          sudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb
+          sudo apt install -f
+          ```
+
+          **Arch Linux:**
+          ```bash
+          # Download source tarball and PKGBUILD, then run:
+          makepkg -si
+          ```
+          EOT
 
           # Single redirection: write the multi-line output safely
           {
             printf '%s\n' "release_body<<EOF"
-            printf '%s\n' "$RELEASE_BODY"
+            cat "$TMP_RELEASE"
             printf '%s\n' "EOF"
           } >> "$GITHUB_OUTPUT"
 
