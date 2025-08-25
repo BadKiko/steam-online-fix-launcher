@@ -40,6 +40,10 @@ rm -rf "$BUILD_DIR" *.deb
 # Build the application using meson
 echo "Building application with Meson..."
 cd "$PROJECT_ROOT"
+
+# Create build directory if it doesn't exist
+mkdir -p build-dir
+
 meson setup build-dir --prefix=/usr --buildtype=release -Dprofile=release -Dtiff_compression=webp
 meson compile -C build-dir
 meson install --destdir="$BUILD_DIR" -C build-dir
@@ -98,6 +102,10 @@ echo "Debian package created: ${PACKAGE_NAME}_${VERSION}_all.deb"
 
 # Move package to output directory
 if [ "$OUTPUT_DIR" != "." ]; then
+    # Convert relative path to absolute if needed
+    if [[ "$OUTPUT_DIR" != /* ]]; then
+        OUTPUT_DIR="$PROJECT_ROOT/$OUTPUT_DIR"
+    fi
     mkdir -p "$OUTPUT_DIR"
     mv "${PACKAGE_NAME}_${VERSION}_all.deb" "$OUTPUT_DIR/"
     echo "Package moved to: $OUTPUT_DIR/${PACKAGE_NAME}_${VERSION}_all.deb"

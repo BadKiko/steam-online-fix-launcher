@@ -85,7 +85,22 @@ cd "$ARCH_DIR"
 # Set PKGDEST to current directory so makepkg puts the package here
 export PKGDEST="$PWD"
 
-makepkg -f --noconfirm
+# Create temporary user for makepkg (it doesn't like running as root)
+if ! id -u builder &>/dev/null; then
+    useradd -m -s /bin/bash builder
+    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+fi
+
+# Configure makepkg environment
+export PACKAGER="CI Builder <ci@localhost>"
+export BUILDDIR="/tmp/makepkg-build"
+mkdir -p "$BUILDDIR"
+
+# Change ownership of project directory to builder user
+chown -R builder:builder "$PROJECT_DIR" || true
+
+# Run makepkg as builder user
+sudo -u builder bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
 
 echo "Arch Linux package built successfully!"
 

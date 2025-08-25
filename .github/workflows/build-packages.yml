@@ -93,7 +93,7 @@ jobs:
         run: |
           mkdir -p dist
           cd packaging/debian
-          ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
+          ./build.sh ${{ needs.get-version.outputs.version }} ../../../dist
 
       - name: Upload Debian artifact
         uses: actions/upload-artifact@v4
@@ -110,11 +110,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create non-root user
+      - name: Create builder user for makepkg
         run: |
-          useradd -m -s /bin/bash builder
-          echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-          chown -R builder:builder ${{ github.workspace }}
+          # Create builder user since makepkg doesn't like running as root
+          if ! id -u builder &>/dev/null; then
+              useradd -m -s /bin/bash builder
+              echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+              # Give builder user access to project directory
+              mkdir -p ${{ github.workspace }}
+              chown -R builder:builder ${{ github.workspace }} || echo "Warning: Could not change ownership, continuing anyway..."
+          fi
+          echo "Builder user created and configured"
 
       - name: Update system and install dependencies
         run: |
@@ -123,8 +129,7 @@ jobs:
 
       - name: Update version
         run: |
-          chown -R builder:builder ${{ github.workspace }}
-          su - builder -c "./scripts/update_version.sh ${{ needs.get-version.outputs.version }}"
+          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
 
       - name: Fix git safe directory
         run: |
@@ -133,8 +138,8 @@ jobs:
       - name: Build Arch Linux package
         run: |
           mkdir -p dist
-          chown builder:builder dist
-          su - builder -c "cd packaging/arch && ./build.sh ${{ needs.get-version.outputs.version }} ../../dist"
+          chown builder:builder dist || echo "Warning: Could not change ownership of dist, continuing anyway..."
+          cd packaging/arch && ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
 
       - name: Upload Arch package artifacts
         uses: actions/upload-artifact@v4
