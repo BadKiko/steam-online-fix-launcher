@@ -1,14 +1,16 @@
 #!/bin/bash
 
 # Flatpak Build Script for SOFL
-# Usage: ./build.sh [version]
+# Usage: ./build.sh [version] [output_dir] [install]
 
-set -e
+set -euo pipefail
 
 PROJECT_NAME="org.badkiko.sofl"
 REPO_NAME="sofl-repo"
 VERSION=${1:-"0.0.3"}
 OUTPUT_DIR=${2:-"."}
+# Branch to be used for the repository commits and bundle; can be overridden via FLATPAK_BRANCH env var
+BRANCH="${FLATPAK_BRANCH:-stable}"
 
 echo "Building Flatpak package for $PROJECT_NAME version $VERSION..."
 
@@ -24,11 +26,9 @@ if ! command -v flatpak-builder &> /dev/null; then
     sudo apt install -y flatpak-builder
 fi
 
-# Initialize flatpak if needed
-if [ ! -d ~/.local/share/flatpak ]; then
-    echo "Initializing flatpak user installation..."
-    flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-fi
+# Initialize flatpak user installation (ensure flathub exists for user)
+echo "Ensuring flathub remote exists for user..."
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 # Add Flathub remote if not exists
 echo "Setting up Flathub remote..."
@@ -68,16 +68,16 @@ rm -rf build-dir flatpak-build $REPO_NAME
 
 
 # Build the flatpak with better error handling
-echo "Building Flatpak..."
-if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --install-deps-from=flathub flatpak-build $PROJECT_NAME.yml; then
+echo "Building Flatpak (branch: $BRANCH)..."
+if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse flatpak-build $PROJECT_NAME.yml; then
     echo "Error: Flatpak build failed"
     echo "Trying with additional flags..."
-    flatpak-builder --force-clean --user --repo=$REPO_NAME --install-deps-from=flathub --ccache flatpak-build $PROJECT_NAME.yml
+    flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build $PROJECT_NAME.yml
 fi
 
 # Create bundle
 echo "Creating bundle..."
-flatpak build-bundle $REPO_NAME $PROJECT_NAME.flatpak $PROJECT_NAME
+flatpak build-bundle $REPO_NAME $PROJECT_NAME.flatpak $PROJECT_NAME $BRANCH
 
 echo "Flatpak bundle created: $PROJECT_NAME.flatpak"
 
