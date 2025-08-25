@@ -9,7 +9,8 @@ VERSION=${1:-"0.0.3"}
 PACKAGE_NAME="sofl"
 BUILD_DIR="deb-build"
 DEBIAN_DIR="packaging/debian"
-OUTPUT_DIR=${2:-"."}
+# OUTPUT_DIR is normalized to absolute path later; default is project dist directory
+OUTPUT_DIR=${2:-"dist"}
 
 echo "Building Debian package for $PACKAGE_NAME version $VERSION..."
 
@@ -33,6 +34,12 @@ sudo apt install -y $BUILD_DEPS
 
 # Get project root directory (parent of packaging directory)
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+# Normalize OUTPUT_DIR to absolute path
+if [[ "$OUTPUT_DIR" != /* ]]; then
+    OUTPUT_DIR="$PROJECT_ROOT/$OUTPUT_DIR"
+fi
+OUTPUT_DIR="$(mkdir -p "$OUTPUT_DIR" && cd "$OUTPUT_DIR" && pwd)"
 
 # Clean previous build
 rm -rf "$BUILD_DIR" *.deb
@@ -98,18 +105,11 @@ chmod 755 "$BUILD_DIR/DEBIAN/prerm"
 echo "Building Debian package..."
 dpkg-deb --build "$BUILD_DIR" "${PACKAGE_NAME}_${VERSION}_all.deb"
 
-echo "Debian package created: ${PACKAGE_NAME}_${VERSION}_all.deb"
+echo "Debian package created: $(pwd)/${PACKAGE_NAME}_${VERSION}_all.deb"
 
-# Move package to output directory
-if [ "$OUTPUT_DIR" != "." ]; then
-    # Convert relative path to absolute if needed
-    if [[ "$OUTPUT_DIR" != /* ]]; then
-        OUTPUT_DIR="$PROJECT_ROOT/$OUTPUT_DIR"
-    fi
-    mkdir -p "$OUTPUT_DIR"
-    mv "${PACKAGE_NAME}_${VERSION}_all.deb" "$OUTPUT_DIR/"
-    echo "Package moved to: $OUTPUT_DIR/${PACKAGE_NAME}_${VERSION}_all.deb"
-fi
+# Move package to absolute OUTPUT_DIR (already absolute)
+mv "${PACKAGE_NAME}_${VERSION}_all.deb" "$OUTPUT_DIR/"
+echo "Package moved to: $OUTPUT_DIR/${PACKAGE_NAME}_${VERSION}_all.deb"
 
 # Optional: Check package with lintian
 if command -v lintian &> /dev/null; then

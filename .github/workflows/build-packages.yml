@@ -91,15 +91,14 @@ jobs:
 
       - name: Build Debian package
         run: |
-          mkdir -p dist
-          cd packaging/debian
-          ./build.sh ${{ needs.get-version.outputs.version }} ../../../dist
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          ./packaging/debian/build.sh ${{ needs.get-version.outputs.version }} "$GITHUB_WORKSPACE/dist"
 
       - name: Upload Debian artifact
         uses: actions/upload-artifact@v4
         with:
           name: sofl-deb-${{ needs.get-version.outputs.version }}
-          path: dist/sofl_${{ needs.get-version.outputs.version }}_all.deb
+          path: ${{ github.workspace }}/dist/sofl_${{ needs.get-version.outputs.version }}_all.deb
 
   build-arch:
     needs: get-version
