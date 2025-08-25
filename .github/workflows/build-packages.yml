@@ -44,7 +44,7 @@ jobs:
       - name: Install flatpak dependencies
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder python3-gi python3-gi-cairo blueprint-compiler git python3-pip gettext
+          sudo apt install -y flatpak flatpak-builder python3-gi python3-gi-cairo git python3-pip gettext
 
       - name: Setup flatpak
         run: |
@@ -83,7 +83,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev libgtk-4-dev libadwaita-1-dev blueprint-compiler gettext
+          sudo apt install -y meson ninja-build python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg dpkg-dev libgtk-4-dev libadwaita-1-dev blueprint-compiler gettext desktop-file-utils
 
       - name: Update version
         run: |
@@ -110,6 +110,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create non-root user
+        run: |
+          useradd -m -s /bin/bash builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+          chown -R builder:builder ${{ github.workspace }}
+
       - name: Update system and install dependencies
         run: |
           pacman -Sy --noconfirm
@@ -117,7 +123,8 @@ jobs:
 
       - name: Update version
         run: |
-          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+          chown -R builder:builder ${{ github.workspace }}
+          su - builder -c "./scripts/update_version.sh ${{ needs.get-version.outputs.version }}"
 
       - name: Fix git safe directory
         run: |
@@ -126,8 +133,8 @@ jobs:
       - name: Build Arch Linux package
         run: |
           mkdir -p dist
-          cd packaging/arch
-          ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
+          chown builder:builder dist
+          su - builder -c "cd packaging/arch && ./build.sh ${{ needs.get-version.outputs.version }} ../../dist"
 
       - name: Upload Arch package artifacts
         uses: actions/upload-artifact@v4

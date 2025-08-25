@@ -28,11 +28,12 @@ finish-args:
 
 modules:
   - name: blueprint-compiler
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/bin
-      - cp /usr/bin/blueprint-compiler /app/bin/ || cp /run/host/usr/bin/blueprint-compiler /app/bin/ || echo "blueprint-compiler not found in system"
-    sources: []
+    buildsystem: meson
+    cleanup: ["*"]
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/jwestman/blueprint-compiler
+        tag: v0.18.0
 
   - name: sofl
     buildsystem: meson
