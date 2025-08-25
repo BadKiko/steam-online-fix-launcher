@@ -13,7 +13,7 @@ on:
       release_body:
         description: "Release body (leave empty to use CHANGELOG.md or generate from git commits)"
         required: false
-        type: textarea
+        type: string
       release_body_source:
         description: "Release body source (auto, changelog, git_commits)"
         required: false
@@ -66,9 +66,11 @@ jobs:
         run: |
           # If release body is provided manually, use it
           if [ -n "${{ github.event.inputs.release_body }}" ]; then
-            echo "release_body<<EOF" >> $GITHUB_OUTPUT
-            echo "${{ github.event.inputs.release_body }}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            {
+              printf '%s\n' "release_body<<EOF"
+              printf '%s\n' "${{ github.event.inputs.release_body }}"
+              printf '%s\n' "EOF"
+            } >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -82,80 +84,66 @@ jobs:
             fi
           fi
 
-          echo "release_body<<EOF" >> $GITHUB_OUTPUT
+          # Build release body into a variable, then write it to the single
+          # GitHub Actions output with one redirection to avoid multiple appends
+          RELEASE_BODY=""
 
           case "$SOURCE" in
             "changelog")
               if [ -f "CHANGELOG.md" ]; then
-                echo "## Changes" >> $GITHUB_OUTPUT
-                echo "" >> $GITHUB_OUTPUT
+                RELEASE_BODY="${RELEASE_BODY}## Changes\n\n"
                 # Extract latest version section from CHANGELOG.md
-                awk '
+                RELEASE_BODY="${RELEASE_BODY}$(awk '
                   /^## \[v.*\]/ { if (++count > 1) exit; next }
                   count == 1 && /^###/ { in_section = 1 }
                   count == 1 && in_section && /^---/ { exit }
                   count == 1 && in_section { print }
-                ' CHANGELOG.md >> $GITHUB_OUTPUT
+                ' CHANGELOG.md)"
               else
-                echo "CHANGELOG.md not found, falling back to git commits" >> $GITHUB_OUTPUT
+                RELEASE_BODY="${RELEASE_BODY}CHANGELOG.md not found, falling back to git commits\n"
                 SOURCE="git_commits"
               fi
               ;;
           esac
 
           if [ "$SOURCE" = "git_commits" ]; then
-            echo "## Changes" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
+            RELEASE_BODY="${RELEASE_BODY}## Changes\n\n"
 
             # Get previous tag
             PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
 
             if [ -n "$PREVIOUS_TAG" ]; then
-              echo "### New Features" >> $GITHUB_OUTPUT
-              git log --pretty=format:"%s" --grep="^feat:" --grep="^add:" --grep="^new:" $PREVIOUS_TAG..HEAD | sed 's/^/- /' >> $GITHUB_OUTPUT
-              echo "" >> $GITHUB_OUTPUT
+              RELEASE_BODY="${RELEASE_BODY}### New Features\n"
+              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" --grep="^feat:" --grep="^add:" --grep="^new:" $PREVIOUS_TAG..HEAD | sed 's/^/- /')\n\n"
 
-              echo "### Bug Fixes" >> $GITHUB_OUTPUT
-              git log --pretty=format:"%s" --grep="^fix:" --grep="^bug:" $PREVIOUS_TAG..HEAD | sed 's/^/- /' >> $GITHUB_OUTPUT
-              echo "" >> $GITHUB_OUTPUT
+              RELEASE_BODY="${RELEASE_BODY}### Bug Fixes\n"
+              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" --grep="^fix:" --grep="^bug:" $PREVIOUS_TAG..HEAD | sed 's/^/- /')\n\n"
 
-              echo "### Other Changes" >> $GITHUB_OUTPUT
-              git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD | grep -v -E "^(feat|add|new|fix|bug):" | sed 's/^/- /' >> $GITHUB_OUTPUT
-              echo "" >> $GITHUB_OUTPUT
+              RELEASE_BODY="${RELEASE_BODY}### Other Changes\n"
+              RELEASE_BODY="${RELEASE_BODY}$(git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD | grep -v -E "^(feat|add|new|fix|bug):" | sed 's/^/- /')\n\n"
             else
-              echo "### Recent Changes" >> $GITHUB_OUTPUT
-              git log --oneline --since="1 week ago" --pretty=format:"%s" | sed 's/^/- /' >> $GITHUB_OUTPUT
-              echo "" >> $GITHUB_OUTPUT
+              RELEASE_BODY="${RELEASE_BODY}### Recent Changes\n"
+              RELEASE_BODY="${RELEASE_BODY}$(git log --oneline --since="1 week ago" --pretty=format:"%s" | sed 's/^/- /')\n\n"
             fi
           fi
 
           # Add package information
-          echo "### Package Downloads" >> $GITHUB_OUTPUT
-          echo "- **Flatpak**: \`org.badkiko.sofl.flatpak\`" >> $GITHUB_OUTPUT
-          echo "- **Debian/Ubuntu**: \`sofl_${{ needs.get-version.outputs.version }}_all.deb\`" >> $GITHUB_OUTPUT
-          echo "- **Arch Linux**: Source package available for building with \`makepkg\`" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
+          RELEASE_BODY="${RELEASE_BODY}### Package Downloads\n"
+          RELEASE_BODY="${RELEASE_BODY}- **Flatpak**: \`org.badkiko.sofl.flatpak\`\n"
+          RELEASE_BODY="${RELEASE_BODY}- **Debian/Ubuntu**: \`sofl_${{ needs.get-version.outputs.version }}_all.deb\`\n"
+          RELEASE_BODY="${RELEASE_BODY}- **Arch Linux**: Source package available for building with \`makepkg\`\n\n"
 
-          echo "### Installation Instructions" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "**Flatpak:**" >> $GITHUB_OUTPUT
-          echo "\`\`\`bash" >> $GITHUB_OUTPUT
-          echo "flatpak install --user org.badkiko.sofl.flatpak" >> $GITHUB_OUTPUT
-          echo "\`\`\`" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "**Debian/Ubuntu:**" >> $GITHUB_OUTPUT
-          echo "\`\`\`bash" >> $GITHUB_OUTPUT
-          echo "sudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb" >> $GITHUB_OUTPUT
-          echo "sudo apt install -f" >> $GITHUB_OUTPUT
-          echo "\`\`\`" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "**Arch Linux:**" >> $GITHUB_OUTPUT
-          echo "\`\`\`bash" >> $GITHUB_OUTPUT
-          echo "# Download source tarball and PKGBUILD, then run:" >> $GITHUB_OUTPUT
-          echo "makepkg -si" >> $GITHUB_OUTPUT
-          echo "\`\`\`" >> $GITHUB_OUTPUT
+          RELEASE_BODY="${RELEASE_BODY}### Installation Instructions\n\n"
+          RELEASE_BODY="${RELEASE_BODY}**Flatpak:**\n\`\`\`bash\nflatpak install --user org.badkiko.sofl.flatpak\n\`\`\`\n\n"
+          RELEASE_BODY="${RELEASE_BODY}**Debian/Ubuntu:**\n\`\`\`bash\nsudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb\nsudo apt install -f\n\`\`\`\n\n"
+          RELEASE_BODY="${RELEASE_BODY}**Arch Linux:**\n\`\`\`bash\n# Download source tarball and PKGBUILD, then run:\nmakepkg -si\n\`\`\`\n"
 
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Single redirection: write the multi-line output safely
+          {
+            printf '%s\n' "release_body<<EOF"
+            printf '%s\n' "$RELEASE_BODY"
+            printf '%s\n' "EOF"
+          } >> "$GITHUB_OUTPUT"
 
   build-flatpak:
     needs: [get-version, generate-release-body]

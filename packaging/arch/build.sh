@@ -76,7 +76,15 @@ fi
 
 # Prepare working directory for PKGBUILD edits
 BUILD_WORK_DIR="$OUTPUT_DIR/arch-build-$VERSION"
-mkdir -p "$BUILD_WORK_DIR"
+# Ensure the build work directory exists and is writable
+mkdir -p "$BUILD_WORK_DIR" || { echo "Error: could not create $BUILD_WORK_DIR"; exit 1; }
+
+# Try to make it writable for the current user; bail if still not writable
+chmod u+rwx "$BUILD_WORK_DIR" 2>/dev/null || true
+if [ ! -w "$BUILD_WORK_DIR" ]; then
+    echo "Error: $BUILD_WORK_DIR is not writable by the current user"
+    exit 1
+fi
 
 # Copy PKGBUILD and update version there (avoid writing to repo directory)
 echo "Preparing PKGBUILD in working directory: $BUILD_WORK_DIR"
@@ -121,9 +129,11 @@ fi
 
 # Run makepkg as unprivileged user
 if [ "$(id -u)" -eq 0 ] && [ "$BUILD_USER" != "root" ]; then
-    runuser -u "$BUILD_USER" -- bash -c "cd '$ARCH_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    # Run makepkg from the working directory so the edited PKGBUILD is used
+    runuser -u "$BUILD_USER" -- bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
 else
-    bash -c "cd '$ARCH_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    # Non-root case: run makepkg from the working directory
+    bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
 fi
 
 echo "Arch Linux package built successfully!"
