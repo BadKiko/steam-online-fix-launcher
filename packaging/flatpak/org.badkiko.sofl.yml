@@ -33,7 +33,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler
-        branch: main
+        tag: v0.16.0
 
   - name: sofl
     buildsystem: meson

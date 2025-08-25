@@ -50,9 +50,11 @@ git config --global --add safe.directory "$PROJECT_DIR" || true
 
 # Check if we're in a git repository
 if git rev-parse --git-dir > /dev/null 2>&1; then
-    # Create source tarball for makepkg
+    # Create source tarball for makepkg (write to arch directory)
     echo "Creating source tarball from git repository..."
-    git archive --format=tar.gz --prefix="$PACKAGE_NAME-$VERSION/" -o "$PACKAGE_NAME-$VERSION.tar.gz" HEAD
+    git -C "$PROJECT_DIR" archive --format=tar.gz \
+        --prefix="$PACKAGE_NAME-$VERSION/" \
+        -o "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" HEAD
 else
     echo "Not in a git repository, creating tarball from current directory..."
     # Create tarball from current directory if not in git repo
@@ -65,8 +67,8 @@ else
     cd "$PACKAGE_NAME-$VERSION"
     rm -rf build* dist .git* *.log *.tmp cache __pycache__ *.pyc build-dir flatpak-build *.flatpak *.deb *.pkg.tar.zst .ninja* compile_commands.json meson-private meson-info meson-logs subprojects *.so *.o
 
-    # Create the tarball from the cleaned directory
-    tar -czf "$PROJECT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," .
+    # Create the tarball from the cleaned directory (write to arch directory)
+    tar -czf "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," .
 
     cd "$PROJECT_DIR"
     rm -rf "$TMP_DIR"
@@ -76,9 +78,11 @@ fi
 echo "Updating PKGBUILD..."
 sed -i "s/pkgver=.*/pkgver=$VERSION/" "$ARCH_DIR/PKGBUILD"
 
-# Copy tarball to arch directory
-echo "Copying source tarball to build directory..."
-cp "$PACKAGE_NAME-$VERSION.tar.gz" "$ARCH_DIR/"
+# Ensure tarball exists in arch directory
+echo "Ensuring source tarball is in build directory..."
+if [ ! -f "$ARCH_DIR/$PACKAGE_NAME-$VERSION.tar.gz" ] && [ -f "$PACKAGE_NAME-$VERSION.tar.gz" ]; then
+    cp "$PACKAGE_NAME-$VERSION.tar.gz" "$ARCH_DIR/"
+fi
 
 # Build the package
 echo "Building package with makepkg..."
