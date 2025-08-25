@@ -126,9 +126,13 @@ jobs:
           pacman -Sy --noconfirm
           pacman -S --noconfirm --needed base-devel git meson ninja python python-gobject gtk4 libadwaita python-requests python-pillow python-cairo python-psutil python-pyxdg gobject-introspection blueprint-compiler gettext
 
-      - name: Update version as builder
+      - name: Update version (root)
         run: |
-          runuser -u builder -- bash -c "./scripts/update_version.sh ${{ needs.get-version.outputs.version }}"
+          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+
+      - name: Restore ownership to builder after version update
+        run: |
+          chown -R builder:builder ${{ github.workspace }} || echo "Warning: Could not change ownership, continuing anyway..."
 
       - name: Fix git safe directory as builder
         run: |

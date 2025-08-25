@@ -27,6 +27,14 @@ finish-args:
   - --env=GDK_BACKEND=wayland,x11
 
 modules:
+  - name: blueprint-compiler
+    buildsystem: meson
+    cleanup: ["*"]
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/jwestman/blueprint-compiler
+        branch: main
+
   - name: sofl
     buildsystem: meson
     builddir: true
