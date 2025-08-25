@@ -83,6 +83,10 @@ echo "Preparing PKGBUILD in working directory: $BUILD_WORK_DIR"
 cp "$ARCH_DIR/PKGBUILD" "$BUILD_WORK_DIR/PKGBUILD"
 sed -i "s/pkgver=.*/pkgver=$VERSION/" "$BUILD_WORK_DIR/PKGBUILD"
 
+# Sanitize PKGBUILD: remove any legacy manual install lines if present
+sed -i "/data\/org.badkiko\\.sofl\\.desktop/d" "$BUILD_WORK_DIR/PKGBUILD" || true
+sed -i "/data\/org.badkiko\\.sofl\\.metainfo\\.xml/d" "$BUILD_WORK_DIR/PKGBUILD" || true
+
 echo "Using source tarball from output directory: $OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz"
 
 # Build the package
