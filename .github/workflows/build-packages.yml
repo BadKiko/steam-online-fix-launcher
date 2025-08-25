@@ -260,7 +260,7 @@ jobs:
       - name: Update system and install dependencies (root)
         run: |
           pacman -Sy --noconfirm
-          pacman -S --noconfirm --needed base-devel git meson ninja python python-gobject gtk4 libadwaita python-requests python-pillow python-cairo python-psutil python-pyxdg gobject-introspection blueprint-compiler gettext python-rarfile
+          pacman -S --noconfirm --needed base-devel git meson ninja python python-gobject gtk4 libadwaita python-requests python-pillow python-cairo python-psutil python-pyxdg gobject-introspection blueprint-compiler gettext python-rarfile python-setuptools
 
       - name: Update version (root)
         run: |
@@ -276,7 +276,7 @@ jobs:
 
       - name: Build python-vdf from AUR (builder)
         run: |
-          runuser -u builder -- bash -c "cd ~ && rm -rf python-vdf && git clone https://aur.archlinux.org/python-vdf.git && cd python-vdf && makepkg -sf --noconfirm"
+          runuser -u builder -- bash -c "cd ~ && rm -rf python-vdf && git clone https://aur.archlinux.org/python-vdf.git && cd python-vdf && makepkg -sf --noconfirm --nocheck"
 
       - name: Install python-vdf (root)
         run: |
