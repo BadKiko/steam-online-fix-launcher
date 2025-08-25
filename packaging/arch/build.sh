@@ -54,7 +54,20 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
 else
     echo "Not in a git repository, creating tarball from current directory..."
     # Create tarball from current directory if not in git repo
-    tar -czf "$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," --exclude="$PACKAGE_NAME-$VERSION.tar.gz" --exclude="build*" --exclude="dist" --exclude=".git*" .
+    # Use a temporary directory to avoid issues with changing files
+    TMP_DIR=$(mktemp -d)
+    cp -r . "$TMP_DIR/$PACKAGE_NAME-$VERSION"
+    cd "$TMP_DIR"
+
+    # Clean up build artifacts and temporary files
+    cd "$PACKAGE_NAME-$VERSION"
+    rm -rf build* dist .git* *.log *.tmp cache __pycache__ *.pyc build-dir flatpak-build *.flatpak *.deb *.pkg.tar.zst .ninja* compile_commands.json meson-private meson-info meson-logs subprojects *.so *.o
+
+    # Create the tarball from the cleaned directory
+    tar -czf "$PROJECT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," .
+
+    cd "$PROJECT_DIR"
+    rm -rf "$TMP_DIR"
 fi
 
 # Update version in PKGBUILD

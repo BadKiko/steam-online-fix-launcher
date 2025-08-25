@@ -1,4 +1,4 @@
-blueprint_compiler = find_program('blueprint-compiler', required: true)
+blueprint_compiler = find_program('blueprint-compiler', required: true, dirs: ['/app/bin', '/usr/bin', '/run/host/usr/bin'])
 
 blueprints = custom_target(
   'blueprints',

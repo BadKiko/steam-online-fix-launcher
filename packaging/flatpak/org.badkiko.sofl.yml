@@ -1,6 +1,6 @@
 app-id: org.badkiko.sofl
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: "48"
 sdk: org.gnome.Sdk
 command: sofl
 finish-args:
@@ -27,6 +27,13 @@ finish-args:
   - --env=GDK_BACKEND=wayland,x11
 
 modules:
+  - name: blueprint-compiler
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/bin
+      - cp /usr/bin/blueprint-compiler /app/bin/ || cp /run/host/usr/bin/blueprint-compiler /app/bin/ || echo "blueprint-compiler not found in system"
+    sources: []
+
   - name: sofl
     buildsystem: meson
     builddir: true
