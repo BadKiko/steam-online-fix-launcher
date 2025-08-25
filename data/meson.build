@@ -1,3 +1,5 @@
+blueprint_compiler = find_program('blueprint-compiler', required: true, dirs: ['/app/bin', '/usr/bin', '/run/host/usr/bin'])
+
 blueprints = custom_target(
   'blueprints',
   input: files(
@@ -10,7 +12,7 @@ blueprints = custom_target(
   ),
   output: '.',
   command: [
-    find_program('blueprint-compiler'),
+    blueprint_compiler,
     'batch-compile',
     '@OUTPUT@',
     '@CURRENT_SOURCE_DIR@',

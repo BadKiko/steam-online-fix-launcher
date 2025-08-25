@@ -25,6 +25,7 @@ from typing import Iterable, NamedTuple
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import SourceIterable, URLExecutableSource
 from sofl.utils.steam import SteamFileHelper, SteamInvalidManifestError
@@ -93,7 +94,7 @@ class SteamSourceIterable(SourceIterable):
                 "game_id": self.source.game_id_format.format(game_id=appid),
                 "executable": self.source.make_executable(game_id=appid),
             }
-            game = Game(values)
+            game = GameFactory.create_game(values)
 
             # Add official cover image
             image_path = (

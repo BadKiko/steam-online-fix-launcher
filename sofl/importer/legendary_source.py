@@ -24,6 +24,7 @@ from typing import NamedTuple
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import (
     ExecutableFormatSource,
@@ -43,11 +44,11 @@ class LegendarySourceIterable(SourceIterable):
         # Build game
         app_name = entry["app_name"]
         values = {
-            "added": shared.import_time,
-            "source": self.source.source_id,
             "name": entry["title"],
+            "source": self.source.source_id,
             "game_id": self.source.game_id_format.format(game_id=app_name),
             "executable": self.source.make_executable(app_name=app_name),
+            "added": shared.import_time,
         }
         data = {}
 
@@ -63,7 +64,7 @@ class LegendarySourceIterable(SourceIterable):
         except (JSONDecodeError, OSError, KeyError):
             pass
 
-        game = Game(values)
+        game = GameFactory.create_game(values)
         return (game, data)
 
     def __iter__(self):

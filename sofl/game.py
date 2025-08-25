@@ -29,6 +29,7 @@ from gi.repository import Adw, GObject, Gtk
 
 from sofl import shared
 from sofl.game_cover import GameCover
+from sofl.game_data import GameData
 from sofl.utils.run_executable import run_executable
 from sofl.utils.create_dialog import create_dialog
 
@@ -53,28 +54,21 @@ class Game(Gtk.Box):
 
     loading: int = 0
     filtered: bool = False
-
-    added: int
-    executable: str
-    game_id: str
-    source: str
-    hidden: bool = False
-    last_played: int = 0
-    name: str
-    developer: Optional[str] = None
-    removed: bool = False
-    blacklisted: bool = False
     game_cover: GameCover = None
-    version: int = 0
+    
+    # Это виджет, который использует данные игры из data
+    data: GameData = None
 
-    def __init__(self, data: dict[str, Any], **kwargs: Any) -> None:
+    def __init__(self, data: GameData, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
         self.app = shared.win.get_application()
-        self.version = shared.SPEC_VERSION
-
-        self.update_values(data)
-        self.base_source = self.source.split("_")[0]
+        self.data = data
+        
+        # Подключаем сигналы от data
+        self.data.connect("update-ready", self.on_update_ready)
+        self.data.connect("save-ready", self.on_save_ready)
+        self.data.connect("toast", self.on_toast)
 
         self.set_play_icon()
 
@@ -86,173 +80,26 @@ class Game(Gtk.Box):
         self.play_button.connect("clicked", self.main_button_clicked, True)
 
         shared.schema.connect("changed", self.schema_changed)
+        
+        # Инициализируем UI на основе данных
+        self.title.set_label(self.data.name)
 
-    def update_values(self, data: dict[str, Any]) -> None:
-        for key, value in data.items():
-            # Convert executables to strings
-            if key == "executable" and isinstance(value, list):
-                value = shlex.join(value)
-            setattr(self, key, value)
-
-    def update(self) -> None:
+    def on_update_ready(self, data: GameData, _args: Any) -> None:
+        """Обрабатывает сигнал о необходимости обновления"""
+        # Обновляем UI на основе данных
+        self.title.set_label(self.data.name)
         self.emit("update-ready", {})
-
-    def save(self) -> None:
+        
+    def on_save_ready(self, data: GameData, _args: Any) -> None:
+        """Обрабатывает сигнал о необходимости сохранения"""
         self.emit("save-ready", {})
-
-    def create_toast(self, title: str, action: Optional[str] = None) -> None:
-        toast = Adw.Toast.new(title.format(self.name))
+        
+    def on_toast(self, data: GameData, message: str) -> None:
+        """Обрабатывает сигнал о необходимости показать уведомление"""
+        toast = Adw.Toast.new(message)
         toast.set_priority(Adw.ToastPriority.HIGH)
         toast.set_use_markup(False)
-
-        if action:
-            toast.set_button_label(_("Undo"))
-            toast.connect("button-clicked", shared.win.on_undo_action, self, action)
-
-            if (self, action) in shared.win.toasts.keys():
-                # Dismiss the toast if there already is one
-                shared.win.toasts[(self, action)].dismiss()
-
-            shared.win.toasts[(self, action)] = toast
-
         shared.win.toast_overlay.add_toast(toast)
-
-    def launch(self) -> None:
-        self.last_played = int(time())
-        self.save()
-        self.update()
-
-        run_executable(self.executable)
-
-        if shared.schema.get_boolean("exit-after-launch"):
-            self.app.quit()
-
-        # The variable is the title of the game
-        self.create_toast(_("{} launched"))
-
-    def toggle_hidden(self, toast: bool = True) -> None:
-        self.hidden = not self.hidden
-        self.save()
-
-        if shared.win.navigation_view.get_visible_page() == shared.win.details_page:
-            shared.win.navigation_view.pop()
-
-        self.update()
-
-        if toast:
-            self.create_toast(
-                # The variable is the title of the game
-                (_("{} hidden") if self.hidden else _("{} unhidden")).format(self.name),
-                "hide",
-            )
-
-    def remove_game(self) -> None:
-        # Add "removed=True" to the game properties so it can be deleted on next init
-        self.removed = True
-        self.save()
-        self.update()
-
-        if shared.win.navigation_view.get_visible_page() == shared.win.details_page:
-            shared.win.navigation_view.pop()
-
-        # The variable is the title of the game
-        self.create_toast(_("{} removed").format(self.name), "remove")
-
-    def uninstall_game(self) -> None:
-        """Uninstall the game by removing its root directory after confirmation"""
-        # Check if the game is from online-fix
-        if "online-fix" not in self.source:
-            self.log_and_toast(_("Cannot uninstall non-online-fix games"))
-            return
-        
-        # Get the path to online-fix installations
-        onlinefix_path = shared.schema.get_string("online-fix-install-path")
-        # Expand tilde to full home directory path
-        onlinefix_root = Path(os.path.expanduser(onlinefix_path))
-        
-        try:
-            # Check if the game is inside the online-fix folder
-            if not str(self.executable).startswith(str(onlinefix_root)):
-                self.log_and_toast(_("Game is not installed in Online-Fix directory"))
-                return
-            
-            # Get a more reliable game root folder
-            game_root = self._detect_game_root_folder(onlinefix_root)
-            
-            # Create a confirmation dialog
-            dialog = create_dialog(
-                shared.win,
-                _("Uninstall Game"),
-                _("This will remove folder {}, and can't be undone.").format(game_root),
-                "uninstall",
-                _("Uninstall")
-            )
- 
-            dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
-            
-            def on_response(dialog, response):
-                if response == "uninstall":
-                    self.log_and_toast(_("{} started uninstalling").format(self.name))
-                    try:
-                        # Remove the game's root folder
-                        shutil.rmtree(game_root)
-                        self.log_and_toast(_("{} uninstalled").format(self.name))
-                    
-                    except Exception as e:
-                        self.log_and_toast(_("Error uninstalling {}: {}").format(self.name, str(e)))
-
-                    finally:
-                        # Mark the game as removed
-                        self.removed = True
-                        self.save()
-                        self.update()
-                        
-                        if shared.win.navigation_view.get_visible_page() == shared.win.details_page:
-                            shared.win.navigation_view.pop()
-            dialog.connect("response", on_response)
-            
-        except Exception as e:
-            
-            self.log_and_toast(_("Error: {}").format(str(e)))
-
-    def _detect_game_root_folder(self, onlinefix_root: Path) -> Path:
-        """
-        Detects the game's root folder more reliably
-        
-        Args:
-            onlinefix_root: Path to the online-fix installation directory
-            
-        Returns:
-            Path: Path to the detected game folder
-        """
-        try:
-            # Get the path to the executable
-            exec_path = Path(self.executable.split()[0])
-            
-            # Make sure it's relative to the online-fix root
-            if not str(exec_path).startswith(str(onlinefix_root)):
-                # Fallback to parent directory of executable
-                return exec_path.parent
-                
-            # Get relative path from online-fix root
-            rel_path = exec_path.relative_to(onlinefix_root)
-            
-            # First try to use first directory component
-            if len(rel_path.parts) > 0:
-                candidate = rel_path.parts[0]
-                game_dir = onlinefix_root / candidate
-                
-                # Verify that this is actually a directory
-                if game_dir.is_dir():
-                    return game_dir
-            
-            # If first component isn't suitable, fall back to executable's parent
-            return exec_path.parent
-            
-        except Exception as e:
-            logging.error(f"Error detecting game root folder: {str(e)}")
-            # Always fall back to parent directory of executable if something goes wrong
-            return Path(self.executable.split()[0]).parent
 
     def set_loading(self, state: int) -> None:
         self.loading += state
@@ -260,17 +107,6 @@ class Game(Gtk.Box):
 
         self.cover.set_opacity(int(not loading))
         self.spinner.set_visible(loading)
-
-    def get_cover_path(self) -> Optional[Path]:
-        cover_path = shared.covers_dir / f"{self.game_id}.gif"
-        if cover_path.is_file():
-            return cover_path  # type: ignore
-
-        cover_path = shared.covers_dir / f"{self.game_id}.tiff"
-        if cover_path.is_file():
-            return cover_path  # type: ignore
-
-        return None
 
     def toggle_play(
         self, _widget: Any, _prop1: Any, _prop2: Any, state: bool = True
@@ -281,16 +117,14 @@ class Game(Gtk.Box):
 
     def main_button_clicked(self, _widget: Any, button: bool) -> None:
         if shared.schema.get_boolean("cover-launches-game") ^ button:
-            self.launch()
+            self.data.launch()
         else:
             shared.win.show_details_page(self)
 
     def set_play_icon(self) -> None:
-        self.play_button.set_icon_name(
-            "help-about-symbolic"
-            if shared.schema.get_boolean("cover-launches-game")
-            else "media-playback-start-symbolic"
-        )
+        self.play_button.set_icon_name(self.data.get_play_button_icon())
+        # Set button tooltip
+        self.play_button.set_tooltip_text(self.data.get_play_button_label())
 
     def schema_changed(self, _settings: Any, key: str) -> None:
         if key == "cover-launches-game":
@@ -303,7 +137,95 @@ class Game(Gtk.Box):
     @GObject.Signal(name="save-ready", arg_types=[object])
     def save_ready(self, _additional_data):  # type: ignore
         """Signal emitted when the game needs saving"""
-
-    def log_and_toast(self, message: str) -> None:
-        print("[SOFL] " + message)
-        self.create_toast(message, None)
+        
+    # Методы делегирования к data
+    @property
+    def game_id(self) -> str:
+        return self.data.game_id
+        
+    @property
+    def name(self) -> str:
+        return self.data.name
+    
+    @name.setter
+    def name(self, value: str) -> None:
+        self.data.name = value
+    
+    @property
+    def source(self) -> str:
+        return self.data.source
+    
+    @property
+    def base_source(self) -> str:
+        return self.data.base_source
+    
+    @property
+    def executable(self) -> str:
+        return self.data.executable
+    
+    @executable.setter
+    def executable(self, value: str) -> None:
+        self.data.executable = value
+    
+    @property
+    def hidden(self) -> bool:
+        return self.data.hidden
+    
+    @property
+    def removed(self) -> bool:
+        return self.data.removed
+    
+    @property
+    def developer(self) -> Optional[str]:
+        return self.data.developer
+    
+    @developer.setter
+    def developer(self, value: Optional[str]) -> None:
+        self.data.developer = value
+    
+    @property
+    def last_played(self) -> int:
+        return self.data.last_played
+    
+    @property
+    def added(self) -> int:
+        return self.data.added
+    
+    @property
+    def version(self) -> int:
+        return self.data.version
+    
+    @property
+    def blacklisted(self) -> bool:
+        return self.data.blacklisted
+    
+    # Делегируем методы к data
+    def launch(self) -> None:
+        self.data.launch()
+    
+    def toggle_hidden(self, toast: bool = True) -> None:
+        self.data.toggle_hidden(toast)
+    
+    def remove_game(self) -> None:
+        self.data.remove_game()
+    
+    def uninstall_game(self) -> None:
+        self.data.uninstall_game()
+    
+    def get_play_button_label(self) -> str:
+        return self.data.get_play_button_label()
+    
+    def get_play_button_icon(self) -> str:
+        return self.data.get_play_button_icon()
+    
+    def get_cover_path(self) -> Optional[Path]:
+        return self.data.get_cover_path()
+    
+    def create_toast(self, message: str) -> None:
+        self.data.create_toast(message)
+    
+    def update(self) -> None:
+        self.data.update()
+    
+    def save(self) -> None:
+        self.data.save()

@@ -7,27 +7,54 @@
   "finish-args": [
     "--share=network",
     "--share=ipc",
-    "--socket=fallback-x11",
-    "--device=dri",
+    "--socket=x11",
     "--socket=wayland",
+    "--socket=fallback-x11",
+    "--socket=pulseaudio",
+    "--socket=pcsc",
+    "--device=dri",
+    "--device=all",
+
     "--talk-name=org.freedesktop.Flatpak",
     "--talk-name=org.freedesktop.portal.Documents",
     "--talk-name=org.freedesktop.portal.FileChooser",
-    "--filesystem=host",
+
     "--filesystem=xdg-download",
     "--filesystem=xdg-documents",
-    "--filesystem=~/.var/app/com.valvesoftware.Steam/data/Steam/:ro",
-    "--filesystem=~/.var/app/net.lutris.Lutris/:ro",
-    "--filesystem=~/.var/app/com.heroicgameslauncher.hgl/config/heroic/:ro",
-    "--filesystem=~/.var/app/com.heroicgameslauncher.hgl/config/legendary/:ro",
-    "--filesystem=~/.var/app/com.usebottles.bottles/data/bottles/:ro",
-    "--filesystem=~/.var/app/io.itch.itch/config/itch/:ro",
-    "--filesystem=~/.var/app/org.libretro.RetroArch/config/retroarch/:ro",
+    "--filesystem=xdg-data/flatpak/app:ro",
+    "--filesystem=xdg-data/flatpak/exports:ro",
     "--filesystem=/var/lib/flatpak/app:ro",
     "--filesystem=/var/lib/flatpak/exports:ro",
     "--filesystem=xdg-data/flatpak/app:ro",
-    "--filesystem=xdg-data/flatpak/exports:ro"
+    "--filesystem=xdg-data/flatpak/exports:ro",
+    "--filesystem=/etc/ld.so.cache:rw",
+
+    "--filesystem=/lib:ro",
+    "--filesystem=/tmp:rw",
+    "--filesystem=/usr/lib:ro",
+    "--filesystem=/usr/lib/x86_64-linux-gnu:ro",
+    "--env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib:/usr/lib/x86_64-linux-gnu/GL/default/lib:/usr/lib/x86_64-linux-gnu/openh264/extra:/usr/lib/x86_64-linux-gnu:/usr/lib:/lib",
+
+    
+    "--env=PATH=/app/bin:/app/utils/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin:/app/bin/heroic/resources/app.asar.unpacked/build/bin/linux",
+    "--env=XDG_DATA_DIRS=/app/share:/usr/lib/extensions/vulkan/share:/usr/share:/usr/share/runtime/share:/run/host/user-share:/run/host/share:/usr/lib/pressure-vessel/overrides/share",
+
+    "--persist=Games",
+    "--persist=.local",
+    "--filesystem=xdg-run/gamescope-0:rw",
+    "--allow=per-app-dev-shm"
   ],
+  "add-extensions": {
+    "io.github.Open_Wine_Components.umu_launcher": {
+      "directory": "umu-launcher",
+      "version": "stable",
+      "add-ld-path": "lib",
+      "merge-dirs": "bin",
+      "subdirectories": true,
+      "no-autodownload": true,
+      "autodelete": true
+    }
+  },
   "cleanup": [
     "/include",
     "/lib/pkgconfig",
@@ -108,6 +135,20 @@
           ]
         },
         {
+          "name": "python3-vdf",
+          "buildsystem": "simple",
+          "build-commands": [
+              "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"vdf\" --no-build-isolation"
+          ],
+          "sources": [
+            {
+                "type": "file",
+                "url": "https://files.pythonhosted.org/packages/96/60/6456b687cf55cf60020dcd01f9bc51561c3cc84f05fd8e0feb71ce60f894/vdf-3.4-py2.py3-none-any.whl",
+                "sha256": "68c1a125cc49e343d535af2dd25074e9cb0908c6607f073947c4a04bbe234534"
+            }
+          ]
+        },
+        {
           "name": "python3-rarfile",
           "buildsystem": "simple",
           "build-commands": [
@@ -148,8 +189,24 @@
           "url": "https://www.rarlab.com/rar/unrarsrc-7.0.9.tar.gz",
           "sha256": "505c13f9e4c54c01546f2e29b2fcc2d7fabc856a060b81e5cdfe6012a9198326"
         }
+      ]
+    },
+    {
+      "name": "umu-launcher",
+      "buildsystem": "simple",
+      "build-commands": [
+        "mkdir -p ${FLATPAK_DEST}/bin",
+        "mkdir -p ${FLATPAK_DEST}/bin/umu",
+        "cp umu-run ${FLATPAK_DEST}/bin/umu/",
+        "chmod +x ${FLATPAK_DEST}/bin/umu/umu-run"
       ],
-      "comment": "Необходим для работы библиотеки rarfile из Python, которая использует его для распаковки RAR-архивов"
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.2.6/umu-launcher-1.2.6-zipapp.tar",
+          "sha256": "ae0bfd9bd3de209d0b6590ffbffc395d79c501b10176e9e239e4a1f842b4ad3a"
+        }
+      ]
     },
     {
       "name": "sofl",

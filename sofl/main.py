@@ -37,6 +37,7 @@ from gi.repository import Adw, Gio, GLib, Gtk
 from sofl import shared
 from sofl.details_dialog import DetailsDialog
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.bottles_source import BottlesSource
 from sofl.importer.desktop_source import DesktopSource
 from sofl.importer.flatpak_source import FlatpakSource
@@ -246,7 +247,7 @@ class SOFLApplication(Adw.Application):
                     data = json.load(game_file.open())
                 except (OSError, json.decoder.JSONDecodeError):
                     continue
-                game = Game(data)
+                game = GameFactory.create_game(data)
                 shared.store.add_game(game, {"skip_save": True})
 
     def get_source_name(self, source_id: str) -> Any:

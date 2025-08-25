@@ -17,7 +17,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# pyright: reportAssignmentType=none
 
 import logging
 import re
@@ -25,6 +24,7 @@ from pathlib import Path
 from shutil import rmtree
 from sys import platform
 from typing import Any, Callable, Optional
+import os
 
 from gi.repository import Adw, Gio, GLib, Gtk
 
@@ -123,6 +123,15 @@ class SOFLPreferences(Adw.PreferencesDialog):
     # Online-Fix
     online_fix_entry_row: Adw.EntryRow = Gtk.Template.Child()
     online_fix_file_chooser_button: Gtk.Button = Gtk.Template.Child()
+    online_fix_launcher_combo: Adw.ComboRow = Gtk.Template.Child()
+    online_fix_auto_patch_switch: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_dll_override_entry: Adw.EntryRow = Gtk.Template.Child()
+    online_fix_dll_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_patches_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
+    online_fix_proton_combo: Adw.ComboRow = Gtk.Template.Child()
+    online_fix_umu_proton_combo: Adw.ComboRow = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -497,6 +506,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
         # Set the source row subtitles
         self.resolve_locations(source)
         self.update_source_action_row_paths(source)
+
     def setup_online_fix_settings(self) -> None:
         """Setup parameters for Online-Fix"""
         # Check for the key in settings
@@ -521,6 +531,135 @@ class SOFLPreferences(Adw.PreferencesDialog):
         
         # Handler for the folder selection button
         self.online_fix_file_chooser_button.connect("clicked", self.online_fix_path_browse_handler)
+
+        # Setup launcher selection
+        launcher_model = Gtk.StringList.new(["Steam API", "UMU Launcher"])
+        self.online_fix_launcher_combo.set_model(launcher_model)
+        self.online_fix_launcher_combo.set_selected(shared.schema.get_int("online-fix-launcher-type"))
+        self.online_fix_launcher_combo.connect("notify::selected", self.on_launcher_changed)
+
+        # Get available Proton versions
+        proton_versions = self.get_proton_versions()
+        
+        # Setup Proton version selection for Steam API
+        self.setup_proton_combo(self.online_fix_proton_combo, proton_versions, "online-fix-proton-version")
+        
+        # Setup Proton version selection for UMU Launcher
+        self.setup_proton_combo(self.online_fix_umu_proton_combo, proton_versions, "online-fix-umu-proton-version")
+        
+        # Setup auto patch switch
+        shared.schema.bind(
+            "online-fix-auto-patch",
+            self.online_fix_auto_patch_switch,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        # Connect auto-patch switch to show/hide manual options
+        self.online_fix_auto_patch_switch.connect("notify::active", self.on_auto_patch_changed)
+        
+        # Setup DLL overrides
+        self.online_fix_dll_override_entry.set_text(shared.schema.get_string("online-fix-dll-overrides"))
+        self.online_fix_dll_override_entry.connect("changed", self.on_dll_overrides_changed)
+        
+        # Setup manual patches
+        shared.schema.bind(
+            "online-fix-steam-appid-patch",
+            self.online_fix_steam_appid_switch, 
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        shared.schema.bind(
+            "online-fix-steamfix64-patch",
+            self.online_fix_patch_steam_fix_64,
+            "active", 
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        
+        # Set initial visibility
+        self.on_auto_patch_changed(self.online_fix_auto_patch_switch, None)
+        self.on_launcher_changed(self.online_fix_launcher_combo, None)
+
+    def setup_proton_combo(self, combo: Adw.ComboRow, proton_versions: list[str], schema_key: str) -> None:
+        """Setup Proton version selection combo box"""
+        # Create model for combo box
+        proton_model = Gtk.StringList.new([version for version in proton_versions])
+        combo.set_model(proton_model)
+        
+        # Get current selection from settings
+        try:
+            current_proton = shared.schema.get_string(schema_key)
+        except GLib.Error as e:
+            # If setting doesn't exist, use default
+            current_proton = "GE-Proton9-26" if schema_key == "online-fix-proton-version" else "GE-Proton10-3"
+            shared.schema.set_string(schema_key, current_proton)
+        
+        # Find index of current selection
+        selected_idx = 0
+        for idx, version in enumerate(proton_versions):
+            if version == current_proton:
+                selected_idx = idx
+                break
+        
+        # Set selected item
+        combo.set_selected(selected_idx)
+        
+        # Connect signal for selection change
+        combo.connect("notify::selected", lambda c, _: self.on_proton_changed(c, schema_key))
+
+    def on_proton_changed(self, combo: Adw.ComboRow, schema_key: str) -> None:
+        """Handler for Proton version change"""
+        selected_idx = combo.get_selected()
+        if selected_idx >= 0:
+            model = combo.get_model()
+            if model and selected_idx < model.get_n_items():
+                selected_version = model.get_string(selected_idx)
+                shared.schema.set_string(schema_key, selected_version)
+                logging.info(f"Proton version set to: {selected_version} for {schema_key}")
+        
+    def get_proton_versions(self) -> list[str]:
+        """Get available Proton versions from compatibility.d directory"""
+        proton_path = Path(os.path.expanduser("~/.local/share/Steam/compatibilitytools.d"))
+        versions = []
+        
+        # Default versions if no others found
+        default_versions = ["GE-Proton10-3", "GE-Proton9-26", "Proton-8.0"]
+        
+        if proton_path.exists() and proton_path.is_dir():
+            for item in proton_path.iterdir():
+                if item.is_dir() and (item.name.startswith("GE-Proton") or 
+                                     item.name.startswith("Proton")):
+                    versions.append(item.name)
+        
+        # If no versions found, add defaults
+        if not versions:
+            versions = default_versions
+            
+        # Sort versions
+        versions.sort(reverse=True)
+            
+        return versions
+
+    def on_auto_patch_changed(self, switch: Adw.SwitchRow, _param: Any) -> None:
+        """Show/hide manual settings based on auto-patch switch"""
+        is_auto = switch.get_active()
+        self.online_fix_patches_group.set_visible(not is_auto)
+
+    def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
+        """Handler for launcher type change"""
+        launcher_type = combo.get_selected()
+        shared.schema.set_int("online-fix-launcher-type", launcher_type)
+        
+        # Show appropriate Proton selection control based on launcher type
+        # 0 = Steam API
+        # 1 = UMU Launcher
+        self.online_fix_proton_combo.set_visible(launcher_type == 0)
+        self.online_fix_umu_proton_combo.set_visible(launcher_type == 1)
+
+    def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
+        """Handler for DLL overrides change"""
+        shared.schema.set_string("online-fix-dll-overrides", entry.get_text())
 
     def online_fix_path_browse_handler(self, *_args):
         """Choose directory for Online-Fix games installation"""

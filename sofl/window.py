@@ -383,6 +383,9 @@ class SOFLWindow(Adw.ApplicationWindow):
         self.details_view_hide_button.set_icon_name(icon)
         self.details_view_hide_button.set_tooltip_text(text)
 
+        # Set play button label and icon based on game type
+        self.details_view_play_button.set_label(game.get_play_button_label())
+
         if self.details_view_game_cover:
             self.details_view_game_cover.pictures.remove(self.details_view_cover)
 

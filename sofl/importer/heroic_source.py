@@ -29,6 +29,7 @@ from typing import Iterable, NamedTuple, Optional, TypedDict
 
 from sofl import shared
 from sofl.game import Game
+from sofl.game_factory import GameFactory
 from sofl.importer.location import Location, LocationSubPath
 from sofl.importer.source import (
     SourceIterable,
@@ -108,7 +109,7 @@ class SubSourceIterable(Iterable):
             "executable": self.source.make_executable(runner=runner, app_name=app_name),
             "hidden": self.source_iterable.is_hidden(app_name),
         }
-        game = Game(values)
+        game = GameFactory.create_game(values)
 
         # Get the image path from the Heroic cache
         # Filenames are derived from the URL that Heroic used to get the file
