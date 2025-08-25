@@ -37,10 +37,12 @@ echo "Output directory: $OUTPUT_DIR"
 
 cd "$PROJECT_DIR"
 
-# Install build dependencies if possible
-if command -v pacman &> /dev/null; then
+# Install build dependencies if possible (only when running as root)
+if command -v pacman &> /dev/null && [ "$(id -u)" -eq 0 ]; then
     echo "Installing build dependencies..."
-    sudo pacman -Sy --needed meson ninja git || echo "Could not install dependencies, continuing anyway..."
+    pacman -Sy --noconfirm --needed meson ninja git || echo "Could not install dependencies, continuing anyway..."
+else
+    echo "Skipping dependency installation (not root or pacman unavailable)"
 fi
 
 # Fix git safe directory issue
@@ -85,10 +87,16 @@ cd "$ARCH_DIR"
 # Set PKGDEST to current directory so makepkg puts the package here
 export PKGDEST="$PWD"
 
-# Create temporary user for makepkg (it doesn't like running as root)
-if ! id -u builder &>/dev/null; then
-    useradd -m -s /bin/bash builder
-    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+# Ensure we have an unprivileged user for makepkg
+if id -u builder &>/dev/null; then
+    BUILD_USER=builder
+elif [ "$(id -u)" -eq 0 ]; then
+    echo "Creating temporary 'builder' user for packaging..."
+    useradd -m -s /bin/bash builder || true
+    BUILD_USER=builder
+else
+    echo "No 'builder' user found, using current user: $(id -un)"
+    BUILD_USER=$(id -un)
 fi
 
 # Configure makepkg environment
@@ -96,11 +104,17 @@ export PACKAGER="CI Builder <ci@localhost>"
 export BUILDDIR="/tmp/makepkg-build"
 mkdir -p "$BUILDDIR"
 
-# Change ownership of project directory to builder user
-chown -R builder:builder "$PROJECT_DIR" || true
+# Change ownership of project directory to build user when running as root
+if [ "$(id -u)" -eq 0 ] && [ -n "$BUILD_USER" ]; then
+    chown -R "$BUILD_USER":"$BUILD_USER" "$PROJECT_DIR" || echo "Warning: Could not change ownership of project directory"
+fi
 
-# Run makepkg as builder user
-sudo -u builder bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+# Run makepkg as unprivileged user
+if [ "$(id -u)" -eq 0 ] && [ "$BUILD_USER" != "root" ]; then
+    runuser -u "$BUILD_USER" -- bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+else
+    bash -c "cd '$ARCH_DIR' && export PKGDEST='$PWD' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+fi
 
 echo "Arch Linux package built successfully!"
 

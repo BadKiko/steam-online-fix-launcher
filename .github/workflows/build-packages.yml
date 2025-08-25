@@ -115,31 +115,30 @@ jobs:
           # Create builder user since makepkg doesn't like running as root
           if ! id -u builder &>/dev/null; then
               useradd -m -s /bin/bash builder
-              echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
               # Give builder user access to project directory
               mkdir -p ${{ github.workspace }}
               chown -R builder:builder ${{ github.workspace }} || echo "Warning: Could not change ownership, continuing anyway..."
           fi
           echo "Builder user created and configured"
 
-      - name: Update system and install dependencies
+      - name: Update system and install dependencies (root)
         run: |
           pacman -Sy --noconfirm
           pacman -S --noconfirm --needed base-devel git meson ninja python python-gobject gtk4 libadwaita python-requests python-pillow python-cairo python-psutil python-pyxdg gobject-introspection blueprint-compiler gettext
 
-      - name: Update version
+      - name: Update version as builder
         run: |
-          ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
+          runuser -u builder -- bash -c "./scripts/update_version.sh ${{ needs.get-version.outputs.version }}"
 
-      - name: Fix git safe directory
+      - name: Fix git safe directory as builder
         run: |
-          git config --global --add safe.directory ${{ github.workspace }}
+          runuser -u builder -- bash -c "git config --global --add safe.directory ${{ github.workspace }}"
 
-      - name: Build Arch Linux package
+      - name: Build Arch Linux package as builder
         run: |
           mkdir -p dist
           chown builder:builder dist || echo "Warning: Could not change ownership of dist, continuing anyway..."
-          cd packaging/arch && ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
+          runuser -u builder -- bash -c "cd packaging/arch && ./build.sh ${{ needs.get-version.outputs.version }} ../../dist"
 
       - name: Upload Arch package artifacts
         uses: actions/upload-artifact@v4
@@ -194,7 +193,7 @@ jobs:
           files: |
             sofl-flatpak-${{ needs.get-version.outputs.version }}/org.badkiko.sofl.flatpak
             sofl-deb-${{ needs.get-version.outputs.version }}/sofl_${{ needs.get-version.outputs.version }}_all.deb
-            sofl-arch-${{ needs.get-version.outputs.version }}/sofl-${{ needs.get-version.outputs.version }}.tar.gz
+            sofl-arch-${{ needs.get-version.outputs.version }}/*.pkg.tar.zst
             packaging/arch/PKGBUILD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
