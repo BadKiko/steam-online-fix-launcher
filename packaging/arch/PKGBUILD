@@ -50,8 +50,4 @@ build() {
 package() {
     cd "$srcdir/steam-online-fix-launcher-$pkgver"
     meson install --destdir="$pkgdir" -C build
-
-    # Install additional files
-    install -Dm644 data/org.badkiko.sofl.desktop "$pkgdir/usr/share/applications/org.badkiko.sofl.desktop"
-    install -Dm644 data/org.badkiko.sofl.metainfo.xml "$pkgdir/usr/share/metainfo/org.badkiko.sofl.metainfo.xml"
 }
