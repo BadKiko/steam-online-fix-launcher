@@ -46,9 +46,16 @@ fi
 # Fix git safe directory issue
 git config --global --add safe.directory "$PROJECT_DIR" || true
 
-# Create source tarball for makepkg
-echo "Creating source tarball..."
-git archive --format=tar.gz --prefix="$PACKAGE_NAME-$VERSION/" -o "$PACKAGE_NAME-$VERSION.tar.gz" HEAD
+# Check if we're in a git repository
+if git rev-parse --git-dir > /dev/null 2>&1; then
+    # Create source tarball for makepkg
+    echo "Creating source tarball from git repository..."
+    git archive --format=tar.gz --prefix="$PACKAGE_NAME-$VERSION/" -o "$PACKAGE_NAME-$VERSION.tar.gz" HEAD
+else
+    echo "Not in a git repository, creating tarball from current directory..."
+    # Create tarball from current directory if not in git repo
+    tar -czf "$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," --exclude="$PACKAGE_NAME-$VERSION.tar.gz" --exclude="build*" --exclude="dist" --exclude=".git*" .
+fi
 
 # Update version in PKGBUILD
 echo "Updating PKGBUILD..."

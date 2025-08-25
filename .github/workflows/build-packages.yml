@@ -3,11 +3,11 @@ name: Build and Release Packages
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build (leave empty for auto from meson.build)'
+        description: "Version to build (leave empty for auto from meson.build)"
         required: false
         type: string
 
@@ -44,7 +44,7 @@ jobs:
       - name: Install flatpak dependencies
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder
+          sudo apt install -y flatpak flatpak-builder python3-gi python3-gi-cairo git python3-pip
 
       - name: Setup flatpak
         run: |
@@ -57,12 +57,17 @@ jobs:
           flatpak install --user --noninteractive flathub org.gnome.Platform//48
           flatpak install --user --noninteractive flathub org.gnome.Sdk//48
 
+      - name: Install blueprint-compiler
+        run: |
+          pip3 install blueprint-compiler || echo "blueprint-compiler installed via pip"
+
       - name: Update version
         run: |
           ./scripts/update_version.sh ${{ needs.get-version.outputs.version }}
 
       - name: Build Flatpak
         run: |
+          mkdir -p dist
           cd packaging/flatpak
           ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
 
@@ -90,6 +95,7 @@ jobs:
 
       - name: Build Debian package
         run: |
+          mkdir -p dist
           cd packaging/debian
           ./build.sh ${{ needs.get-version.outputs.version }} ../../dist
 
@@ -119,7 +125,7 @@ jobs:
 
       - name: Fix git safe directory
         run: |
-          git config --global --add safe.directory /__w/steam-online-fix-launcher/steam-online-fix-launcher
+          git config --global --add safe.directory ${{ github.workspace }}
 
       - name: Build Arch Linux package
         run: |

@@ -31,12 +31,15 @@ BUILD_DEPS="python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requ
 echo "Installing build dependencies..."
 sudo apt install -y $BUILD_DEPS
 
+# Get project root directory (parent of packaging directory)
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
 # Clean previous build
 rm -rf "$BUILD_DIR" *.deb
 
 # Build the application using meson
 echo "Building application with Meson..."
-cd /home/kiko/Work/steam-online-fix-launcher
+cd "$PROJECT_ROOT"
 meson setup build-dir --prefix=/usr --buildtype=release -Dprofile=release -Dtiff_compression=webp
 meson compile -C build-dir
 meson install --destdir="$BUILD_DIR" -C build-dir

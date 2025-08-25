@@ -61,6 +61,18 @@ else
     echo "org.gnome.Sdk//48 already installed"
 fi
 
+# Pre-install blueprint-compiler to avoid git cloning issues in CI
+echo "Pre-installing blueprint-compiler..."
+if ! command -v blueprint-compiler &> /dev/null; then
+    echo "Installing blueprint-compiler from Ubuntu repositories..."
+    sudo apt update
+    sudo apt install -y python3-gi python3-gi-cairo git
+    # Try to install from pip if available
+    if command -v pip3 &> /dev/null; then
+        pip3 install blueprint-compiler || echo "Could not install blueprint-compiler from pip, will use fallback"
+    fi
+fi
+
 # Clean previous build
 rm -rf build-dir flatpak-build $REPO_NAME
 

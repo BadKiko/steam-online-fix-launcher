@@ -1,3 +1,13 @@
+blueprint_compiler = find_program('blueprint-compiler', required: false)
+if not blueprint_compiler.found()
+  # Fallback: try to find alternative names or provide error message
+  blueprint_compiler = find_program('blueprint-compiler.py', required: false)
+endif
+
+if not blueprint_compiler.found()
+  error('blueprint-compiler not found. Please install it with: pip install blueprint-compiler')
+endif
+
 blueprints = custom_target(
   'blueprints',
   input: files(
@@ -10,7 +20,7 @@ blueprints = custom_target(
   ),
   output: '.',
   command: [
-    find_program('blueprint-compiler'),
+    blueprint_compiler,
     'batch-compile',
     '@OUTPUT@',
     '@CURRENT_SOURCE_DIR@',
