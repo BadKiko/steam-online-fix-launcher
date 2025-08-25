@@ -39,6 +39,15 @@ modules:
     buildsystem: simple
     build-commands: []
     modules:
+      - name: python3-pyyaml
+        buildsystem: simple
+        build-commands:
+          - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pyyaml" --no-build-isolation
+        sources:
+          - type: file
+            url: https://files.pythonhosted.org/packages/54/ed/79a089b6be93607fa5cdaedf301d7dfb23af5f25c398d5ead2525b063e17/pyyaml-6.0.2.tar.gz
+            sha256: d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e
+
       - name: python3-pillow
         buildsystem: simple
         build-commands:
@@ -86,6 +95,18 @@ modules:
           - type: file
             url: https://files.pythonhosted.org/packages/26/3f/3118a797444e7e30e784921c4bfafb6500fb288a0c84cb8c32ed15853c16/rarfile-4.2.tar.gz
             sha256: 8e1c8e72d0845ad2b32a47ab11a719bc2e41165ec101fd4d3fe9e92aa3f469ef
+
+  - name: umu-launcher
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - mkdir -p ${FLATPAK_DEST}/bin/umu
+      - cp umu-run ${FLATPAK_DEST}/bin/umu/
+      - chmod +x ${FLATPAK_DEST}/bin/umu/umu-run
+    sources:
+      - type: archive
+        url: https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.2.9/umu-launcher-1.2.9-zipapp.tar
+        sha256: be4a3ce6a7617547c19e579610fc18c9ce5c6b32b62216eabd8528bc36a136d
 
   - name: sofl
     buildsystem: meson

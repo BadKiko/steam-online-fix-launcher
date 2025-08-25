@@ -35,6 +35,7 @@ optdepends=(
     'steam: For Steam game integration'
     'lutris: For Lutris game integration'
     'heroic-games-launcher: For Heroic game integration'
+    'umu-launcher: For running Windows games via Proton outside Steam'
 )
 source=("$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
