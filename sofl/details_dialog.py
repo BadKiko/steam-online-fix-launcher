@@ -54,6 +54,7 @@ class DetailsDialog(Adw.Dialog):
 
     name: Adw.EntryRow = Gtk.Template.Child()
     developer: Adw.EntryRow = Gtk.Template.Child()
+    game_type: Adw.ComboRow = Gtk.Template.Child()
     executable: Adw.EntryRow = Gtk.Template.Child()
 
     exec_info_label: Gtk.Label = Gtk.Template.Child()
@@ -66,7 +67,7 @@ class DetailsDialog(Adw.Dialog):
 
     is_open: bool = False
     install_mode: bool = False
-    
+
     # Logger setup
     logger = logging.getLogger(__name__)
 
@@ -91,9 +92,13 @@ class DetailsDialog(Adw.Dialog):
             self.game_cover.new_cover(self.game.get_cover_path())
             if self.game_cover.get_texture():
                 self.cover_button_delete_revealer.set_reveal_child(True)
+            # Hide game type selector when viewing existing game details
+            self.game_type.set_visible(False)
         else:
             self.set_title(_("Add New Game"))
             self.apply_button.set_label(_("Add"))
+            # Show game type selector only when adding new game
+            self.game_type.set_visible(True)
 
         if self.install_mode:
             self.set_title(_("Install Game"))
@@ -203,21 +208,33 @@ class DetailsDialog(Adw.Dialog):
                 )
                 return
 
-            # Increment the number after the game id (eg. imported_1, imported_2)
-            source_id = "imported"
+            # Determine source based on game type selection
+            game_type_selected = self.game_type.get_selected()
+            if game_type_selected == 0:
+                source_id = "online-fix"
+                self.logger.info("Creating Online-Fix game")
+            else:  # Regular Game
+                source_id = "imported"
+                self.logger.info("Creating regular imported game")
+
             numbers = [0]
             game_id: str
+            prefix = f"{source_id}_"
             for game_id in shared.store.source_games.get(source_id, set()):
-                prefix = "imported_"
                 if not game_id.startswith(prefix):
                     continue
                 numbers.append(int(game_id.replace(prefix, "", 1)))
 
             game_number = max(numbers) + 1
 
+            game_id_final = f"{source_id}_{game_number}"
+            self.logger.info(
+                f"Creating game with ID: {game_id_final}, source: {source_id}"
+            )
+
             self.game = GameFactory.create_game(
                 {
-                    "game_id": f"imported_{game_number}",
+                    "game_id": game_id_final,
                     "hidden": False,
                     "source": source_id,
                     "added": int(time()),
@@ -320,7 +337,7 @@ class DetailsDialog(Adw.Dialog):
         except GLib.Error:
             log_message("Error getting file path", logging.ERROR)
             return
-            
+
         if not path:
             log_message("No valid path selected", logging.WARNING)
             return
@@ -328,7 +345,7 @@ class DetailsDialog(Adw.Dialog):
         def thread_func() -> None:
             nonlocal path
             new_path = None
-            
+
             # Check if we need to handle Flatpak path
             if is_flatpak_path(path):
                 log_message(f"Detected Flatpak path: {path}")
@@ -367,7 +384,7 @@ class DetailsDialog(Adw.Dialog):
 
         self.toggle_loading()
         GLib.Thread.new(None, thread_func)
-        
+
     def set_executable(self, _source: Any, result: Gio.Task, *_args: Any) -> None:
         try:
             path = self.exec_file_dialog.open_finish(result).get_path()
@@ -384,12 +401,12 @@ class DetailsDialog(Adw.Dialog):
 
     def set_is_open(self, is_open: bool) -> None:
         self.__class__.is_open = is_open
-        
+
         # When closing the dialog, also close all child dialogs and reset install_mode flag
         if not is_open:
             # Reset install_mode flag
             self.__class__.install_mode = False
-            
+
             # Close all dialogs in the root window
             root = self.get_root()
             if root:
@@ -397,13 +414,13 @@ class DetailsDialog(Adw.Dialog):
                 def close_dialogs(widget):
                     if isinstance(widget, (Adw.Dialog, Gtk.Dialog)) and widget != self:
                         widget.close()
-                    elif hasattr(widget, 'get_first_child'):
+                    elif hasattr(widget, "get_first_child"):
                         child = widget.get_first_child()
                         while child:
                             close_dialogs(child)
                             child = child.get_next_sibling()
-                
+
                 close_dialogs(root)
-                
+
                 # Return focus to the main window
                 root.present()
