@@ -408,7 +408,14 @@ class OnlineFixGameData(GameData):
         try:
             # Check if the game is inside the online-fix folder
             if not str(self.executable).startswith(str(onlinefix_root)):
-                self.log_and_toast(_("Game is not installed in Online-Fix directory"))
+                self.log_and_toast(
+                    _(
+                        "Game is not installed in Online-Fix directory, removing it from the list"
+                    )
+                )
+                self.removed = True
+                self.save()
+                self.update()
                 return
             # Get a more reliable game root folder
             game_root = self._detect_game_root_folder(onlinefix_root)

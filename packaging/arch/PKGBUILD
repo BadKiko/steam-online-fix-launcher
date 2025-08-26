@@ -1,6 +1,6 @@
 # Maintainer: badkiko <badkiko@badkiko.page>
 pkgname=sofl
-pkgver=0.0.3
+pkgver=0.0.3.1a
 pkgrel=1
 pkgdesc="Steam Online Fix Launcher - Launch all your games"
 arch=('x86_64')

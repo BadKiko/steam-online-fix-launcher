@@ -22,15 +22,14 @@ echo "Updating version to: $NEW_VERSION"
 # First, backup the original file
 cp "$PROJECT_DIR/meson.build" "$PROJECT_DIR/meson.build.backup"
 
-# Replace only the project version line (first version line after project()
-sed -i '1,/^)/ {
+# Replace only the project version line (first version line after project())
+sed -i "1,/^)/ {
     /^  version: / {
-        s/version: '\''[^'\'']+'\''/version: '\'''"$NEW_VERSION"''\''/
+        s/version: '[^']*'/version: '$NEW_VERSION'/
         b done
     }
     :done
-}' "$PROJECT_DIR/meson.build"
-
+}" "$PROJECT_DIR/meson.build"
 
 # Update Debian control
 DEBIAN_CONTROL="$PROJECT_DIR/packaging/debian/DEBIAN/control"
