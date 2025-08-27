@@ -124,7 +124,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     # Online-Fix
     online_fix_entry_row: Adw.EntryRow = Gtk.Template.Child()
     online_fix_file_chooser_button: Gtk.Button = Gtk.Template.Child()
-    online_fix_launcher_combo: Adw.ComboRow = Gtk.Template.Child()
+
     online_fix_auto_patch_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_dll_override_entry: Adw.EntryRow = Gtk.Template.Child()
     online_fix_dll_group: Adw.PreferencesGroup = Gtk.Template.Child()
@@ -132,9 +132,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
     online_fix_steam_appid_switch: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_patch_steam_fix_64: Adw.SwitchRow = Gtk.Template.Child()
     online_fix_proton_combo: Adw.ComboRow = Gtk.Template.Child()
-    online_fix_umu_proton_combo: Adw.ComboRow = Gtk.Template.Child()
-    online_fix_umu_banner_box: Gtk.Box = Gtk.Template.Child()
-    online_fix_umu_info_button: Gtk.Button = Gtk.Template.Child()
 
     removed_games: set[Game] = set()
     warning_menu_buttons: dict = {}
@@ -210,20 +207,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
 
         # Online-Fix setup
         self.setup_online_fix_settings()
-        # Connect UMU info button to show description
-        try:
-
-            def show_umu_info(_widget: Any, *_args: Any) -> None:
-                title = _("About UMU Launcher")
-                body = _(
-                    "UMU Launcher is a launcher similar to Steam API, and it may work if the game does not function with Steam API. "
-                    "For installation, please visit https://github.com/Open-Wine-Components/umu-launcher."
-                )
-                create_dialog(self, title, body)
-
-            self.online_fix_umu_info_button.connect("clicked", show_umu_info)
-        except Exception:
-            pass
 
         def update_sgdb(*_args: Any) -> None:
             counter = 0
@@ -529,105 +512,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
         self.resolve_locations(source)
         self.update_source_action_row_paths(source)
 
-    def check_umu_availability(self) -> bool:
-        """Check if umu-run is available on the system
-
-        Returns:
-            bool: True if umu-run is available, False otherwise
-        """
-        # Robust UMU detection that works inside Flatpak and native installs
-        import shutil
-
-        in_flatpak = os.path.exists("/.flatpak-info")
-        logging.info(f"Checking UMU availability (in_flatpak: {in_flatpak})")
-
-        # If running inside Flatpak, prefer binaries exposed inside the sandbox
-        if in_flatpak:
-            # Check PATH inside Flatpak first
-            path_candidate = shutil.which("umu-run")
-            if path_candidate:
-                logging.info(f"UMU found in Flatpak PATH: {path_candidate}")
-                return True
-
-            # Common locations inside Flatpak runtime
-            flatpak_candidates = [
-                "/app/bin/umu-run",  # This should be in PATH
-                "/app/bin/umu/umu-run",
-                os.path.join(os.getenv("FLATPAK_DEST") or "", "bin", "umu", "umu-run"),
-            ]
-
-            for candidate in flatpak_candidates:
-                logging.info(f"Checking Flatpak candidate: {candidate}")
-                try:
-                    if candidate and os.path.isfile(candidate):
-                        logging.info(f"UMU found at Flatpak location: {candidate}")
-                        return True
-                except Exception as e:
-                    logging.debug(f"Error checking Flatpak candidate {candidate}: {e}")
-
-            # As a last resort, check if host has umu-run (so we could spawn it)
-            try:
-                logging.info("Checking host system for umu-run...")
-                which_proc = subprocess.run(
-                    ["flatpak-spawn", "--host", "which", "umu-run"],
-                    capture_output=True,
-                    text=True,
-                )
-                if which_proc.returncode == 0 and which_proc.stdout.strip():
-                    logging.info(f"UMU found on host: {which_proc.stdout.strip()}")
-                    return True
-                else:
-                    logging.info("UMU not found on host")
-            except Exception as e:
-                logging.debug(f"Error checking host umu-run: {e}")
-
-        # Native host checks: PATH and vendor path
-        path_candidate = shutil.which("umu-run")
-        vendor_candidate = "/usr/share/sofl/umu/umu-run"
-
-        if path_candidate:
-            logging.info(f"UMU found in native PATH: {path_candidate}")
-            return True
-        elif os.path.isfile(vendor_candidate):
-            logging.info(f"UMU found at vendor path: {vendor_candidate}")
-            return True
-
-        logging.info("UMU not found anywhere")
-        return False
-
-    def setup_launcher_combo(self) -> None:
-        """Setup launcher selection combo box, hiding UMU if not available"""
-        umu_available = self.check_umu_availability()
-
-        if umu_available:
-            # Both launchers available
-            launcher_options = ["Steam API", "UMU Launcher"]
-            self.online_fix_launcher_combo.set_sensitive(True)
-            self.online_fix_umu_banner_box.set_visible(False)
-        else:
-            # Only Steam API available, disable combo and show info banner
-            launcher_options = ["Steam API"]
-            self.online_fix_launcher_combo.set_sensitive(False)
-            self.online_fix_umu_banner_box.set_visible(True)
-
-        launcher_model = Gtk.StringList.new(launcher_options)
-        self.online_fix_launcher_combo.set_model(launcher_model)
-
-        # Get current selection, but ensure it's valid
-        try:
-            current_launcher = shared.schema.get_int("online-fix-launcher-type")
-            if not umu_available and current_launcher == 1:
-                # Reset to Steam API if UMU was selected but is not available
-                current_launcher = 0
-                shared.schema.set_int("online-fix-launcher-type", current_launcher)
-        except GLib.Error:
-            current_launcher = 0
-
-        self.online_fix_launcher_combo.set_selected(current_launcher)
-        self.online_fix_launcher_combo.connect(
-            "notify::selected", self.on_launcher_changed
-        )
-
     def setup_online_fix_settings(self) -> None:
         """Setup parameters for Online-Fix"""
         # Check for the key in settings
@@ -659,22 +543,12 @@ class SOFLPreferences(Adw.PreferencesDialog):
             "clicked", self.online_fix_path_browse_handler
         )
 
-        # Setup launcher selection
-        self.setup_launcher_combo()
-
         # Get available Proton versions
         proton_versions = self.get_proton_versions()
 
         # Setup Proton version selection for Steam API
         self.setup_proton_combo(
             self.online_fix_proton_combo, proton_versions, "online-fix-proton-version"
-        )
-
-        # Setup Proton version selection for UMU Launcher
-        self.setup_proton_combo(
-            self.online_fix_umu_proton_combo,
-            proton_versions,
-            "online-fix-umu-proton-version",
         )
 
         # Setup auto patch switch
@@ -715,7 +589,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
 
         # Set initial visibility
         self.on_auto_patch_changed(self.online_fix_auto_patch_switch, None)
-        self.on_launcher_changed(self.online_fix_launcher_combo, None)
 
     def setup_proton_combo(
         self, combo: Adw.ComboRow, proton_versions: list[str], schema_key: str
@@ -798,29 +671,6 @@ class SOFLPreferences(Adw.PreferencesDialog):
         """Show/hide manual settings based on auto-patch switch"""
         is_auto = switch.get_active()
         self.online_fix_patches_group.set_visible(not is_auto)
-
-    def on_launcher_changed(self, combo: Adw.ComboRow, _param: Any) -> None:
-        """Handler for launcher type change"""
-        launcher_type = combo.get_selected()
-
-        # Check if UMU is available when trying to select it
-        if launcher_type == 1 and not self.check_umu_availability():
-            # Reset to Steam API if UMU is not available
-            launcher_type = 0
-            combo.set_selected(0)
-            self.add_toast(
-                Adw.Toast.new(
-                    _("UMU Launcher is not available. Please install umu-launcher.")
-                )
-            )
-
-        shared.schema.set_int("online-fix-launcher-type", launcher_type)
-
-        # Show appropriate Proton selection control based on launcher type
-        # 0 = Steam API
-        # 1 = UMU Launcher
-        self.online_fix_proton_combo.set_visible(launcher_type == 0)
-        self.online_fix_umu_proton_combo.set_visible(launcher_type == 1)
 
     def on_dll_overrides_changed(self, entry: Adw.EntryRow) -> None:
         """Handler for DLL overrides change"""

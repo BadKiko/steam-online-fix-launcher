@@ -56,7 +56,6 @@ A huge thank you to [@kra-mo/cartridges](https://github.com/kra-mo/cartridges) p
 * ❓ UI for SteamDeck: (Idea) Maybe something like RetroDeck but for pirates game?
 * 🛠️ Automatic Fixes for Common Online-Fix Errors: Implement scripted solutions for issues listed in [my manual guide](https://www.reddit.com/r/LinuxCrackSupport/comments/1cw7v8j/onlinefix_a_complete_guide_to_running_games_with/) (like Steam environment errors, missing DLLs, etc.)
 * 🚀 Automatic Steam Launch and Session End: Launch Steam automatically before starting games and close it after the session ends
-* 🎮 Runner Selection: Choose to launch games via Steam or [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
 
 ## 📜 License
 
