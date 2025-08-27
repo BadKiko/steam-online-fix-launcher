@@ -63,20 +63,4 @@ package() {
     # Vendor python 'vdf' module into /usr/share/sofl/vendor
     install -d "$pkgdir/usr/share/sofl/vendor"
     PYTHONUSERBASE="$pkgdir/usr/share/sofl/vendor" pip install --no-compile --no-cache-dir --no-input --disable-pip-version-check --no-warn-script-location --root "$pkgdir" --target "$pkgdir/usr/share/sofl/vendor" vdf
-
-    # Vendor UMU launcher into package so users don't need AUR
-    install -d "$pkgdir/usr/share/sofl/umu"
-    if [ -f "$srcdir/umu-run" ]; then
-        install -m755 "$srcdir/umu-run" "$pkgdir/usr/share/sofl/umu/umu-run"
-    elif [ -f "$srcdir/umu-launcher-1.2.9-zipapp/umu-run" ]; then
-        install -m755 "$srcdir/umu-launcher-1.2.9-zipapp/umu-run" "$pkgdir/usr/share/sofl/umu/umu-run"
-    else
-        # Fallback: attempt to locate umu-run anywhere in $srcdir
-        UMU_CANDIDATE=$(find "$srcdir" -maxdepth 2 -type f -name umu-run | head -n1)
-        if [ -n "$UMU_CANDIDATE" ]; then
-            install -m755 "$UMU_CANDIDATE" "$pkgdir/usr/share/sofl/umu/umu-run"
-        else
-            echo "Warning: umu-run not found in sources; package will rely on system umu-launcher if available" >&2
-        fi
-    fi
 }

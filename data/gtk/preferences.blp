@@ -444,52 +444,9 @@ template $SOFLPreferences: Adw.PreferencesDialog {
       title: _("Launcher Settings");
       description: _("Configure how games should be launched");
 
-      Adw.ComboRow online_fix_launcher_combo {
-        title: _("Launcher Type");
-        selected: 0;
-      }
-
-      Box online_fix_umu_banner_box {
-        orientation: vertical;
-        spacing: 12;
-        visible: false;
-
-        styles [
-          "banner",
-        ]
-
-        Box {
-          orientation: horizontal;
-          spacing: 12;
-
-          Button online_fix_umu_info_button {
-            icon-name: "dialog-information-symbolic";
-            valign: start;
-            tooltip-text: _("What is UMU Launcher?");
-
-            styles [
-              "warning",
-            ]
-          }
-
-          Label {
-            label: _("UMU Launcher is not available");
-
-            styles [
-              "warning",
-            ]
-          }
-        }
-      }
-
       Adw.ComboRow online_fix_proton_combo {
         title: _("Proton Version");
-        tooltip-text: _("Version of Proton to use with Steam launcher");
-      }
-
-      Adw.ComboRow online_fix_umu_proton_combo {
-        title: _("UMU Proton Version");
-        tooltip-text: _("Version of Proton to use with UMU launcher");
+        tooltip-text: _("Version of Proton to use with launcher");
       }
 
       Adw.SwitchRow online_fix_auto_patch_switch {

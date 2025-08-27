@@ -78,13 +78,16 @@ class OnlineFixGameData(GameData):
         self.save()
         self.update()
 
-        launcher_type = shared.schema.get_int("online-fix-launcher-type")
+        # TODO: Add launcher type selection in future versions
+        # For now, only Direct Steam API is supported
+        launcher_type = 0  # shared.schema.get_int("online-fix-launcher-type")
         logging.info(f"[SOFL] Launcher type: {launcher_type}")
 
         if launcher_type == 0:
             self._launch_with_direct_steam_api()
-        elif launcher_type == 1:
-            self._launch_with_umu_runner()
+        # Future launcher types can be added here:
+        # elif launcher_type == 1:
+        #     self._launch_with_custom_launcher()
 
     def _launch_with_direct_steam_api(self) -> None:
         """Запуск игры через Direct Steam API Runner"""
@@ -327,138 +330,6 @@ class OnlineFixGameData(GameData):
 
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
-
-    def _launch_with_umu_runner(self) -> None:
-        """Запуск игры через UMU Runner"""
-        import shutil
-
-        logging.info("Umu Runner")
-
-        game_exec = normalize_executable_path(self.executable)
-        game_exec_str = str(game_exec) if game_exec else ""
-        if not game_exec_str:
-            self.log_and_toast(_("Invalid executable path"))
-            return
-        dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
-
-        # Get selected Proton version from settings
-        proton_version = shared.schema.get_string("online-fix-umu-proton-version")
-        proton_path = shared.utils.get_umu_proton_path(proton_version)
-
-        # Check if Proton exists, find available proton if not
-        if not os.path.exists(proton_path):
-            # Scan for available proton versions
-            proton_dir = Path(
-                os.path.expanduser("~/.local/share/Steam/compatibilitytools.d")
-            )
-            available_protons = []
-
-            if proton_dir.exists() and proton_dir.is_dir():
-                for item in proton_dir.iterdir():
-                    if item.is_dir() and (
-                        item.name.startswith("GE-Proton")
-                        or item.name.startswith("Proton")
-                    ):
-                        available_protons.append(item.name)
-
-            if available_protons:
-                # Use the first available proton (sorted by version descending)
-                available_protons.sort(reverse=True)
-                proton_version = available_protons[0]
-                proton_path = shared.utils.get_umu_proton_path(proton_version)
-                self.log_and_toast(
-                    _("Proton version not found, using {}").format(proton_version)
-                )
-            else:
-                self.log_and_toast(
-                    _("No Proton versions found. Please install Proton through Steam.")
-                )
-                return
-
-        # Создаем директорию для префикса, если она не существует
-        prefix_path = self._create_wine_prefix(game_exec)
-
-        # Используем этот префикс вместо стандартного
-        prefix_path = os.environ.get("SOFL_WINEPREFIX", prefix_path)
-        prefix_path = os.path.expanduser(prefix_path)
-
-        logging.info(f"Using Proton: {proton_path}")
-
-        # Находим umu-run в Flatpak среде
-        flatpak_umu_path = None
-
-        # Сначала проверяем PATH
-        path_candidate = shutil.which("umu-run")
-        if path_candidate:
-            flatpak_umu_path = path_candidate
-            logging.info(f"Found umu-run in PATH: {path_candidate}")
-        else:
-            # Проверяем стандартные пути в Flatpak
-            flatpak_candidates = [
-                "/app/bin/umu-run",  # Основной путь в Flatpak
-                "/app/bin/umu/umu-run",
-                f"{os.getenv('FLATPAK_DEST') or ''}/bin/umu/umu-run",
-            ]
-
-            for candidate in flatpak_candidates:
-                if candidate and os.path.isfile(candidate):
-                    flatpak_umu_path = candidate
-                    logging.info(f"Found umu-run at: {candidate}")
-                    break
-
-        if not flatpak_umu_path:
-            logging.error("[SOFL] umu-run not found in Flatpak environment")
-            self.log_and_toast(
-                _(
-                    "umu-run not found. Please install umu-launcher or reinstall package."
-                )
-            )
-            return
-
-        # Временная папка на хосте (в /tmp)
-        temp_dir = tempfile.gettempdir()
-        host_umu_path = os.path.join(temp_dir, f"umu-run-{os.getuid()}")
-
-        logging.info(f"Flatpak UMU path: {flatpak_umu_path}")
-        logging.info(f"Host UMU path: {host_umu_path}")
-
-        # Копируем только если файл отсутствует или отличается
-        if not os.path.exists(host_umu_path) or os.path.getmtime(
-            host_umu_path
-        ) < os.path.getmtime(flatpak_umu_path):
-            try:
-                shutil.copy2(flatpak_umu_path, host_umu_path)
-                os.chmod(host_umu_path, os.stat(host_umu_path).st_mode | stat.S_IXUSR)
-                logging.info(f"[SOFL] Copied umu-run to: {host_umu_path}")
-            except Exception as e:
-                logging.error(f"[SOFL] Failed to copy umu-run: {e}")
-                self.log_and_toast(_("Failed to copy UMU launcher"))
-                return
-
-        # Формируем команду с вызовом через flatpak-spawn --host
-        cmd_parts = [
-            f"WINEPREFIX='{prefix_path}'",
-            f'WINEDLLOVERRIDES="{dll_overrides}"',
-            "GAMEID=480",
-            f"PROTONPATH={proton_path}",
-            host_umu_path,
-            f"'{game_exec_str}'",
-        ]
-        cmd_str = " ".join(cmd_parts)
-
-        # Запускаем через run_executable для Flatpak совместимости
-        try:
-            logging.info(f"[SOFL] Executing UMU command: {cmd_str}")
-            run_executable(cmd_str)
-        except Exception as e:
-            logging.error(f"[SOFL] Error launching game with UMU: {e}")
-            self.log_and_toast(_("Failed to launch game with UMU: {}").format(str(e)))
-            return
-
-        if shared.schema.get_boolean("exit-after-launch"):
-            shared.win.get_application().quit()
-
-        self.create_toast(_("{} launched").format(self.name))
 
     def _run_game(self, cmd: str, env: dict, game_exec: Path) -> None:
         """Запуск игры в любом окружении"""

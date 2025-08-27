@@ -120,20 +120,11 @@
     <key name="online-fix-install-path" type="s">
       <default>"~/Games/Online-Fix"</default>
     </key>
-    <key name="online-fix-launcher-type" type="i">
-      <default>0</default>
-      <summary>Online-Fix launcher type</summary>
-      <description>Type of launcher to use (0 = Direct Steam API, 1 = UMU Launcher)</description>
-    </key>
+
     <key name="online-fix-proton-version" type="s">
       <default>"GE-Proton9-26"</default>
       <summary>Proton version for Steam launcher</summary>
       <description>Version of Proton to use with Steam launcher (format: GE-ProtonX-Y)</description>
-    </key>
-    <key name="online-fix-umu-proton-version" type="s">
-      <default>"GE-Proton10-3"</default>
-      <summary>Proton version for UMU launcher</summary>
-      <description>Version of Proton to use with UMU launcher</description>
     </key>
     <key name="online-fix-auto-patch" type="b">
       <default>true</default>
