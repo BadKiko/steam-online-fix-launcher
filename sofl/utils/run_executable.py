@@ -26,16 +26,11 @@ from sofl import shared
 
 
 def run_executable(executable) -> None:
-    args = (
-        "flatpak-spawn --host /bin/sh -c " + quote(executable)  # Flatpak
-        if os.getenv("FLATPAK_ID") == shared.APP_ID
-        else executable  # Others
-    )
+    logging.info("Launching `%s`", executable)
 
-    logging.info("Launching `%s`", str(args))
     # pylint: disable=consider-using-with
     subprocess.Popen(
-        args,
+        executable,
         cwd=shared.home,
         shell=True,
         start_new_session=True,

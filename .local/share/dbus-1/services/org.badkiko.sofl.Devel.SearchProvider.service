@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.badkiko.sofl.SearchProvider
+Exec=/home/kiko/Work/steam-online-fix-launcher/.local/bin/org.badkiko.sofl.Devel-search-provider 

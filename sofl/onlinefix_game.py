@@ -95,20 +95,11 @@ class OnlineFixGameData(GameData):
         game_exec = Path(self.executable.split()[0])
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
-        # Проверяем, запущен ли Steam (с учетом flatpak)
+        # Проверяем, запущен ли Steam
         try:
-            # В flatpak окружении используем flatpak-spawn для проверки
-            if os.path.exists("/.flatpak-info"):
-                steam_process = subprocess.run(
-                    ["flatpak-spawn", "--host", "pidof", "steam"],
-                    capture_output=True,
-                    text=True,
-                )
-            else:
-                steam_process = subprocess.run(
-                    ["pidof", "steam"], capture_output=True, text=True
-                )
-
+            steam_process = subprocess.run(
+                ["pidof", "steam"], capture_output=True, text=True
+            )
             if steam_process.returncode == 1:
                 self.log_and_toast(_("Steam is not running"))
                 return
@@ -223,11 +214,8 @@ class OnlineFixGameData(GameData):
         if not debug_mode:
             cmd = f"{cmd} > /dev/null 2>&1"
 
-        # Запускаем через bash
-        if os.path.exists("/.flatpak-info"):
-            self._run_in_flatpak(cmd, env, game_exec, prefix_path)
-        else:
-            self._run_native(cmd, env, game_exec)
+        # Запускаем игру
+        self._run_game(cmd, env, game_exec)
 
         self.create_toast(
             _("{} launched directly with Proton {}").format(self.name, proton_version)
@@ -272,17 +260,9 @@ class OnlineFixGameData(GameData):
         logging.info(f"Using Proton: {proton_path}")
 
         if os.path.exists("/.flatpak-info") and os.path.isfile(flatpak_umu_path):
-            # Inside Flatpak: copy to /tmp and execute via flatpak-spawn --host
-            temp_dir = tempfile.gettempdir()
-            host_umu_tmp = os.path.join(temp_dir, f"umu-run-{os.getuid()}")
-            logging.info(f"Flatpak UMU path: {flatpak_umu_path}")
-            logging.info(f"Host UMU temp path: {host_umu_tmp}")
-            if not os.path.exists(host_umu_tmp) or os.path.getmtime(
-                host_umu_tmp
-            ) < os.path.getmtime(flatpak_umu_path):
-                shutil.copy2(flatpak_umu_path, host_umu_tmp)
-                os.chmod(host_umu_tmp, os.stat(host_umu_tmp).st_mode | stat.S_IXUSR)
-            host_umu_path = host_umu_tmp
+            # Inside Flatpak: use umu-run directly
+            host_umu_path = flatpak_umu_path
+            logging.info(f"Using Flatpak UMU path: {flatpak_umu_path}")
         else:
             # Native host: try PATH first, then vendored path in Arch package
             path_candidate = shutil.which("umu-run")
@@ -299,7 +279,7 @@ class OnlineFixGameData(GameData):
                 )
                 return
 
-        # Формируем команду с вызовом через flatpak-spawn --host
+        # Формируем команду для запуска
         cmd = [
             f"WINEPREFIX='{prefix_path}'",
             f'WINEDLLOVERRIDES="{dll_overrides}"',
@@ -317,71 +297,20 @@ class OnlineFixGameData(GameData):
 
         self.create_toast(_("{} launched").format(self.name))
 
-    def _run_in_flatpak(
-        self, cmd: str, env: dict, game_exec: Path, prefix_path: str
-    ) -> None:
-        """Запуск команды в окружении Flatpak через временный скрипт"""
-        # В flatpak окружении создаем временный скрипт для запуска
-        with tempfile.NamedTemporaryFile(
-            mode="w", prefix="sofl_launch_", suffix=".sh", delete=False
-        ) as script_file:
-            script_path = script_file.name
+    def _run_game(self, cmd: str, env: dict, game_exec: Path) -> None:
+        """Запуск игры в любом окружении"""
+        # Создаем директорию для префикса
+        prefix_path = self._create_wine_prefix(game_exec)
+        if not os.path.exists(prefix_path):
+            os.makedirs(prefix_path, exist_ok=True)
 
-            # Записываем скрипт с экспортом всех переменных окружения
-            script_file.write("#!/bin/bash\n\n")
+        # Создаем структуру префикса для совместимости
+        pfx_user_path = os.path.join(
+            prefix_path, "pfx", "drive_c", "users", "steamuser"
+        )
+        for dir_name in ["AppData", "Saved Games", "Documents"]:
+            os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
 
-            # Экспортируем все переменные окружения
-            for key, value in env.items():
-                # Убедимся, что пути правильно экранированы
-                value = value.replace('"', '\\"')
-                script_file.write(f'export {key}="{value}"\n')
-
-            # Создаем директорию для префикса на хосте
-            script_file.write(f'\nmkdir -p "{prefix_path}"\n')
-
-            # Создаем структуру префикса для совместимости с оригинальным кодом
-            pfx_user_path = os.path.join(
-                prefix_path, "pfx", "drive_c", "users", "steamuser"
-            )
-            for dir_name in ["AppData", "Saved Games", "Documents"]:
-                script_file.write(
-                    f'mkdir -p "{os.path.join(pfx_user_path, dir_name)}"\n'
-                )
-
-            # Добавляем команду запуска
-            script_file.write(f"\n{cmd}\n")
-
-        # Делаем скрипт исполняемым
-        os.chmod(script_path, os.stat(script_path).st_mode | stat.S_IXUSR)
-
-        # Запускаем скрипт через flatpak-spawn
-        full_cmd = ["flatpak-spawn", "--host", script_path]
-        logging.info(f"[SOFL] Created launch script: {script_path}")
-
-        try:
-            logging.info(f"[SOFL] Executing command: {' '.join(full_cmd)}")
-            subprocess.Popen(
-                full_cmd, cwd=str(game_exec.parent), start_new_session=True
-            )
-
-            # Планируем удаление временного файла через некоторое время
-            def delayed_delete():
-                import time
-
-                time.sleep(10)  # Даем время на запуск скрипта
-                try:
-                    if os.path.exists(script_path):
-                        os.unlink(script_path)
-                except Exception as e:
-                    logging.error(f"[SOFL] Failed to delete temp script: {str(e)}")
-
-            # Запускаем удаление в отдельном потоке
-            threading.Thread(target=delayed_delete, daemon=True).start()
-        except Exception as e:
-            self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
-
-    def _run_native(self, cmd: str, env: dict, game_exec: Path) -> None:
-        """Запуск команды в нативном окружении"""
         full_cmd = ["bash", "-c", cmd]
 
         try:

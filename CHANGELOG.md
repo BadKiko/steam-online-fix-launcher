@@ -1,5 +1,12 @@
 # SOFL Changelog
 
+## [v0.0.3.1a] - 2025-08-26
+
+- Fxed #24
+- Fixed online-fix removing
+- Added select on adding games 
+
+
 ## [v0.0.3] - 2025-08-25
 
 ### New Features

@@ -37,7 +37,7 @@ from sofl.store.managers.cover_manager import CoverManager
 from sofl.store.managers.sgdb_manager import SgdbManager
 from sofl.utils.create_dialog import create_dialog
 from sofl.utils.save_cover import convert_cover, save_cover
-from sofl.utils.flatpak import is_flatpak_path, copy_flatpak_file, log_message
+
 from sofl.game_factory import GameFactory
 
 
@@ -346,13 +346,7 @@ class DetailsDialog(Adw.Dialog):
             nonlocal path
             new_path = None
 
-            # Check if we need to handle Flatpak path
-            if is_flatpak_path(path):
-                log_message(f"Detected Flatpak path: {path}")
-                copied_path = copy_flatpak_file(path)
-                if copied_path and copied_path != path:
-                    log_message(f"Using copied file: {copied_path}")
-                    path = copied_path
+            # Use path directly - Flatpak paths are accessible in modern versions
 
             try:
                 with Image.open(path) as image:

@@ -96,7 +96,7 @@ def log_system_info() -> None:
     logging.debug("Python version: %s", sys.version)
     if os.getenv("FLATPAK_ID") == shared.APP_ID:
         process = subprocess.run(
-            ("flatpak-spawn", "--host", "flatpak", "--version"),
+            ("flatpak", "--version"),
             capture_output=True,
             encoding="utf-8",
             check=False,

@@ -177,11 +177,6 @@ class DesktopSourceIterable(SourceIterable):
                 yield (game, additional_data)
 
     def check_command(self, command) -> bool:
-        flatpak_str = "flatpak-spawn --host /bin/sh -c "
-
-        if os.getenv("FLATPAK_ID") == shared.APP_ID:
-            command = flatpak_str + shlex.quote(command)
-
         try:
             subprocess.run(command, shell=True, check=True)
         except subprocess.CalledProcessError:

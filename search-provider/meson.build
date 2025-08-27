@@ -8,6 +8,8 @@ search_provider_id = app_id + '.SearchProvider'
 conf_data = configuration_data()
 conf_data.set('APP_ID', app_id)
 conf_data.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
+conf_data.set('PREFIX', prefix)
+conf_data.set('PYTHON', py_installation.full_path())
 
 search_provider_executable = configure_file(
     input: 'sofl-search-provider.in',

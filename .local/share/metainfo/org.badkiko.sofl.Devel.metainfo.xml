@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.badkiko.sofl.Devel</id>
+  <replaces>
+    <id>hu.badkiko.SOFL</id>
+    <id>org.badkiko.sofl</id>
+  </replaces>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>SOFL</name>
+  <name xml:lang="ia">SOFL</name>
+  <name xml:lang="te">SOFL</name>
+  <name xml:lang="ie">SOFL</name>
+  <name xml:lang="en-GB">SOFL</name>
+  <name xml:lang="hi">SOFL</name>
+  <name xml:lang="ja">SOFL</name>
+  <name xml:lang="ca">SOFL</name>
+  <name xml:lang="hr">SOFL</name>
+  <name xml:lang="be-Cyrl">SOFL</name>
+  <name xml:lang="zh-Hans">SOFL</name>
+  <name xml:lang="cs">SOFL</name>
+  <name xml:lang="el">Κασέτες</name>
+  <name xml:lang="tr">SOFL</name>
+  <name xml:lang="sv">SOFL</name>
+  <name xml:lang="pl">SOFL</name>
+  <name xml:lang="fa">کارتریج‌ها</name>
+  <name xml:lang="pt-BR">SOFL</name>
+  <name xml:lang="ro">Cartușe</name>
+  <name xml:lang="de">SOFL</name>
+  <name xml:lang="ko">SOFL</name>
+  <name xml:lang="ru">SOFL</name>
+  <name xml:lang="pt">SOFL</name>
+  <name xml:lang="fi">SOFL</name>
+  <name xml:lang="es">Cartuchos</name>
+  <name xml:lang="ar">SOFL</name>
+  <name xml:lang="it">SOFL</name>
+  <name xml:lang="nl">SOFL</name>
+  <name xml:lang="fr">Cartouches</name>
+  <name xml:lang="nb-NO">SOFL</name>
+  <name xml:lang="uk">SOFL</name>
+  <name xml:lang="ta">SOFL</name>
+  <name xml:lang="hu">Kazetták</name>
+  <summary>Launch all your games</summary>
+  <summary xml:lang="te">మీ అన్ని ఆటలను ప్రారంభించండి</summary>
+  <summary xml:lang="ie">Lansar vor ludes</summary>
+  <summary xml:lang="en-GB">Launch all your games</summary>
+  <summary xml:lang="hi">अपने सभी गेम्स लॉन्च करें</summary>
+  <summary xml:lang="ca">Llança tots els teus jocs</summary>
+  <summary xml:lang="hr">Pokreni sve svoje igre</summary>
+  <summary xml:lang="be-Cyrl">Запускайце ўсе свае гульні</summary>
+  <summary xml:lang="zh-Hans">启动所有游戏</summary>
+  <summary xml:lang="cs">Spusťte všechny vaše hry</summary>
+  <summary xml:lang="el">Εκκινήστε όλα σας τα παιχνίδια</summary>
+  <summary xml:lang="tr">Tüm oyunlarınızı başlatın</summary>
+  <summary xml:lang="sv">Starta alla dina spel</summary>
+  <summary xml:lang="pl">Uruchom wszystkie swoje gry</summary>
+  <summary xml:lang="fa">اجرای همهٔ بازی‌هایتان</summary>
+  <summary xml:lang="pt-BR">Inicie todos os seus jogos</summary>
+  <summary xml:lang="ro">Lansați toate jocurile dvs.</summary>
+  <summary xml:lang="de">Starten Sie alle Ihre Spiele</summary>
+  <summary xml:lang="ko">모든 게임을 실행합니다</summary>
+  <summary xml:lang="ru">Запускайте все свои игры</summary>
+  <summary xml:lang="pt">Inicie todos os seus jogos</summary>
+  <summary xml:lang="fi">Käynnistä kaikki pelisi</summary>
+  <summary xml:lang="es">Lance todos sus juegos</summary>
+  <summary xml:lang="ar">شغِّل كلَّ ألعابك</summary>
+  <summary xml:lang="it">Avvia tutti i tuoi giochi</summary>
+  <summary xml:lang="nl">Start al uw games op</summary>
+  <summary xml:lang="fr">Lancez tous vos jeux</summary>
+  <summary xml:lang="nb-NO">Start alle spillene dine</summary>
+  <summary xml:lang="uk">Запустіть усі свої ігри</summary>
+  <summary xml:lang="ta">உங்கள் எல்லா விளையாட்டுகளையும் தொடங்கவும்</summary>
+  <summary xml:lang="hu">Indítsa el az összes játékát</summary>
+  <description>
+    <p>SOFL is a simple game launcher for all of your games. It has support for importing games from Steam, Lutris, Heroic and more with no login necessary. You can sort and hide games or download cover art from SteamGridDB.</p>
+    <p xml:lang="te">కాట్రిడ్జ్‌లు అనేది మీ అన్ని గేమ్‌ల కోసం ఒక సాధారణ గేమ్ లాంచర్. లాగిన్ అవసరం లేకుండా స్టీమ్, లుట్రిస్, హీరోయిక్ మరియు మరిన్నింటి నుండి గేమ్‌లను దిగుమతి చేసుకోవడానికి ఇది మద్దతును కలిగి ఉంది. మీరు గేమ్‌లను క్రమబద్ధీకరించవచ్చు మరియు దాచవచ్చు లేదా SteamGridDB నుండి కవర్ ఆర్ట్‌ని డౌన్‌లోడ్ చేసుకోవచ్చు.</p>
+    <p xml:lang="ie">SOFL es un simplic lansator por vor ludes. It supporta importation de ludes de Steam, Lutris, Heroic e plu sin inregistration. On posse celar e ordinar ludes o descargar covrimentes de SteamGridDB.</p>
+    <p xml:lang="en-GB">SOFL is a simple game launcher for all of your games. It has support for importing games from Steam, Lutris, Heroic and more with no login necessary. You can sort and hide games or download cover art from SteamGridDB.</p>
+    <p xml:lang="hi">SOFL आपके सभी गेम के लिए एक सरल गेम लॉन्चर है। इसमें बिना किसी लॉगिन अवश्यक्ता के Steam, Lutris, Heroic और अन्य से गेम आयात करने का समर्थन है। आप गेम को सॉर्ट और छिपा सकते हैं या SteamGridDB से कवर आर्ट डाउनलोड कर सकते हैं।</p>
+    <p xml:lang="ca">SOFL es un llançador de jocs senzill per tots els teus jocs. Suporta la importació de jocs des de Steam, Lutris, Heroic i molts més sense la necessitat de iniciar sessió. Pots ordenar i amagar els jocs o descarregar l'art de la coberta de SteamGridDB.</p>
+    <p xml:lang="hr">SOFL je jednostavan pokretač igri za sve tvoje igre. Podržava uvoz igri sa Steama, Lutrisa, Heroica i drugih bez potrebe za prijavom. Možeš promijeniti redoslijed igri, sakriti igre ili preuzeti naslovnice sa SteamGridDB-a.</p>
+    <p xml:lang="be-Cyrl">Картрыджы - гэта простая праграма для запуску ўсіх вашых гульняў. Яна падтрымлівае імпарт гульняў з Steam, Lutris, Heroic і іншых без неабходнасці ўваходу ў сістэму. Вы можаце сартаваць і хаваць гульні або спампоўваць вокладку з SteamGridDB.</p>
+    <p xml:lang="zh-Hans">SOFL 是一个简单的游戏启动器，适用于您的所有游戏。它支持从Steam、Lutris、Heroic等游戏平台导入游戏且无需登录。您可以排序和隐藏游戏，也可以从SteamGridDB下载封面。</p>
+    <p xml:lang="cs">Kazety jsou jednoduchý spouštěč pro všechny vaše hry. Podporuje importovaní her ze služeb Steam, Lutris, Heroic a dalších bez nutnosti přihlášení. Hry můžete třídit a skrývat nebo stahovat obálky ze služby SteamGridDB.</p>
+    <p xml:lang="el">Οι Κασέτες είναι ένας απλός εκκινητής παιχνιδιών για όλα σας τα παιχνίδια. Υποστηρίζει την εισαγωγή παιχνιδιών από το Steam, Heroic και άλλες πλατφόρμες χωρίς σύνδεση να είναι απαραίτητη. Μπορείτε να ταξινομήσετε και να κρύψετε τα παιχνίδια σας, καθώς και να κατεβάσετε τα εξώφυλλα τους από το SteamGridDB.</p>
+    <p xml:lang="tr">Kartuşlar, tüm oyunlarınız için basit bir oyun başlatıcıdır. Oturum açmaya gerek kalmadan Steam, Lutris, Heroic ve daha fazla sağlayıcıdan oyun içe aktarma desteğine sahiptir. Oyunları sıralayabilir, gizleyebilir veya SteamGridDB'den kapak resmi indirebilirsiniz.</p>
+    <p xml:lang="sv">SOFL är en enkel spelstartare för alla dina spel. Det har stöd för att importera spel från Steam, Lutris, Heroic och fler utan inloggning. Du kan sortera och dölja spel eller ladda ner omslagsbilder från SteamGridDB.</p>
+    <p xml:lang="pl">SOFL to prosty launcher gier dla wszystkich twoich gier. Posiada wsparcie dla importu gier ze Steam, Lutris, Heroic i innych bez konieczności logowania. Możesz sortować i ukrywać gry lub pobierać okładki ze SteamGridDB.</p>
+    <p xml:lang="fa">کارتریج یک اجراگر سادهٔ بازی برای همهٔ بازی‌هایتان است. کارتریج می‌تواند بدون نیاز به ورود، بازی‌هایتان را از استیم، لوتریس، هروییک و… وارد کند. می‌توانید بازی‌هایتان را نهفته یا طرح جلدشان را از SteamGridDB بگیرید.</p>
+    <p xml:lang="pt-BR">Cartuchos é um simples iniciador de jogos para todos os seus jogos. Ele tem suporte para importar jogos do Steam, Lutris, Heroic e outros, sem necessidade de login. Você pode ordenar e esconder jogos ou baixar arte de capa do SteamGridDB.</p>
+    <p xml:lang="ro">Cartușe este un lansator de jocuri simplu pentru toate jocurile tale. Acesta are suport pentru importul de jocuri de pe Steam, Lutris, Heroic și multe altele, fără a fi necesară autentificarea. Puteți sorta și ascunde jocurile sau descărca coperta jocului din SteamGridDB.</p>
+    <p xml:lang="de">SOFL ist ein einfacher Game Launcher für alle deine Spiele. Es bietet Unterstützung für den Import von Spielen aus Steam, Lutris, Heroic und mehr, ohne dass eine Anmeldung erforderlich ist. Sie können Spiele sortieren und ausblenden oder Cover-Art von SteamGridDB herunterladen.</p>
+    <p xml:lang="ko">카트리지는 간단한 게임 실행 프로그램입니다. 스팀, 루트리스, 히어로익 등의 사이트에서 로그인을 하지 않고 게임을 가져올 수 있습니다. 게임을 정리하고 숨기거나, SteamGridDB에서 표지를 다운로드할 수 있습니다.</p>
+    <p xml:lang="ru">SOFL - это простое приложение для запуска ваших игр. Оно поддерживает импорт игр из Steam, Lutris, Heroic и других без необходимости входа в систему. Вы можете сортировать и скрывать игры или загружать обложки из SteamGridDB.</p>
+    <p xml:lang="pt">SOFL é um lançador de jogos simples para todos os seus jogos. Tem suporte para importar jogos do Steam, Lutris, Heroic e muito mais, sem necessidade de login. Você pode classificar e ocultar jogos ou baixar a capa do SteamGridDB.</p>
+    <p xml:lang="fi">SOFL on yksinkertainen pelien käynnistysohjelma kaikille peleillesi. Se tukee pelien tuontia Steamista, Lutriksesta, Heroicista ja muista ilman kirjautumista. Voit lajitella ja piilottaa pelejä tai ladata kansikuvia SteamGridDB:stä.</p>
+    <p xml:lang="es">Cartuchos es un sencillo lanzador de juegos para todos sus juegos. Tiene soporte para importar juegos de Steam, Lutris, Heroic y más sin necesidad de iniciar sesión. Puede ordenar y ocultar juegos o descargar portadas de SteamGridDB.</p>
+    <p xml:lang="ar">«خراطيش» هو مشغِّل ألعاب يسير، فيه دعم لاستيراد الألعاب من ستيم،ولوترس، وهِرُوِك، وبرامج أخرى، وذلك دون تسجيل دخول. ولك ترتيب وإخفاء الألعاب فيه كيفما شئت، وكذلك تستطيع منه تنزيل غُلُف الألعاب من SteamGridDB.</p>
+    <p xml:lang="it">Cartucce è un semplice launcher per tutti i tuoi giochi. Supporta l'import di giochi da Steam, Lutris, Heroic e altri senza bisogno di login. Puoi organizzare e nascondere i giochi oppure scaricare le copertine da StreamGridDB.</p>
+    <p xml:lang="nl">SOFL is een eenvoudige launcher voor al uw games. Het biedt ondersteuning voor het importeren van games van Steam, Lutris, Heroic en meer, zonder in te hoeven loggen. U kunt spellen sorteren, verbergen en covers van SteamGridDB downloaden.</p>
+    <p xml:lang="fr">Cartouches est un lanceur de jeux simple pour tous vos jeux. Il prend en charge l’importation des jeux depuis Steam, Lutris, Heroic et d’autres encore, sans nécessiter de connexion. Vous pouvez trier et masquer les jeux ou télécharger la pochette depuis SteamGridDB.</p>
+    <p xml:lang="nb-NO">SOFL er en enkel spillutvalgsoppstarter for alle spillene dine. Den har støtte for importering av spill fra Steam, Lutris, Heroic, og flere uten innlogging. Du kan sortere og skjule spil eller laste ned omslagsbilder fra SteamGridDB.</p>
+    <p xml:lang="uk">Картриджі - це простий лаунчер для всіх ваших ігор. Він підтримує імпорт ігор з Steam, Lutris, Heroic тощо без необхідності входу в систему. Ви можете сортувати та приховувати ігри або завантажувати обкладинки з SteamGridDB.</p>
+    <p xml:lang="ta">உங்கள் எல்லா விளையாட்டுகளுக்கும் கேட்ரிட்ஜ்கள் ஒரு எளிய விளையாட்டு துவக்கி ஆகும். Steam, Lutris, Heroic மற்றும் பலவற்றிலிருந்து விளையாட்டுகளை இறக்குமதி செய்வதற்கான ஆதரவை இது கொண்டுள்ளது. நீங்கள் விளையாட்டுகளை வரிசைப்படுத்தலாம் மற்றும் மறைக்கலாம் அல்லது SteamGridDB இலிருந்து அட்டைப்பட கலையைப் பதிவிறக்கலாம்.</p>
+    <p xml:lang="hu">A Kazetták egy egyszerű játékindító. Importálhat játékokat a Steamből, a Lutrisból, a Heroicból és több más forrásból bejelentkezés nélkül. Rendezheti és elrejtheti a játékait, valamint letölthet borítóképeket a SteamGridDB-ről.</p>
+  </description>
+  <url type="homepage">https://github.com/BadKiko/steam-online-fix-launcher</url>
+  <url type="bugtracker">https://github.com/BadKiko/steam-online-fix-launcher/issues</url>
+  <url type="translate">https://hosted.weblate.org/engage/sofl/</url>
+  <url type="contact">https://www.badkiko.page/about/</url>
+  <url type="vcs-browser">https://github.com/BadKiko/steam-online-fix-launcher</url>
+  <url type="contribute">https://github.com/BadKiko/steam-online-fix-launcher/blob/main/CONTRIBUTING.md</url>
+  <developer id="page.badkiko">
+    <name translate="no">badkiko</name>
+  </developer>
+  <launchable type="desktop-id">org.badkiko.sofl.Devel.desktop</launchable>
+  <translation type="gettext">sofl</translation>
+  <branding>
+    <color type="primary" scheme_preference="light">#29cf34</color>
+    <color type="primary" scheme_preference="dark">#374F39</color>
+  </branding>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/1.png</image>
+      <caption>SOFL</caption>
+      <caption xml:lang="ia">SOFL</caption>
+      <caption xml:lang="te">SOFL</caption>
+      <caption xml:lang="ie">SOFL</caption>
+      <caption xml:lang="en-GB">SOFL</caption>
+      <caption xml:lang="hi">SOFL</caption>
+      <caption xml:lang="ja">SOFL</caption>
+      <caption xml:lang="ca">SOFL</caption>
+      <caption xml:lang="hr">SOFL</caption>
+      <caption xml:lang="be-Cyrl">SOFL</caption>
+      <caption xml:lang="zh-Hans">SOFL</caption>
+      <caption xml:lang="cs">SOFL</caption>
+      <caption xml:lang="el">Κασέτες</caption>
+      <caption xml:lang="tr">SOFL</caption>
+      <caption xml:lang="sv">SOFL</caption>
+      <caption xml:lang="pl">SOFL</caption>
+      <caption xml:lang="fa">کارتریج‌ها</caption>
+      <caption xml:lang="pt-BR">SOFL</caption>
+      <caption xml:lang="ro">Cartușe</caption>
+      <caption xml:lang="de">SOFL</caption>
+      <caption xml:lang="ko">SOFL</caption>
+      <caption xml:lang="ru">SOFL</caption>
+      <caption xml:lang="pt">SOFL</caption>
+      <caption xml:lang="fi">SOFL</caption>
+      <caption xml:lang="es">Cartuchos</caption>
+      <caption xml:lang="ar">SOFL</caption>
+      <caption xml:lang="it">SOFL</caption>
+      <caption xml:lang="nl">SOFL</caption>
+      <caption xml:lang="fr">Cartouches</caption>
+      <caption xml:lang="nb-NO">SOFL</caption>
+      <caption xml:lang="uk">SOFL</caption>
+      <caption xml:lang="ta">SOFL</caption>
+      <caption xml:lang="hu">Kazetták</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/2.png</image>
+      <caption>Game Details</caption>
+      <caption xml:lang="te">గేమ్ వివరాలు</caption>
+      <caption xml:lang="ie">Detallies del lude</caption>
+      <caption xml:lang="en-GB">Game Details</caption>
+      <caption xml:lang="hi">गेम विवरण</caption>
+      <caption xml:lang="ca">Detalls del joc</caption>
+      <caption xml:lang="hr">Detalji igre</caption>
+      <caption xml:lang="be-Cyrl">Падрабязнасці аб гульні</caption>
+      <caption xml:lang="zh-Hans">游戏详情</caption>
+      <caption xml:lang="cs">Podrobnosti o hře</caption>
+      <caption xml:lang="el">Λεπτομέρειες Παιχνιδιού</caption>
+      <caption xml:lang="tr">Oyun Ayrıntıları</caption>
+      <caption xml:lang="sv">Speldetaljer</caption>
+      <caption xml:lang="pl">Szczegóły gry</caption>
+      <caption xml:lang="fa">جزییات بازی</caption>
+      <caption xml:lang="pt-BR">Detalhes do jogo</caption>
+      <caption xml:lang="ro">Detalii joc</caption>
+      <caption xml:lang="de">Spieldetails</caption>
+      <caption xml:lang="ko">게임 세부 정보</caption>
+      <caption xml:lang="ru">Подробности об игре</caption>
+      <caption xml:lang="pt">Detalhes do jogo</caption>
+      <caption xml:lang="fi">Pelin tiedot</caption>
+      <caption xml:lang="es">Detalles del juego</caption>
+      <caption xml:lang="ar">تفاصيل اللعبة</caption>
+      <caption xml:lang="it">Dettagli del gioco</caption>
+      <caption xml:lang="nl">Game-details</caption>
+      <caption xml:lang="fr">Détails du jeu</caption>
+      <caption xml:lang="nb-NO">Spilldetaljer</caption>
+      <caption xml:lang="uk">Подробиці гри</caption>
+      <caption xml:lang="ta">விளையாட்டு விவரங்கள்</caption>
+      <caption xml:lang="hu">Játék tulajdonságai</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/3.png</image>
+      <caption>Edit Game Details</caption>
+      <caption xml:lang="te">గేమ్ వివరాలను సవరించండి</caption>
+      <caption xml:lang="ie">Redacter li detallies del lude</caption>
+      <caption xml:lang="en-GB">Edit Game Details</caption>
+      <caption xml:lang="hi">गेम विवरण संपादन</caption>
+      <caption xml:lang="ca">Editar els detalls del joc</caption>
+      <caption xml:lang="hr">Uredi detalje igre</caption>
+      <caption xml:lang="be-Cyrl">Рэдагаваць падрабязнасці аб гульні</caption>
+      <caption xml:lang="zh-Hans">编辑游戏详情</caption>
+      <caption xml:lang="cs">Upravit podrobnosti o hře</caption>
+      <caption xml:lang="el">Επεξεργασία Λεπτομερειών Παιχνιδιού</caption>
+      <caption xml:lang="tr">Oyun Ayrıntılarını Düzenle</caption>
+      <caption xml:lang="sv">Redigera speldetaljer</caption>
+      <caption xml:lang="pl">Edycja szczegółów gry</caption>
+      <caption xml:lang="fa">ویرایش جزییات بازی</caption>
+      <caption xml:lang="pt-BR">Editar detalhes do jogo</caption>
+      <caption xml:lang="ro">Editați detaliile jocului</caption>
+      <caption xml:lang="de">Spieldetails bearbeiten</caption>
+      <caption xml:lang="ko">게임 세부 정보 편집</caption>
+      <caption xml:lang="ru">Редактировать подробности об игре</caption>
+      <caption xml:lang="pt">Editar detalhes do jogo</caption>
+      <caption xml:lang="fi">Muokkaa pelin tietoja</caption>
+      <caption xml:lang="es">Editar detalles del juego</caption>
+      <caption xml:lang="ar">حرِّر تفاصيل اللعبة</caption>
+      <caption xml:lang="it">Modifica dettagli del gioco</caption>
+      <caption xml:lang="nl">Game-details bewerken</caption>
+      <caption xml:lang="fr">Modifier les détails du jeu</caption>
+      <caption xml:lang="nb-NO">Rediger spilldetaljer</caption>
+      <caption xml:lang="uk">Редагувати інформацію про гру</caption>
+      <caption xml:lang="ta">விளையாட்டு விவரங்களைத் திருத்து</caption>
+      <caption xml:lang="hu">Játék szerkesztése</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/kra-mo/sofl/main/data/screenshots/4.png</image>
+      <caption>Preferences</caption>
+      <caption xml:lang="te">ప్రాధాన్యతలు</caption>
+      <caption xml:lang="ie">Preferenties</caption>
+      <caption xml:lang="en-GB">Preferences</caption>
+      <caption xml:lang="hi">प्राथमिकताएं</caption>
+      <caption xml:lang="ca">Preferències</caption>
+      <caption xml:lang="hr">Postavke</caption>
+      <caption xml:lang="be-Cyrl">Параметры</caption>
+      <caption xml:lang="zh-Hans">偏好</caption>
+      <caption xml:lang="cs">Předvolby</caption>
+      <caption xml:lang="el">Προτιμήσεις</caption>
+      <caption xml:lang="tr">Tercihler</caption>
+      <caption xml:lang="sv">Inställningar</caption>
+      <caption xml:lang="pl">Preferencje</caption>
+      <caption xml:lang="fa">ترجیحات</caption>
+      <caption xml:lang="pt-BR">Preferências</caption>
+      <caption xml:lang="ro">Preferințe</caption>
+      <caption xml:lang="de">Einstellungen</caption>
+      <caption xml:lang="ko">기본 설정</caption>
+      <caption xml:lang="ru">Параметры</caption>
+      <caption xml:lang="pt">Preferências</caption>
+      <caption xml:lang="fi">Asetukset</caption>
+      <caption xml:lang="es">Preferencias</caption>
+      <caption xml:lang="ar">التفضيلات</caption>
+      <caption xml:lang="it">Preferenze</caption>
+      <caption xml:lang="nl">Voorkeuren</caption>
+      <caption xml:lang="fr">Préférences</caption>
+      <caption xml:lang="nb-NO">Brukervalg</caption>
+      <caption xml:lang="uk">Параметри</caption>
+      <caption xml:lang="ta">விருப்பங்கள்</caption>
+      <caption xml:lang="hu">Beállítások</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="flatpak" date="2025-08-24">
+      <description translate="no">
+        <p>Added Online-Fix support.</p>
+      </description>
+    </release>
+  </releases>
+</component>
