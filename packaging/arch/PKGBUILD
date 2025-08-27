@@ -34,16 +34,6 @@ optdepends=(
     'steam: For Steam game integration'
     'lutris: For Lutris game integration'
     'heroic-games-launcher: For Heroic game integration'
-    'umu-launcher: For running Windows games via Proton outside Steam'
-)
-
-source=(
-    "$pkgname-$pkgver.tar.gz"
-    "umu-launcher-1.2.9-zipapp.tar::https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.2.9/umu-launcher-1.2.9-zipapp.tar"
-)
-sha256sums=(
-    'SKIP'
-    '1be4a3ce6a7617547c19e579610fc18c9ce5c6b32b62216eabd8528bc36a136d'
 )
 
 build() {
