@@ -22,6 +22,7 @@ from os import getenv
 from pathlib import Path
 
 from gi.repository import Gdk, Gio, GLib
+from . import utils
 
 
 class AppState(IntEnum):
