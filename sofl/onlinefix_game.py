@@ -237,15 +237,37 @@ class OnlineFixGameData(GameData):
             f"~/.local/share/Steam/compatibilitytools.d/{proton_version}"
         )
 
-        # Check if Proton exists, fall back to default if not
+        # Check if Proton exists, find available proton if not
         if not os.path.exists(proton_path):
-            default_proton = "GE-Proton10-3"
-            proton_path = os.path.expanduser(
-                f"~/.local/share/Steam/compatibilitytools.d/{default_proton}"
+            # Scan for available proton versions
+            proton_dir = Path(
+                os.path.expanduser("~/.local/share/Steam/compatibilitytools.d")
             )
-            self.log_and_toast(
-                _("Proton version not found, using {}").format(default_proton)
-            )
+            available_protons = []
+
+            if proton_dir.exists() and proton_dir.is_dir():
+                for item in proton_dir.iterdir():
+                    if item.is_dir() and (
+                        item.name.startswith("GE-Proton")
+                        or item.name.startswith("Proton")
+                    ):
+                        available_protons.append(item.name)
+
+            if available_protons:
+                # Use the first available proton (sorted by version descending)
+                available_protons.sort(reverse=True)
+                proton_version = available_protons[0]
+                proton_path = os.path.expanduser(
+                    f"~/.local/share/Steam/compatibilitytools.d/{proton_version}"
+                )
+                self.log_and_toast(
+                    _("Proton version not found, using {}").format(proton_version)
+                )
+            else:
+                self.log_and_toast(
+                    _("No Proton versions found. Please install Proton through Steam.")
+                )
+                return
 
         # Создаем директорию для префикса, если она не существует
         prefix_path = self._create_wine_prefix(game_exec)

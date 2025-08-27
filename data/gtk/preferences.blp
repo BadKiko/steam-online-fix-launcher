@@ -23,8 +23,8 @@ template $SOFLPreferences: Adw.PreferencesDialog {
       }
 
       Adw.SwitchRow force_theme_switch {
-            title: _("Dark theme");
-          }
+        title: _("Dark theme");
+      }
     }
 
     Adw.PreferencesGroup images_group {
@@ -447,6 +447,39 @@ template $SOFLPreferences: Adw.PreferencesDialog {
       Adw.ComboRow online_fix_launcher_combo {
         title: _("Launcher Type");
         selected: 0;
+      }
+
+      Box online_fix_umu_banner_box {
+        orientation: vertical;
+        spacing: 12;
+        visible: false;
+
+        styles [
+          "banner",
+        ]
+
+        Box {
+          orientation: horizontal;
+          spacing: 12;
+
+          Button online_fix_umu_info_button {
+            icon-name: "dialog-information-symbolic";
+            valign: start;
+            tooltip-text: _("What is UMU Launcher?");
+
+            styles [
+              "warning",
+            ]
+          }
+
+          Label {
+            label: _("UMU Launcher is not available");
+
+            styles [
+              "warning",
+            ]
+          }
+        }
       }
 
       Adw.ComboRow online_fix_proton_combo {

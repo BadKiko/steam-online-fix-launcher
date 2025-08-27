@@ -367,7 +367,7 @@ class InstallDialog(Adw.Dialog):
 
     def log_message(self, message, level=logging.INFO):
         """Delegates to utility function"""
-        log_message(message, level)
+        logger.log(level, message)
 
     def _do_show_toast(self):
         """Actually show toast after debouncing"""
