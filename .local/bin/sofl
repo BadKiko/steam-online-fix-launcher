@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/home/kiko/Work/steam-online-fix-launcher/.venv/bin/python3
 
 # sofl.in
 #
@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 from platform import system
 
-VERSION = "0.0.3.1a"
+VERSION = "0.0.3.2a"
 
 if os.name == "nt":
     PKGDATADIR = os.path.join(os.path.dirname(__file__), "..", "share", "sofl")
