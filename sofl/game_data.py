@@ -27,6 +27,8 @@ from gi.repository import GObject
 from sofl import shared
 from sofl.utils.run_executable import run_executable
 
+from sofl.utils.path_utils import normalize_executable_path
+
 from gettext import gettext as _
 
 
@@ -112,7 +114,7 @@ class GameData(GObject.Object):
         self.save()
         self.update()
 
-        run_executable(self.executable)
+        run_executable(normalize_executable_path(self.executable))
 
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()

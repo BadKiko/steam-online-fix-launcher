@@ -22,17 +22,20 @@ import os
 import subprocess
 from shlex import quote
 
+from sofl.utils.path_utils import normalize_executable_path
+
 from sofl import shared
 
 
 def run_executable(executable) -> None:
+    executable = normalize_executable_path(executable)
     logging.info("Launching `%s`", executable)
 
     # pylint: disable=consider-using-with
     subprocess.Popen(
         executable,
         cwd=shared.home,
-        shell=True,
+        shell=False,
         start_new_session=True,
         creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,  # type: ignore
     )

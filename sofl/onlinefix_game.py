@@ -18,7 +18,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import logging
-import shutil
+import shlex
 import os
 import subprocess
 import tempfile
@@ -34,6 +34,7 @@ from sofl import shared
 from sofl.game_data import GameData
 from sofl.utils.run_executable import run_executable
 from sofl.utils.create_dialog import create_dialog
+from sofl.utils.path_utils import normalize_executable_path
 
 from gettext import gettext as _
 
@@ -45,9 +46,6 @@ import subprocess
 
 class OnlineFixGameData(GameData):
     """Класс данных для игр Online-Fix с расширенной функциональностью"""
-
-    def __init__(self, data: dict[str, Any]):
-        super().__init__(data)
 
     def get_play_button_label(self) -> str:
         """Return the label text for the play button"""
@@ -92,7 +90,11 @@ class OnlineFixGameData(GameData):
         """Запуск игры через Direct Steam API Runner"""
         logging.info("Direct Steam API Runner")
 
-        game_exec = Path(self.executable.split()[0])
+        game_exec = normalize_executable_path(self.executable)
+        game_exec_str = str(game_exec) if game_exec else ""
+        if not game_exec_str:
+            self.log_and_toast(_("Invalid executable path"))
+            return
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
         # Проверяем, запущен ли Steam
@@ -106,9 +108,6 @@ class OnlineFixGameData(GameData):
         except Exception as e:
             logging.error(f"[SOFL] Failed to check Steam status: {str(e)}")
             # Продолжаем выполнение, даже если не удалось проверить статус Steam
-
-        # Путь к исполняемому файлу игры
-        game_exec_str = str(game_exec)
 
         # Получаем путь к Proton из настроек
         proton_version = shared.schema.get_string("online-fix-proton-version")
@@ -228,14 +227,16 @@ class OnlineFixGameData(GameData):
         """Запуск игры через UMU Runner"""
         logging.info("Umu Runner")
 
-        game_exec = Path(self.executable.split()[0])
+        game_exec = normalize_executable_path(self.executable)
+        game_exec_str = str(game_exec) if game_exec else ""
+        if not game_exec_str:
+            self.log_and_toast(_("Invalid executable path"))
+            return
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
         # Get selected Proton version from settings
         proton_version = shared.schema.get_string("online-fix-umu-proton-version")
-        proton_path = os.path.expanduser(
-            f"~/.local/share/Steam/compatibilitytools.d/{proton_version}"
-        )
+        proton_path = shared.utils.get_umu_proton_path(proton_version)
 
         # Check if Proton exists, find available proton if not
         if not os.path.exists(proton_path):
@@ -257,9 +258,7 @@ class OnlineFixGameData(GameData):
                 # Use the first available proton (sorted by version descending)
                 available_protons.sort(reverse=True)
                 proton_version = available_protons[0]
-                proton_path = os.path.expanduser(
-                    f"~/.local/share/Steam/compatibilitytools.d/{proton_version}"
-                )
+                proton_path = shared.utils.get_umu_proton_path(proton_version)
                 self.log_and_toast(
                     _("Proton version not found, using {}").format(proton_version)
                 )

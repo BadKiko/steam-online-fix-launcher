@@ -385,7 +385,9 @@ class DetailsDialog(Adw.Dialog):
         except GLib.Error:
             return
 
-        self.executable.set_text(shlex.quote(path))
+        # Store the path as-is; parsing will handle spaces safely at runtime
+        path_to_store = path
+        self.executable.set_text(path_to_store)
 
     def choose_executable(self, *_args: Any) -> None:
         self.exec_file_dialog.open(self.get_root(), None, self.set_executable)
