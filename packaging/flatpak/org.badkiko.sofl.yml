@@ -15,8 +15,12 @@ finish-args:
   - --filesystem=xdg-documents
   - --filesystem=xdg-desktop
   - --filesystem=xdg-download
-  - --filesystem=xdg-data/Steam:ro
-  - --filesystem=xdg-config/steam:ro
+  - --filesystem=xdg-data/Steam
+  - --filesystem=xdg-config/steam
+  - --filesystem=/tmp
+  - --filesystem=/home
+  - --filesystem=~/.local/share/Steam/compatibilitytools.d
+  - --filesystem=~/.local/share/Steam
   # Device access
   - --device=all
   # Network access
@@ -25,6 +29,8 @@ finish-args:
   - --talk-name=org.gnome.Shell.Screenshot
   - --env=XDG_SESSION_TYPE=wayland
   - --env=GDK_BACKEND=wayland,x11
+  - --env=STEAM_COMPAT_CLIENT_INSTALL_PATH=~/.steam/steam
+  - --env=STEAM_COMPAT_DATA_PATH=~/.steam/steam
 
 modules:
   - name: blueprint-compiler
@@ -113,6 +119,9 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/bin/umu
       - cp umu-run ${FLATPAK_DEST}/bin/umu/
       - chmod +x ${FLATPAK_DEST}/bin/umu/umu-run
+      # Also copy to bin directory so it's in PATH
+      - cp umu-run ${FLATPAK_DEST}/bin/umu-run
+      - chmod +x ${FLATPAK_DEST}/bin/umu-run
     sources:
       - type: archive
         url: https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.2.9/umu-launcher-1.2.9-zipapp.tar

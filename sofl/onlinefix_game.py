@@ -183,13 +183,16 @@ class OnlineFixGameData(GameData):
 
         # Опционально добавляем Steam Overlay
         use_steam_overlay = shared.schema.get_boolean("online-fix-use-steam-overlay")
-        if use_steam_overlay:
+        if use_steam_overlay and not in_flatpak:
+            # Steam Overlay не работает в Flatpak из-за ограничений sandbox
             env["LD_PRELOAD"] = (
                 f":{user_home}/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so:{user_home}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so"
             )
             logging.info(
                 f"[SOFL] Steam Overlay enabled with LD_PRELOAD={env['LD_PRELOAD']}"
             )
+        elif use_steam_overlay and in_flatpak:
+            logging.info("[SOFL] Steam Overlay disabled in Flatpak environment")
 
         # Опционально используем Steam Runtime
         use_steam_runtime = shared.schema.get_boolean("online-fix-use-steam-runtime")
@@ -276,9 +279,29 @@ class OnlineFixGameData(GameData):
                 steam_runtime_path = os.path.join(
                     steam_home, "ubuntu12_32", "steam-runtime", "run.sh"
                 )
-                if not os.path.exists(steam_runtime_path):
+
+                # Проверяем существование файла (учитываем Flatpak среду)
+                try:
+                    if in_flatpak:
+                        check_proc = subprocess.run(
+                            [
+                                "flatpak-spawn",
+                                "--host",
+                                "test",
+                                "-f",
+                                steam_runtime_path,
+                            ],
+                            capture_output=True,
+                        )
+                        file_exists = check_proc.returncode == 0
+                    else:
+                        file_exists = os.path.exists(steam_runtime_path)
+                except Exception:
+                    file_exists = False
+
+                if not file_exists:
                     steam_runtime_path = ""
-                    self.log_and_toast(_("Steam Runtime not found"))
+                    logging.info("[SOFL] Steam Runtime not found at standard location")
 
         # Формируем команду запуска
         cmd = f'"{proton_path}" run "{game_exec_str}"'
@@ -295,10 +318,6 @@ class OnlineFixGameData(GameData):
         if args_after:
             cmd = f"{cmd} {args_after}"
 
-        # Если отладка отключена, перенаправляем вывод в /dev/null
-        if not debug_mode:
-            cmd = f"{cmd} > /dev/null 2>&1"
-
         # Запускаем игру
         self._run_game(cmd, env, game_exec)
 
@@ -311,6 +330,8 @@ class OnlineFixGameData(GameData):
 
     def _launch_with_umu_runner(self) -> None:
         """Запуск игры через UMU Runner"""
+        import shutil
+
         logging.info("Umu Runner")
 
         game_exec = normalize_executable_path(self.executable)
@@ -361,43 +382,78 @@ class OnlineFixGameData(GameData):
         prefix_path = os.environ.get("SOFL_WINEPREFIX", prefix_path)
         prefix_path = os.path.expanduser(prefix_path)
 
-        # Resolve umu-run path depending on environment
-        flatpak_umu_path = f"{os.getenv('FLATPAK_DEST')}/bin/umu/umu-run"
-        host_umu_path: Optional[str] = None
         logging.info(f"Using Proton: {proton_path}")
 
-        if os.path.exists("/.flatpak-info") and os.path.isfile(flatpak_umu_path):
-            # Inside Flatpak: use umu-run directly
-            host_umu_path = flatpak_umu_path
-            logging.info(f"Using Flatpak UMU path: {flatpak_umu_path}")
+        # Находим umu-run в Flatpak среде
+        flatpak_umu_path = None
+
+        # Сначала проверяем PATH
+        path_candidate = shutil.which("umu-run")
+        if path_candidate:
+            flatpak_umu_path = path_candidate
+            logging.info(f"Found umu-run in PATH: {path_candidate}")
         else:
-            # Native host: try PATH first, then vendored path in Arch package
-            path_candidate = shutil.which("umu-run")
-            vendor_candidate = "/usr/share/sofl/umu/umu-run"
-            if path_candidate:
-                host_umu_path = path_candidate
-            elif os.path.isfile(vendor_candidate):
-                host_umu_path = vendor_candidate
-            else:
-                self.log_and_toast(
-                    _(
-                        "umu-run not found. Please install umu-launcher or reinstall package."
-                    )
+            # Проверяем стандартные пути в Flatpak
+            flatpak_candidates = [
+                "/app/bin/umu-run",  # Основной путь в Flatpak
+                "/app/bin/umu/umu-run",
+                f"{os.getenv('FLATPAK_DEST') or ''}/bin/umu/umu-run",
+            ]
+
+            for candidate in flatpak_candidates:
+                if candidate and os.path.isfile(candidate):
+                    flatpak_umu_path = candidate
+                    logging.info(f"Found umu-run at: {candidate}")
+                    break
+
+        if not flatpak_umu_path:
+            logging.error("[SOFL] umu-run not found in Flatpak environment")
+            self.log_and_toast(
+                _(
+                    "umu-run not found. Please install umu-launcher or reinstall package."
                 )
+            )
+            return
+
+        # Временная папка на хосте (в /tmp)
+        temp_dir = tempfile.gettempdir()
+        host_umu_path = os.path.join(temp_dir, f"umu-run-{os.getuid()}")
+
+        logging.info(f"Flatpak UMU path: {flatpak_umu_path}")
+        logging.info(f"Host UMU path: {host_umu_path}")
+
+        # Копируем только если файл отсутствует или отличается
+        if not os.path.exists(host_umu_path) or os.path.getmtime(
+            host_umu_path
+        ) < os.path.getmtime(flatpak_umu_path):
+            try:
+                shutil.copy2(flatpak_umu_path, host_umu_path)
+                os.chmod(host_umu_path, os.stat(host_umu_path).st_mode | stat.S_IXUSR)
+                logging.info(f"[SOFL] Copied umu-run to: {host_umu_path}")
+            except Exception as e:
+                logging.error(f"[SOFL] Failed to copy umu-run: {e}")
+                self.log_and_toast(_("Failed to copy UMU launcher"))
                 return
 
-        # Формируем команду для запуска
-        cmd = [
+        # Формируем команду с вызовом через flatpak-spawn --host
+        cmd_parts = [
             f"WINEPREFIX='{prefix_path}'",
             f'WINEDLLOVERRIDES="{dll_overrides}"',
             "GAMEID=480",
             f"PROTONPATH={proton_path}",
             host_umu_path,
-            f"'{game_exec}'",
+            f"'{game_exec_str}'",
         ]
-        cmd_str = " ".join(cmd)
+        cmd_str = " ".join(cmd_parts)
 
-        run_executable(cmd_str)
+        # Запускаем через run_executable для Flatpak совместимости
+        try:
+            logging.info(f"[SOFL] Executing UMU command: {cmd_str}")
+            run_executable(cmd_str)
+        except Exception as e:
+            logging.error(f"[SOFL] Error launching game with UMU: {e}")
+            self.log_and_toast(_("Failed to launch game with UMU: {}").format(str(e)))
+            return
 
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
@@ -418,18 +474,59 @@ class OnlineFixGameData(GameData):
         for dir_name in ["AppData", "Saved Games", "Documents"]:
             os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
 
-        full_cmd = ["bash", "-c", cmd]
+        if os.path.exists("/.flatpak-info"):
+            # В Flatpak среде запускаем команду на хосте через flatpak-spawn
+            logging.debug(f"[SOFL] Raw environment dict: {env}")
 
-        try:
-            logging.info(f"[SOFL] Executing command: {' '.join(full_cmd)}")
-            subprocess.Popen(
-                full_cmd,
-                cwd=str(game_exec.parent),
-                env={**os.environ, **env},
-                start_new_session=True,
-            )
-        except Exception as e:
-            self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
+            # Преобразуем переменные окружения в формат --env=KEY=VALUE
+            env_args = []
+            for key, value in env.items():
+                # Пропускаем пустые значения и None
+                str_value = str(value) if value is not None else ""
+                if str_value.strip():
+                    # Экранируем значение для безопасной передачи
+                    escaped_value = str_value.replace('"', '\\"').replace("$", "\\$")
+                    env_args.append(f"--env={key}={escaped_value}")
+                    logging.debug(f"[SOFL] Adding env var: {key}={escaped_value}")
+                else:
+                    logging.debug(f"[SOFL] Skipping empty env var: {key}={repr(value)}")
+
+            logging.debug(f"[SOFL] Environment variables to pass: {env_args}")
+
+            # Добавляем текущую рабочую директорию
+            game_dir = str(game_exec.parent)
+
+            # Формируем команду
+            if game_dir:
+                # Modify cmd to include cd command
+                cmd = f"cd '{game_dir}' && {cmd}"
+
+            full_cmd = ["flatpak-spawn", "--host"] + env_args + ["bash", "-c", cmd]
+
+            try:
+                logging.info(
+                    f"[SOFL] Executing command via flatpak-spawn: {' '.join(full_cmd)}"
+                )
+                subprocess.Popen(
+                    full_cmd,
+                    start_new_session=True,
+                )
+            except Exception as e:
+                self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
+        else:
+            # В нативной среде запускаем команду обычным способом
+            full_cmd = ["bash", "-c", cmd]
+
+            try:
+                logging.info(f"[SOFL] Executing command: {' '.join(full_cmd)}")
+                subprocess.Popen(
+                    full_cmd,
+                    cwd=str(game_exec.parent),
+                    env={**os.environ, **env},
+                    start_new_session=True,
+                )
+            except Exception as e:
+                self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
 
     def uninstall_game(self) -> None:
         """Uninstall the game by removing its root directory after confirmation"""

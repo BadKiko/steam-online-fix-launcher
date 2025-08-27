@@ -539,43 +539,61 @@ class SOFLPreferences(Adw.PreferencesDialog):
         import shutil
 
         in_flatpak = os.path.exists("/.flatpak-info")
+        logging.info(f"Checking UMU availability (in_flatpak: {in_flatpak})")
 
         # If running inside Flatpak, prefer binaries exposed inside the sandbox
         if in_flatpak:
             # Check PATH inside Flatpak first
-            if shutil.which("umu-run"):
+            path_candidate = shutil.which("umu-run")
+            if path_candidate:
+                logging.info(f"UMU found in Flatpak PATH: {path_candidate}")
                 return True
 
             # Common locations inside Flatpak runtime
             flatpak_candidates = [
-                os.path.join(os.getenv("FLATPAK_DEST") or "", "bin", "umu", "umu-run"),
+                "/app/bin/umu-run",  # This should be in PATH
                 "/app/bin/umu/umu-run",
-                "/app/bin/umu-run",
+                os.path.join(os.getenv("FLATPAK_DEST") or "", "bin", "umu", "umu-run"),
             ]
+
             for candidate in flatpak_candidates:
+                logging.info(f"Checking Flatpak candidate: {candidate}")
                 try:
                     if candidate and os.path.isfile(candidate):
+                        logging.info(f"UMU found at Flatpak location: {candidate}")
                         return True
-                except Exception:
-                    pass
+                except Exception as e:
+                    logging.debug(f"Error checking Flatpak candidate {candidate}: {e}")
 
             # As a last resort, check if host has umu-run (so we could spawn it)
             try:
+                logging.info("Checking host system for umu-run...")
                 which_proc = subprocess.run(
                     ["flatpak-spawn", "--host", "which", "umu-run"],
                     capture_output=True,
                     text=True,
                 )
                 if which_proc.returncode == 0 and which_proc.stdout.strip():
+                    logging.info(f"UMU found on host: {which_proc.stdout.strip()}")
                     return True
-            except Exception:
-                pass
+                else:
+                    logging.info("UMU not found on host")
+            except Exception as e:
+                logging.debug(f"Error checking host umu-run: {e}")
 
         # Native host checks: PATH and vendor path
         path_candidate = shutil.which("umu-run")
         vendor_candidate = "/usr/share/sofl/umu/umu-run"
 
-        return bool(path_candidate or os.path.isfile(vendor_candidate))
+        if path_candidate:
+            logging.info(f"UMU found in native PATH: {path_candidate}")
+            return True
+        elif os.path.isfile(vendor_candidate):
+            logging.info(f"UMU found at vendor path: {vendor_candidate}")
+            return True
+
+        logging.info("UMU not found anywhere")
+        return False
 
     def setup_launcher_combo(self) -> None:
         """Setup launcher selection combo box, hiding UMU if not available"""
