@@ -25,6 +25,7 @@ from shutil import rmtree
 from sys import platform
 from typing import Any, Callable, Optional
 import os
+import subprocess
 
 from gi.repository import Adw, Gio, GLib, Gtk
 
@@ -534,14 +535,43 @@ class SOFLPreferences(Adw.PreferencesDialog):
         Returns:
             bool: True if umu-run is available, False otherwise
         """
-        # Check Flatpak path first
-        flatpak_umu_path = f"{os.getenv('FLATPAK_DEST')}/bin/umu/umu-run"
-        if os.path.exists("/.flatpak-info") and os.path.isfile(flatpak_umu_path):
-            return True
-
-        # Check PATH and vendor path
+        # Robust UMU detection that works inside Flatpak and native installs
         import shutil
 
+        in_flatpak = os.path.exists("/.flatpak-info")
+
+        # If running inside Flatpak, prefer binaries exposed inside the sandbox
+        if in_flatpak:
+            # Check PATH inside Flatpak first
+            if shutil.which("umu-run"):
+                return True
+
+            # Common locations inside Flatpak runtime
+            flatpak_candidates = [
+                os.path.join(os.getenv("FLATPAK_DEST") or "", "bin", "umu", "umu-run"),
+                "/app/bin/umu/umu-run",
+                "/app/bin/umu-run",
+            ]
+            for candidate in flatpak_candidates:
+                try:
+                    if candidate and os.path.isfile(candidate):
+                        return True
+                except Exception:
+                    pass
+
+            # As a last resort, check if host has umu-run (so we could spawn it)
+            try:
+                which_proc = subprocess.run(
+                    ["flatpak-spawn", "--host", "which", "umu-run"],
+                    capture_output=True,
+                    text=True,
+                )
+                if which_proc.returncode == 0 and which_proc.stdout.strip():
+                    return True
+            except Exception:
+                pass
+
+        # Native host checks: PATH and vendor path
         path_candidate = shutil.which("umu-run")
         vendor_candidate = "/usr/share/sofl/umu/umu-run"
 

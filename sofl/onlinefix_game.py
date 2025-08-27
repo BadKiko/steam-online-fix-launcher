@@ -41,7 +41,7 @@ from gettext import gettext as _
 import stat
 import vdf
 import binascii
-import subprocess
+import shutil
 
 
 class OnlineFixGameData(GameData):
@@ -97,12 +97,34 @@ class OnlineFixGameData(GameData):
             return
         dll_overrides = shared.schema.get_string("online-fix-dll-overrides")
 
-        # Проверяем, запущен ли Steam
+        # Detect Flatpak environment and, if present, try to run host checks
+        in_flatpak = os.path.exists("/.flatpak-info")
+        host_home = os.path.expanduser("~")
+        if in_flatpak:
+            try:
+                host_home_proc = subprocess.run(
+                    ["flatpak-spawn", "--host", "bash", "-lc", "echo $HOME"],
+                    capture_output=True,
+                    text=True,
+                )
+                if host_home_proc.returncode == 0:
+                    host_home = host_home_proc.stdout.strip()
+            except Exception as e:
+                logging.error(f"[SOFL] Failed to get host home: {e}")
+
+        # Проверяем, запущен ли Steam (use host pidof when inside Flatpak)
         try:
-            steam_process = subprocess.run(
-                ["pidof", "steam"], capture_output=True, text=True
-            )
-            if steam_process.returncode == 1:
+            if in_flatpak:
+                steam_process = subprocess.run(
+                    ["flatpak-spawn", "--host", "pidof", "steam"],
+                    capture_output=True,
+                    text=True,
+                )
+            else:
+                steam_process = subprocess.run(
+                    ["pidof", "steam"], capture_output=True, text=True
+                )
+            if steam_process.returncode == 1 or not steam_process.stdout.strip():
                 self.log_and_toast(_("Steam is not running"))
                 return
         except Exception as e:
@@ -111,18 +133,38 @@ class OnlineFixGameData(GameData):
 
         # Получаем путь к Proton из настроек
         proton_version = shared.schema.get_string("online-fix-proton-version")
-        steam_home = os.path.expanduser("~/.local/share/Steam")
+        # Use host Steam home when running inside Flatpak
+        steam_home = os.path.join(host_home, ".local/share/Steam")
         proton_path = os.path.join(
             steam_home, "compatibilitytools.d", proton_version, "proton"
         )
 
-        # Проверяем существование Proton
-        if not os.path.exists(proton_path):
+        # Проверяем существование Proton (check on host when in Flatpak)
+        try:
+            if in_flatpak:
+                check = subprocess.run(
+                    [
+                        "flatpak-spawn",
+                        "--host",
+                        "bash",
+                        "-lc",
+                        f"test -e {shlex.quote(proton_path)}",
+                    ],
+                    capture_output=True,
+                )
+                proton_exists = check.returncode == 0
+            else:
+                proton_exists = os.path.exists(proton_path)
+        except Exception:
+            proton_exists = False
+
+        if not proton_exists:
             self.log_and_toast(_("Proton version not found: {}").format(proton_version))
             return
 
         # Настраиваем переменные окружения
-        user_home = os.path.expanduser("~")
+        # Use host home for Steam-related envs when inside Flatpak
+        user_home = host_home if in_flatpak else os.path.expanduser("~")
         dx_overrides = "d3d11=n;d3d10=n;d3d10core=n;dxgi=n;openvr_api_dxvk=n;d3d12=n;d3d12core=n;d3d9=n;d3d8=n;"
 
         # Создаем директорию для префикса, если она не существует
@@ -159,29 +201,73 @@ class OnlineFixGameData(GameData):
                 library_folders_path = os.path.join(
                     user_home, ".steam/steam/steamapps/libraryfolders.vdf"
                 )
-                if os.path.exists(library_folders_path):
-                    with open(library_folders_path, "r") as f:
-                        library_folders_data = vdf.load(f)
+                library_folders_data = None
+                if in_flatpak:
+                    # Try to read the host file via flatpak-spawn
+                    try:
+                        cat = subprocess.run(
+                            [
+                                "flatpak-spawn",
+                                "--host",
+                                "bash",
+                                "-lc",
+                                f"cat {shlex.quote(library_folders_path)}",
+                            ],
+                            capture_output=True,
+                            text=True,
+                        )
+                        if cat.returncode == 0 and cat.stdout:
+                            try:
+                                library_folders_data = vdf.loads(cat.stdout)
+                            except Exception:
+                                # fallback to load via file-like object
+                                import io
 
-                    # Ищем SteamLinuxRuntime_sniper в библиотеках
-                    if "libraryfolders" in library_folders_data:
-                        for folder_id, folder_data in library_folders_data[
-                            "libraryfolders"
-                        ].items():
-                            if (
-                                "apps" in folder_data
-                                and "1628350" in folder_data["apps"]
-                            ):
-                                runtime_path = os.path.join(
-                                    folder_data["path"],
-                                    "steamapps/common/SteamLinuxRuntime_sniper/run",
-                                )
-                                if os.path.isfile(runtime_path):
-                                    steam_runtime_path = runtime_path
-                                    logging.info(
-                                        f"[SOFL] Found Steam Runtime at {steam_runtime_path}"
+                                library_folders_data = vdf.load(io.StringIO(cat.stdout))
+                    except Exception as e:
+                        logging.debug(
+                            f"[SOFL] Could not read host libraryfolders.vdf: {e}"
+                        )
+                else:
+                    if os.path.exists(library_folders_path):
+                        with open(library_folders_path, "r") as f:
+                            library_folders_data = vdf.load(f)
+
+                # Ищем SteamLinuxRuntime_sniper в библиотеках
+                if library_folders_data and "libraryfolders" in library_folders_data:
+                    for folder_id, folder_data in library_folders_data[
+                        "libraryfolders"
+                    ].items():
+                        if "apps" in folder_data and "1628350" in folder_data["apps"]:
+                            runtime_path = os.path.join(
+                                folder_data["path"],
+                                "steamapps/common/SteamLinuxRuntime_sniper/run",
+                            )
+                            # check file existence on host when in Flatpak
+                            try:
+                                if in_flatpak:
+                                    check_runtime = subprocess.run(
+                                        [
+                                            "flatpak-spawn",
+                                            "--host",
+                                            "bash",
+                                            "-lc",
+                                            f"test -f {shlex.quote(runtime_path)}",
+                                        ],
+                                        capture_output=True,
                                     )
-                                    break
+                                    exists_runtime = check_runtime.returncode == 0
+                                else:
+                                    exists_runtime = os.path.isfile(runtime_path)
+                            except Exception:
+                                exists_runtime = False
+
+                            if exists_runtime:
+                                steam_runtime_path = runtime_path
+                                logging.info(
+                                    f"[SOFL] Found Steam Runtime at {steam_runtime_path}"
+                                )
+                                break
             except Exception as e:
                 logging.error(f"[SOFL] Error finding Steam Runtime: {str(e)}")
 
