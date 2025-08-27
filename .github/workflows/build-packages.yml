@@ -137,8 +137,6 @@ jobs:
           # Add package information
           printf '%s\n' "### Package Downloads" >> "$TMP_RELEASE"
           printf '%s\n' "- **Flatpak**: `org.badkiko.sofl.flatpak`" >> "$TMP_RELEASE"
-          printf '%s\n' "- **Debian/Ubuntu**: `sofl_${{ needs.get-version.outputs.version }}_all.deb`" >> "$TMP_RELEASE"
-          printf '%s\n\n' "- **Arch Linux**: `.pkg.tar.zst` binary package" >> "$TMP_RELEASE"
 
           # Installation instructions block
           cat >> "$TMP_RELEASE" <<'EOT'
@@ -147,17 +145,6 @@ jobs:
           **Flatpak:**
           ```bash
           flatpak install --user org.badkiko.sofl.flatpak
-          ```
-
-          **Debian/Ubuntu:**
-          ```bash
-          sudo dpkg -i sofl_${{ needs.get-version.outputs.version }}_all.deb
-          sudo apt install -f
-          ```
-
-          **Arch Linux:**
-          ```bash
-          sudo pacman -U sofl-*.pkg.tar.zst
           ```
           EOT
 

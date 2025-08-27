@@ -1,5 +1,10 @@
 # SOFL Changelog
 
+## [v0.0.3.2a] - 2025-08-27
+
+- Fixed #26 @BadKiko
+- Fixed #27 @BadKiko
+
 ## [v0.0.3.1a] - 2025-08-26
 
 - Fxed #24
