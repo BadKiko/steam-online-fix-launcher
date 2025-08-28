@@ -147,8 +147,11 @@ class SOFLWindow(Adw.ApplicationWindow):
                 Gtk.Image.new_from_icon_name(
                     "user-desktop-symbolic"
                     if (split_id := source_id.split("_")[0]) == "desktop"
-                    else "online-fix-source-symbolic" if source_id == "online-fix"
-                    else f"{split_id}-source-symbolic"
+                    else (
+                        "online-fix-source-symbolic"
+                        if source_id == "online-fix"
+                        else f"{split_id}-source-symbolic"
+                    )
                 )
             )
 
@@ -267,16 +270,15 @@ class SOFLWindow(Adw.ApplicationWindow):
 
         # Загружаем сохраненную тему
         saved_theme = shared.schema.get_string("force-theme")
-        style_manager.set_color_scheme(
-            Adw.ColorScheme.FORCE_DARK if saved_theme == "dark"
-            else Adw.ColorScheme.FORCE_LIGHT
-        )
+        if saved_theme == "dark":
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        elif saved_theme == "light":
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+        # В остальных случаях оставляем системную тему
 
         # Добавляем действие для переключения темы
         action = Gio.SimpleAction.new_stateful(
-            "toggle_theme",
-            None,
-            GLib.Variant.new_boolean(style_manager.get_dark())
+            "toggle_theme", None, GLib.Variant.new_boolean(style_manager.get_dark())
         )
         action.connect("activate", self.on_toggle_theme_action)
         self.add_action(action)
@@ -557,18 +559,16 @@ class SOFLWindow(Adw.ApplicationWindow):
     def on_close_action(self, *_args: Any) -> None:
         self.close()
 
-    def on_toggle_theme_action(self, action: Gio.SimpleAction, state: GLib.Variant) -> None:
+    def on_toggle_theme_action(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
         """Обработчик переключения темы"""
         style_manager = Adw.StyleManager.get_default()
         is_dark = state.get_boolean()
         style_manager.set_color_scheme(
-            Adw.ColorScheme.FORCE_DARK if is_dark 
-            else Adw.ColorScheme.FORCE_LIGHT
+            Adw.ColorScheme.FORCE_DARK if is_dark else Adw.ColorScheme.FORCE_LIGHT
         )
         # Сохраняем выбранную тему
-        shared.schema.set_string(
-            "force-theme",
-            "dark" if is_dark else "light"
-        )
+        shared.schema.set_string("force-theme", "dark" if is_dark else "light")
         # Обновляем прозрачность для детального вида
         self.set_details_view_opacity()

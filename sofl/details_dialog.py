@@ -39,7 +39,7 @@ from sofl.utils.create_dialog import create_dialog
 from sofl.utils.save_cover import convert_cover, save_cover
 
 from sofl.game_factory import GameFactory
-
+from gettext import gettext as _
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/details-dialog.ui")
 class DetailsDialog(Adw.Dialog):
@@ -335,11 +335,11 @@ class DetailsDialog(Adw.Dialog):
             if file:
                 path = file.get_path()
         except GLib.Error:
-            log_message("Error getting file path", logging.ERROR)
+            create_dialog(self, _("Error"), _("Error getting file path"))
             return
 
         if not path:
-            log_message("No valid path selected", logging.WARNING)
+            create_dialog(self, _("Error"), _("No valid path selected"))
             return
 
         def thread_func() -> None:
@@ -355,9 +355,9 @@ class DetailsDialog(Adw.Dialog):
             except UnidentifiedImageError:
                 pass
             except FileNotFoundError as e:
-                log_message(f"File not found: {str(e)}", logging.ERROR)
+                create_dialog(self, _("Error"), f"File not found: {str(e)}")
             except Exception as e:
-                log_message(f"Error opening image: {str(e)}", logging.ERROR)
+                create_dialog(self, _("Error"), f"Error opening image: {str(e)}")
 
             if not new_path:
                 try:
@@ -367,7 +367,7 @@ class DetailsDialog(Adw.Dialog):
                         )
                     )
                 except Exception as e:
-                    log_message(f"Error creating cover: {str(e)}", logging.ERROR)
+                    create_dialog(self, _("Error"), f"Error creating cover: {str(e)}")
 
             if new_path:
                 self.game_cover.new_cover(new_path)

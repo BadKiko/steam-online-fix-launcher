@@ -11,23 +11,17 @@ finish-args:
   - --socket=pulseaudio
   - --socket=session-bus
   # Filesystem access
-  - --filesystem=host
   - --filesystem=xdg-documents
   - --filesystem=xdg-desktop
   - --filesystem=xdg-download
-  - --filesystem=xdg-data/Steam
-  - --filesystem=xdg-config/steam
-  - --filesystem=/tmp
-  - --filesystem=/home
-  - --filesystem=~/.local/share/Steam/compatibilitytools.d
-  - --filesystem=~/.local/share/Steam
+  - --filesystem=xdg-data/Steam:ro
+  - --filesystem=xdg-config/steam:ro
   # Device access
-  - --device=all
+  - --device=dri
   # Network access
   - --share=network
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.Shell.Screenshot
-  - --env=XDG_SESSION_TYPE=wayland
   - --env=GDK_BACKEND=wayland,x11
   - --env=STEAM_COMPAT_CLIENT_INSTALL_PATH=~/.steam/steam
   - --env=STEAM_COMPAT_DATA_PATH=~/.steam/steam

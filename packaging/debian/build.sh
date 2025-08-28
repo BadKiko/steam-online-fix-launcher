@@ -19,11 +19,13 @@ echo "Installing required dependencies..."
 sudo apt update
 
 # Check and install required tools
-REQUIRED_TOOLS="dpkg-deb meson ninja"
+REQUIRED_TOOLS="dpkg-deb meson ninja fakeroot"
 for tool in $REQUIRED_TOOLS; do
     if ! command -v $tool &> /dev/null; then
         echo "Installing $tool..."
-        sudo apt install -y $tool
+        pkg="$tool"
+        [ "$tool" = "ninja" ] && pkg="ninja-build"
+        sudo apt install -y "$pkg"
     fi
 done
 

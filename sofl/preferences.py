@@ -69,7 +69,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
     steam_data_action_row: Adw.ActionRow = Gtk.Template.Child()
     steam_data_file_chooser_button: Gtk.Button = Gtk.Template.Child()
 
-    lutris_expander_row: Adw.ExpanderRowClass = Gtk.Template.Child()
+    lutris_expander_row: Adw.ExpanderRow = Gtk.Template.Child()
     lutris_data_action_row: Adw.ActionRow = Gtk.Template.Child()
     lutris_data_file_chooser_button: Gtk.Button = Gtk.Template.Child()
     lutris_import_steam_switch: Adw.SwitchRow = Gtk.Template.Child()

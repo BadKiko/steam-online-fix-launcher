@@ -1,7 +1,7 @@
 # Heavily inspired by https://gitlab.gnome.org/World/lollypop/-/blob/master/search-provider/meson.build
 
 service_dir = join_paths(get_option('datadir'), 'dbus-1', 'services')
-serarch_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
+search_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
 
 search_provider_id = app_id + '.SearchProvider'
 

@@ -26,6 +26,7 @@ import subprocess
 import tempfile
 import logging
 import threading
+import shutil
 from pathlib import Path
 from sys import platform
 from typing import Any, Optional, Callable
@@ -296,46 +297,60 @@ class InstallDialog(Adw.Dialog):
             bool: True if the archive is valid and opens with password, otherwise False
         """
         try:
-            # Method 1: Use unrar directly for archive testing (fastest)
-            self.log_message("Quick archive verification via unrar")
-            try:
+            # Check if unrar binary is available
+            unrar_path = None
+
+            # First try rarfile.UNRAR_TOOL if it's set and not None
+            if rarfile.UNRAR_TOOL:
                 unrar_path = rarfile.UNRAR_TOOL
-                result = subprocess.run(
-                    [unrar_path, "t", "-p" + ONLINE_FIX_PASSWORD, "-idp", path],
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                    timeout=10,  # Timeout in seconds
-                )
+            else:
+                # Fallback to searching for unrar in PATH
+                unrar_path = shutil.which("unrar")
 
-                if result.returncode == 0:
-                    self.log_message("Archive passed verification via unrar")
-                    return True
-                else:
-                    self.log_message(f"Archive failed verification: {result.stderr}")
-                    return False
-            except subprocess.TimeoutExpired:
-                self.log_message("Archive verification took too long, cancelling")
-                return False
-            except Exception as e:
-                self.log_message(f"Error during verification via unrar: {str(e)}")
-
-                # Method 2: Use rarfile for verification (fallback)
-                self.log_message("Checking archive via rarfile")
+            # Method 1: Use unrar directly for archive testing (fastest)
+            if unrar_path:
+                self.log_message("Quick archive verification via unrar")
                 try:
-                    with rarfile.RarFile(path) as rf:
-                        rf.setpassword(ONLINE_FIX_PASSWORD)
-                        # Just get file list, don't extract
-                        info_list = rf.infolist()
-                        # If we got file list with password, the archive is correct
-                        return len(info_list) > 0
-                except rarfile.PasswordRequired:
-                    # If password required but not the one we specified, it's not an Online-Fix archive
-                    self.log_message("Archive is protected by a different password")
+                    result = subprocess.run(
+                        [unrar_path, "t", "-p" + ONLINE_FIX_PASSWORD, "-idp", path],
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                        timeout=10,  # Timeout in seconds
+                    )
+
+                    if result.returncode == 0:
+                        self.log_message("Archive passed verification via unrar")
+                        return True
+                    else:
+                        self.log_message(
+                            f"Archive failed verification: {result.stderr}"
+                        )
+                        return False
+                except subprocess.TimeoutExpired:
+                    self.log_message("Archive verification took too long, cancelling")
                     return False
                 except Exception as e:
-                    self.log_message(f"Error during verification via rarfile: {str(e)}")
-                    return False
+                    self.log_message(f"Error during verification via unrar: {str(e)}")
+            else:
+                self.log_message("unrar binary not found, using rarfile fallback")
+
+            # Method 2: Use rarfile for verification (fallback)
+            self.log_message("Checking archive via rarfile")
+            try:
+                with rarfile.RarFile(path) as rf:
+                    rf.setpassword(ONLINE_FIX_PASSWORD)
+                    # Just get file list, don't extract
+                    info_list = rf.infolist()
+                    # If we got file list with password, the archive is correct
+                    return len(info_list) > 0
+            except rarfile.PasswordRequired:
+                # If password required but not the one we specified, it's not an Online-Fix archive
+                self.log_message("Archive is protected by a different password")
+                return False
+            except Exception as e:
+                self.log_message(f"Error during verification via rarfile: {str(e)}")
+                return False
         except Exception as e:
             self.log_message(f"General error during archive verification: {str(e)}")
             return False
