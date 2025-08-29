@@ -12,27 +12,4 @@
     background-color: rgba(0, 0, 0, .8);
 }
 
-/* UMU Launcher banner styles */
-.banner {
-    background-color: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 8px;
-    padding: 12px;
-    margin: 6px 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
 
-.banner .warning {
-    color: #856404;
-}
-
-.banner .heading {
-    color: #856404;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.banner .dim-label {
-    color: #6c757d;
-    font-size: 0.9em;
-}

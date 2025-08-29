@@ -41,6 +41,7 @@ from sofl.utils.save_cover import convert_cover, save_cover
 from sofl.game_factory import GameFactory
 from gettext import gettext as _
 
+
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/details-dialog.ui")
 class DetailsDialog(Adw.Dialog):
     __gtype_name__ = "DetailsDialog"
@@ -223,7 +224,16 @@ class DetailsDialog(Adw.Dialog):
             for game_id in shared.store.source_games.get(source_id, set()):
                 if not game_id.startswith(prefix):
                     continue
-                numbers.append(int(game_id.replace(prefix, "", 1)))
+                suffix = game_id[len(prefix) :]
+                if suffix.isdigit():
+                    try:
+                        numbers.append(int(suffix))
+                    except ValueError:
+                        self.logger.warning(f"Skipping non-numeric game ID: {game_id}")
+                else:
+                    self.logger.warning(
+                        f"Skipping game ID with non-numeric suffix: {game_id}"
+                    )
 
             game_number = max(numbers) + 1
 
@@ -381,8 +391,16 @@ class DetailsDialog(Adw.Dialog):
 
     def set_executable(self, _source: Any, result: Gio.Task, *_args: Any) -> None:
         try:
-            path = self.exec_file_dialog.open_finish(result).get_path()
+            file = self.exec_file_dialog.open_finish(result)
         except GLib.Error:
+            return
+
+        # Check that the file object exists and has a valid path
+        if file is None:
+            return
+
+        path = file.get_path()
+        if not path:
             return
 
         # Store the path as-is; parsing will handle spaces safely at runtime

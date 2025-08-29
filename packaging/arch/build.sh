@@ -53,22 +53,22 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     # Create source tarball for makepkg (write to dist/output directory)
     echo "Creating source tarball from git repository..."
     git -C "$PROJECT_DIR" archive --format=tar.gz \
-        --prefix="steam-online-fix-launcher-$VERSION/" \
+        --prefix="$PACKAGE_NAME-$VERSION/" \
         -o "$OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" HEAD
 else
     echo "Not in a git repository, creating tarball from current directory..."
     # Create tarball from current directory if not in git repo
     # Use a temporary directory to avoid issues with changing files
     TMP_DIR=$(mktemp -d)
-    cp -r . "$TMP_DIR/steam-online-fix-launcher-$VERSION"
+    cp -r . "$TMP_DIR/$PACKAGE_NAME-$VERSION"
     cd "$TMP_DIR"
 
     # Clean up build artifacts and temporary files
-    cd "steam-online-fix-launcher-$VERSION"
+    cd "$PACKAGE_NAME-$VERSION"
     rm -rf build* dist .git* *.log *.tmp cache __pycache__ *.pyc build-dir flatpak-build *.flatpak *.deb *.pkg.tar.zst .ninja* compile_commands.json meson-private meson-info meson-logs subprojects *.so *.o
 
     # Create the tarball from the cleaned directory (write to dist/output directory)
-    tar -czf "$OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,steam-online-fix-launcher-$VERSION/," .
+    tar -czf "$OUTPUT_DIR/$PACKAGE_NAME-$VERSION.tar.gz" --transform "s,^./,$PACKAGE_NAME-$VERSION/," .
 
     cd "$PROJECT_DIR"
     rm -rf "$TMP_DIR"

@@ -37,8 +37,8 @@ optdepends=(
 )
 
 build() {
-    cd "$srcdir/steam-online-fix-launcher-$pkgver" || {
-        echo "Directory $srcdir/steam-online-fix-launcher-$pkgver not found"
+    cd "$srcdir/sofl-$pkgver" || {
+        echo "Directory $srcdir/sofl-$pkgver not found"
         ls -la "$srcdir"
         exit 1
     }
@@ -47,7 +47,7 @@ build() {
 }
 
 package() {
-    cd "$srcdir/steam-online-fix-launcher-$pkgver"
+    cd "$srcdir/sofl-$pkgver"
     meson install --destdir="$pkgdir" -C build
 
     # Vendor python 'vdf' module into /usr/share/sofl/vendor

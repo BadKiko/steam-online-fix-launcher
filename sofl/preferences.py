@@ -595,39 +595,35 @@ class SOFLPreferences(Adw.PreferencesDialog):
     ) -> None:
         """Setup Proton version selection combo box"""
         # Create model for combo box
-        proton_model = Gtk.StringList.new([version for version in proton_versions])
+        proton_model = Gtk.StringList.new(list(proton_versions))
         combo.set_model(proton_model)
-
         # Get current selection from settings
         try:
             current_proton = shared.schema.get_string(schema_key)
-        except GLib.Error as e:
-            # If setting doesn't exist, use the first available proton version
+        except GLib.Error:
+            # If setting doesn't exist, pick first available (if any) and persist
             if proton_versions:
                 current_proton = proton_versions[0]
+                shared.schema.set_string(schema_key, current_proton)
             else:
-                # Fallback defaults if no versions found
-                current_proton = (
-                    "GE-Proton9-26"
-                    if schema_key == "online-fix-proton-version"
-                    else "GE-Proton10-3"
-                )
-            shared.schema.set_string(schema_key, current_proton)
-
+                current_proton = ""
         # Find index of current selection
         selected_idx = 0
+        found = False
         for idx, version in enumerate(proton_versions):
             if version == current_proton:
                 selected_idx = idx
+                found = True
                 break
-
         # Set selected item
         combo.set_selected(selected_idx)
-
         # Connect signal for selection change
         combo.connect(
             "notify::selected", lambda c, _: self.on_proton_changed(c, schema_key)
         )
+        # If schema had a stale/non-existent value, align it with UI selection
+        if proton_versions and not found:
+            shared.schema.set_string(schema_key, proton_versions[selected_idx])
 
     def on_proton_changed(self, combo: Adw.ComboRow, schema_key: str) -> None:
         """Handler for Proton version change"""

@@ -43,8 +43,8 @@ if [[ "$OUTPUT_DIR" != /* ]]; then
 fi
 OUTPUT_DIR="$(mkdir -p "$OUTPUT_DIR" && cd "$OUTPUT_DIR" && pwd)"
 
-# Clean previous build
-rm -rf "$BUILD_DIR" *.deb
+rm -rf "$PROJECT_ROOT/$BUILD_DIR"
+rm -f "$OUTPUT_DIR"/*.deb
 
 # Build the application using meson
 echo "Building application with Meson..."

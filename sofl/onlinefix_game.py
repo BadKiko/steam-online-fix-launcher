@@ -78,16 +78,8 @@ class OnlineFixGameData(GameData):
         self.save()
         self.update()
 
-        # TODO: Add launcher type selection in future versions
-        # For now, only Direct Steam API is supported
-        launcher_type = 0  # shared.schema.get_int("online-fix-launcher-type")
-        logging.info(f"[SOFL] Launcher type: {launcher_type}")
-
-        if launcher_type == 0:
-            self._launch_with_direct_steam_api()
-        # Future launcher types can be added here:
-        # elif launcher_type == 1:
-        #     self._launch_with_custom_launcher()
+        # Launch directly with Steam API (only supported method)
+        self._launch_with_direct_steam_api()
 
     def _launch_with_direct_steam_api(self) -> None:
         """Запуск игры через Direct Steam API Runner"""

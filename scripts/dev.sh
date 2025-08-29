@@ -6,7 +6,9 @@
 
 set -euo pipefail
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Get the absolute path of the script directory, regardless of how it's called
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BUILD_DIR="$PROJECT_DIR/builddir"
 PREFIX_DIR="$PROJECT_DIR/.local"
 SCHEMAS_DIR="$PREFIX_DIR/share/glib-2.0/schemas"
@@ -24,22 +26,29 @@ Commands:
   build       Build via Meson
   install     Install into .local prefix
   deps        Create .venv and install Python runtime deps (requests, pillow, rarfile, vdf)
+  smart       Automatically handle setup+build+install+run with smart checks (recommended)
   rebuild-run Remove builddir, then setup+build+install+run (fast clean+run)
-  run         Run app with correct env vars
+  run         Run app with correct env vars (auto-setup/build/install if needed)
   shell       Start an interactive shell with env vars set
   clean       Remove builddir and .local
   all         setup + build + install + run (default)
   help        Show this help
 
 Examples:
+  # Smart full cycle (recommended)
+  ./scripts/dev.sh smart
+
   # Full cycle
   ./scripts/dev.sh
+
+  # Just run (auto-setup/build/install if needed)
+  ./scripts/dev.sh run
 
   # Run with app arguments
   ./scripts/dev.sh run -- --search "doom"
 
   # Rebuild and run
-  ./scripts/dev.sh build && ./scripts/dev.sh install && ./scripts/dev.sh run
+  ./scripts/dev.sh rebuild-run
 EOF
 }
 
@@ -60,22 +69,79 @@ do_setup() {
 
     if [ ! -f "$BUILD_DIR/meson-private/coredata.dat" ]; then
         echo "[dev] meson setup -> $BUILD_DIR (prefix=$PREFIX_DIR)"
+        # Change to project directory for meson setup, then return
+        local original_dir
+        original_dir="$(pwd)"
+        cd "$PROJECT_DIR"
         meson setup "$BUILD_DIR" \
             --prefix="$PREFIX_DIR" \
             -Dprofile=development
+        cd "$original_dir"
     else
         echo "[dev] meson already configured in $BUILD_DIR"
     fi
 }
 
+check_build_needed() {
+    # Check if build is needed by comparing timestamps
+    local meson_stamp="$BUILD_DIR/meson-private/coredata.dat"
+    local source_stamp="$PROJECT_DIR/meson.build"
+
+    if [ ! -f "$meson_stamp" ]; then
+        return 0  # Need build - no build dir
+    fi
+
+    if [ "$source_stamp" -nt "$meson_stamp" ]; then
+        return 0  # Need build - meson.build is newer
+    fi
+
+    # Check if any source files are newer than build files
+    local newest_source
+    newest_source=$(find "$PROJECT_DIR" -name "*.py" -o -name "*.blp" -o -name "*.xml" -o -name "*.desktop" \
+        | head -n 1 | xargs ls -t | head -n 1)
+
+    local build_stamp="$BUILD_DIR/build.ninja"
+    if [ -f "$build_stamp" ] && [ "$newest_source" -nt "$build_stamp" ]; then
+        return 0  # Need build - source files are newer
+    fi
+
+    return 1  # No build needed
+}
+
+check_install_needed() {
+    # Check if install is needed
+    local app_bin="$PREFIX_DIR/bin/sofl"
+    local build_stamp="$BUILD_DIR/build.ninja"
+
+    if [ ! -f "$app_bin" ]; then
+        return 0  # Need install - app not installed
+    fi
+
+    if [ "$build_stamp" -nt "$app_bin" ]; then
+        return 0  # Need install - build is newer than installed app
+    fi
+
+    return 1  # No install needed
+}
+
 do_build() {
     echo "[dev] meson compile"
+    # Change to project directory for meson compile
+    local original_dir
+    original_dir="$(pwd)"
+    cd "$PROJECT_DIR"
     meson compile -C "$BUILD_DIR"
+    cd "$original_dir"
 }
 
 do_install() {
     echo "[dev] meson install -> $PREFIX_DIR"
+    # Change to project directory for meson install
+    local original_dir
+    original_dir="$(pwd)"
+    cd "$PROJECT_DIR"
     meson install -C "$BUILD_DIR"
+    cd "$original_dir"
 
     # Ensure schemas are compiled for local prefix
     if command -v glib-compile-schemas >/dev/null 2>&1; then
@@ -136,11 +202,26 @@ export_env() {
 
 do_run() {
     export_env
-    local app_bin="$PREFIX_DIR/bin/sofl"
-    if [ ! -x "$app_bin" ]; then
-        echo "[dev] App not installed yet, running install step..."
+
+    # Auto-setup if needed
+    if [ ! -f "$BUILD_DIR/meson-private/coredata.dat" ]; then
+        echo "[dev] Build directory not configured, running setup..."
+        do_setup
+    fi
+
+    # Auto-build if needed
+    if check_build_needed; then
+        echo "[dev] Build is outdated or missing, running build..."
+        do_build
+    fi
+
+    # Auto-install if needed
+    if check_install_needed; then
+        echo "[dev] App not installed or outdated, running install..."
         do_install
     fi
+
+    local app_bin="$PREFIX_DIR/bin/sofl"
     echo "[dev] running: $app_bin ${*:-}"
     "$app_bin" "$@"
 }
@@ -167,6 +248,34 @@ do_rebuild_run() {
     do_run "$@"
 }
 
+do_smart() {
+    echo "[dev] Smart mode - automatically handling all steps..."
+
+    # Auto-setup if needed
+    if [ ! -f "$BUILD_DIR/meson-private/coredata.dat" ]; then
+        echo "[dev] Build directory not configured, running setup..."
+        do_setup
+    fi
+
+    # Auto-build if needed
+    if check_build_needed; then
+        echo "[dev] Build is outdated or missing, running build..."
+        do_build
+    else
+        echo "[dev] Build is up to date"
+    fi
+
+    # Auto-install if needed
+    if check_install_needed; then
+        echo "[dev] App not installed or outdated, running install..."
+        do_install
+    else
+        echo "[dev] App is up to date"
+    fi
+
+    do_run "$@"
+}
+
 cmd="${1:-all}"
 shift || true
 
@@ -185,6 +294,9 @@ case "$cmd" in
         ;;
     deps)
         do_deps
+        ;;
+    smart)
+        do_smart "$@"
         ;;
     run)
         do_run "$@"

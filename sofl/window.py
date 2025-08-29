@@ -264,9 +264,9 @@ class SOFLWindow(Adw.ApplicationWindow):
         self.sidebar.connect("row-selected", self.row_selected)
 
         style_manager = Adw.StyleManager.get_default()
-        # Закомментируем автоматическое определение темы
-        # style_manager.connect("notify::dark", self.set_details_view_opacity)
-        # style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
+        
+        style_manager.connect("notify::dark", self.set_details_view_opacity)
+        style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
 
         # Загружаем сохраненную тему
         saved_theme = shared.schema.get_string("force-theme")

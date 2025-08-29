@@ -173,14 +173,9 @@ class InstallDialog(Adw.Dialog):
         filter_rar.set_name("RAR files")
         filter_rar.add_pattern("*.rar")
 
-        filter_exe = Gtk.FileFilter()
-        filter_exe.set_name("EXE files")
-        filter_exe.add_pattern("*.exe")
-
         # Create filter list
         filters = Gio.ListStore.new(Gtk.FileFilter)
         filters.append(filter_rar)
-        filters.append(filter_exe)
 
         # Configure file chooser to open files
         self.file_chooser.set_filters(filters)
@@ -297,17 +292,12 @@ class InstallDialog(Adw.Dialog):
             bool: True if the archive is valid and opens with password, otherwise False
         """
         try:
-            # Check if unrar binary is available
-            unrar_path = None
+            # Select unrar path: use rarfile.UNRAR_TOOL if set else shutil.which("unrar")
+            unrar_path = (
+                rarfile.UNRAR_TOOL if rarfile.UNRAR_TOOL else shutil.which("unrar")
+            )
 
-            # First try rarfile.UNRAR_TOOL if it's set and not None
-            if rarfile.UNRAR_TOOL:
-                unrar_path = rarfile.UNRAR_TOOL
-            else:
-                # Fallback to searching for unrar in PATH
-                unrar_path = shutil.which("unrar")
-
-            # Method 1: Use unrar directly for archive testing (fastest)
+            # Method 1: Try unrar first (fastest)
             if unrar_path:
                 self.log_message("Quick archive verification via unrar")
                 try:
@@ -324,14 +314,15 @@ class InstallDialog(Adw.Dialog):
                         return True
                     else:
                         self.log_message(
-                            f"Archive failed verification: {result.stderr}"
+                            f"Archive failed verification via unrar (exit code {result.returncode}): {result.stderr}"
                         )
-                        return False
+                        # Don't return False immediately, try rarfile fallback
                 except subprocess.TimeoutExpired:
                     self.log_message("Archive verification took too long, cancelling")
                     return False
                 except Exception as e:
                     self.log_message(f"Error during verification via unrar: {str(e)}")
+                    # Continue to rarfile fallback
             else:
                 self.log_message("unrar binary not found, using rarfile fallback")
 
@@ -340,10 +331,30 @@ class InstallDialog(Adw.Dialog):
             try:
                 with rarfile.RarFile(path) as rf:
                     rf.setpassword(ONLINE_FIX_PASSWORD)
-                    # Just get file list, don't extract
+                    # Get file list
                     info_list = rf.infolist()
-                    # If we got file list with password, the archive is correct
-                    return len(info_list) > 0
+
+                    # Verify password correctness by trying to read from first file
+                    if info_list:
+                        try:
+                            with rf.open(info_list[0]) as f:
+                                # Try to read at least 1 byte to force decryption
+                                f.read(1)
+                            self.log_message(
+                                "Archive verified successfully via rarfile"
+                            )
+                            return True
+                        except rarfile.PasswordRequired:
+                            self.log_message("Archive requires different password")
+                            return False
+                        except Exception as e:
+                            self.log_message(
+                                f"Failed to read archive content: {str(e)}"
+                            )
+                            return False
+                    else:
+                        self.log_message("Archive is empty")
+                        return False
             except rarfile.PasswordRequired:
                 # If password required but not the one we specified, it's not an Online-Fix archive
                 self.log_message("Archive is protected by a different password")
@@ -513,10 +524,16 @@ class InstallDialog(Adw.Dialog):
         for game_id in shared.store.source_games.get(source_id, set()):
             if not game_id.startswith(prefix):
                 continue
-            try:
-                numbers.append(int(game_id.replace(prefix, "", 1)))
-            except ValueError:
-                pass
+            suffix = game_id[len(prefix) :]
+            if suffix.isdigit():
+                try:
+                    numbers.append(int(suffix))
+                except ValueError:
+                    self.logger.warning(f"Skipping non-numeric game ID: {game_id}")
+            else:
+                self.logger.warning(
+                    f"Skipping game ID with non-numeric suffix: {game_id}"
+                )
 
         game_number = max(numbers) + 1
         return f"{prefix}{game_number}"

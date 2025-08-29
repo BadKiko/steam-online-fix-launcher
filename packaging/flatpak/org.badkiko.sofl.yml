@@ -23,8 +23,11 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.Shell.Screenshot
   - --env=GDK_BACKEND=wayland,x11
-  - --env=STEAM_COMPAT_CLIENT_INSTALL_PATH=~/.steam/steam
-  - --env=STEAM_COMPAT_DATA_PATH=~/.steam/steam
+  # Adjust Flatpak sandbox paths so Steam compat data is reachable
+  - --env=STEAM_COMPAT_CLIENT_INSTALL_PATH=/var/data/Steam
+  - --env=STEAM_COMPAT_DATA_PATH=/var/data/Steam
+  # If write access to compatdata is required, remove “:ro” or switch to “:rw”
+  - --filesystem=xdg-data/Steam
 
 modules:
   - name: blueprint-compiler
