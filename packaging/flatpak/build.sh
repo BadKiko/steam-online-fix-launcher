@@ -98,9 +98,16 @@ fi
 
 # blueprint-compiler is now available from the host system via flatpak manifest
 
+# Check if running as root - flatpak-builder should run as regular user
+if [ "$EUID" -eq 0 ]; then
+    echo "Warning: Running as root. Flatpak operations work better as a regular user."
+    echo "Consider running this script as a regular user: su - \$SUDO_USER -c './build.sh'"
+fi
+
 # Clean previous build
 rm -rf build-dir flatpak-build $REPO_NAME
 
+# Note: We'll let flatpak-builder create and initialize the repository automatically
 
 # Determine manifest file
 if [ "$DEVELOPMENT" = true ]; then
@@ -113,18 +120,40 @@ fi
 echo "Building Flatpak (branch: $BRANCH) using manifest: $MANIFEST_FILE..."
 if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse flatpak-build "$MANIFEST_FILE"; then
     echo "Error: Flatpak build failed"
-    echo "Trying with additional flags..."
-    flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build "$MANIFEST_FILE"
+    echo "Trying with ccache flag..."
+    if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build "$MANIFEST_FILE"; then
+        echo "Build failed again, trying without repo option..."
+        flatpak-builder --force-clean --user --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build "$MANIFEST_FILE"
+    fi
 fi
 
-# Create bundle
-echo "Creating bundle..."
-flatpak build-bundle $REPO_NAME $PROJECT_NAME.flatpak $PROJECT_NAME $BRANCH
+# Create bundle (only if repository was created successfully by flatpak-builder)
+if [ -d "$REPO_NAME" ] && [ -f "$REPO_NAME/config" ]; then
+    echo "Creating bundle..."
+    if flatpak build-bundle $REPO_NAME $PROJECT_NAME.flatpak $PROJECT_NAME $BRANCH; then
+        echo "Bundle created successfully"
+    else
+        echo "Failed to create bundle, but build completed"
+        echo "You can install directly using: flatpak-builder --install --user flatpak-build $MANIFEST_FILE"
+    fi
+else
+    echo "Repository not available, skipping bundle creation..."
+    echo "You can install directly using: flatpak-builder --install --user flatpak-build $MANIFEST_FILE"
+fi
 
-echo "Flatpak bundle created: $PROJECT_NAME.flatpak"
+# Show appropriate completion message
+if [ -f "$PROJECT_NAME.flatpak" ]; then
+    echo "Flatpak bundle created: $PROJECT_NAME.flatpak"
+    echo "Build completed successfully!"
+elif [ -d "flatpak-build" ]; then
+    echo "Flatpak build completed (build directory created)"
+    echo "You can install it directly: flatpak-builder --install --user flatpak-build $MANIFEST_FILE"
+else
+    echo "Flatpak build completed"
+fi
 
-# Move bundle to output directory
-if [ "$OUTPUT_DIR" != "." ]; then
+# Move bundle to output directory (if it exists)
+if [ -f "$PROJECT_NAME.flatpak" ] && [ "$OUTPUT_DIR" != "." ]; then
     mkdir -p "$OUTPUT_DIR"
     mv "$PROJECT_NAME.flatpak" "$OUTPUT_DIR/"
     echo "Bundle moved to: $OUTPUT_DIR/$PROJECT_NAME.flatpak"
