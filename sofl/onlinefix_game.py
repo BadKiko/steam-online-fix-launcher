@@ -98,7 +98,7 @@ class OnlineFixGameData(GameData):
         if in_flatpak:
             try:
                 host_home_proc = subprocess.run(
-                    ["flatpak-spawn", "--host", "bash", "-lc", "echo $HOME"],
+                    ["flatpak-spawn", "--host", "printenv", "HOME"],
                     capture_output=True,
                     text=True,
                 )
@@ -138,13 +138,7 @@ class OnlineFixGameData(GameData):
         try:
             if in_flatpak:
                 check = subprocess.run(
-                    [
-                        "flatpak-spawn",
-                        "--host",
-                        "bash",
-                        "-lc",
-                        f"test -e {shlex.quote(proton_path)}",
-                    ],
+                    ["flatpak-spawn", "--host", "test", "-e", proton_path],
                     capture_output=True,
                 )
                 proton_exists = check.returncode == 0
@@ -207,13 +201,7 @@ class OnlineFixGameData(GameData):
                     # Try to read the host file via flatpak-spawn
                     try:
                         cat = subprocess.run(
-                            [
-                                "flatpak-spawn",
-                                "--host",
-                                "bash",
-                                "-lc",
-                                f"cat {shlex.quote(library_folders_path)}",
-                            ],
+                            ["flatpak-spawn", "--host", "cat", library_folders_path],
                             capture_output=True,
                             text=True,
                         )
@@ -248,13 +236,7 @@ class OnlineFixGameData(GameData):
                             try:
                                 if in_flatpak:
                                     check_runtime = subprocess.run(
-                                        [
-                                            "flatpak-spawn",
-                                            "--host",
-                                            "bash",
-                                            "-lc",
-                                            f"test -f {shlex.quote(runtime_path)}",
-                                        ],
+                                        ["flatpak-spawn", "--host", "test", "-f", runtime_path],
                                         capture_output=True,
                                     )
                                     exists_runtime = check_runtime.returncode == 0
@@ -301,23 +283,38 @@ class OnlineFixGameData(GameData):
                     steam_runtime_path = ""
                     logging.info("[SOFL] Steam Runtime not found at standard location")
 
-        # Form the launch command with proper escaping
-        cmd = f"{shlex.quote(proton_path)} run {shlex.quote(game_exec_str)}"
+        # Form the launch command as argument list for security
+        cmd_argv = [proton_path, "run", game_exec_str]
 
         if steam_runtime_path:
-            cmd = f"{shlex.quote(steam_runtime_path)} {cmd}"
+            cmd_argv.insert(0, steam_runtime_path)
 
-        # Add arguments before and after the executable
+        # Add arguments before and after the executable safely
         args_before = shared.schema.get_string("online-fix-args-before")
         args_after = shared.schema.get_string("online-fix-args-after")
 
+        # Parse args_before and args_after safely using shlex.split
+        args_before_list = []
         if args_before:
-            cmd = f"{args_before} {cmd}"
+            try:
+                args_before_list = shlex.split(args_before)
+            except ValueError as e:
+                logging.warning(f"[SOFL] Failed to parse args_before '{args_before}': {e}")
+                args_before_list = []
+
+        args_after_list = []
         if args_after:
-            cmd = f"{cmd} {args_after}"
+            try:
+                args_after_list = shlex.split(args_after)
+            except ValueError as e:
+                logging.warning(f"[SOFL] Failed to parse args_after '{args_after}': {e}")
+                args_after_list = []
+
+        # Insert args_before at the beginning, append args_after at the end
+        cmd_argv = args_before_list + cmd_argv + args_after_list
 
         # Launch the game
-        self._run_game(cmd, env, game_exec)
+        self._run_game(cmd_argv, env, game_exec)
 
         self.create_toast(
             _("{} launched directly with Proton {}").format(self.name, proton_version)
@@ -326,7 +323,7 @@ class OnlineFixGameData(GameData):
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
 
-    def _run_game(self, cmd: str, env: dict, game_exec: Path) -> None:
+    def _run_game(self, cmd_argv: list, env: dict, game_exec: Path) -> None:
         """Launch the game in any environment"""
         # Create the prefix directory
         prefix_path = self._create_wine_prefix(game_exec)
@@ -361,16 +358,16 @@ class OnlineFixGameData(GameData):
             # Add the current working directory
             game_dir = str(game_exec.parent)
 
-            # Form the command with proper escaping
+            # Form the command as argument list
             if game_dir:
-                # Modify cmd to include cd command
-                cmd = f"cd {shlex.quote(game_dir)} && {cmd}"
+                # Prepend cd command as separate arguments
+                cmd_argv = ["sh", "-c", f"cd {shlex.quote(game_dir)} && exec \"$@\"", "sh"] + cmd_argv
 
-            full_cmd = ["flatpak-spawn", "--host"] + env_args + ["bash", "-c", cmd]
+            full_cmd = ["flatpak-spawn", "--host"] + env_args + cmd_argv
 
             try:
                 logging.info(
-                    f"[SOFL] Executing command via flatpak-spawn: {' '.join(full_cmd)}"
+                    f"[SOFL] Executing command via flatpak-spawn: {' '.join(shlex.quote(str(arg)) for arg in full_cmd)}"
                 )
                 subprocess.Popen(
                     full_cmd,
@@ -379,13 +376,11 @@ class OnlineFixGameData(GameData):
             except Exception as e:
                 self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
         else:
-            # In native environment, run the command normally
-            full_cmd = ["bash", "-c", cmd]
-
+            # In native environment, run the command directly
             try:
-                logging.info(f"[SOFL] Executing command: {' '.join(full_cmd)}")
+                logging.info(f"[SOFL] Executing command: {' '.join(shlex.quote(str(arg)) for arg in cmd_argv)}")
                 subprocess.Popen(
-                    full_cmd,
+                    cmd_argv,
                     cwd=str(game_exec.parent),
                     env={**os.environ, **env},
                     start_new_session=True,

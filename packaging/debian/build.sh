@@ -30,7 +30,7 @@ for tool in $REQUIRED_TOOLS; do
 done
 
 # Install build dependencies
-BUILD_DEPS="python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg libgtk-4-dev libadwaita-1-dev desktop-file-utils"
+BUILD_DEPS="python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-requests python3-pillow python3-cairo python3-psutil python3-xdg libgtk-4-dev libadwaita-1-dev"
 echo "Installing build dependencies..."
 sudo apt install -y $BUILD_DEPS
 
