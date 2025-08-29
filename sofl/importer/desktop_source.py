@@ -19,6 +19,7 @@
 
 import os
 import shlex
+import shutil
 import subprocess
 from pathlib import Path
 from typing import NamedTuple
@@ -178,22 +179,18 @@ class DesktopSourceIterable(SourceIterable):
 
     def check_command(self, command) -> bool:
         try:
-            # Безопасная альтернатива shell=True - используем which напрямую
             if command.startswith("which "):
-                executable_name = command[6:]  # Убираем "which "
-                result = subprocess.run(
-                    ["which", executable_name],
-                    capture_output=True,
-                    text=True,
-                    check=False
-                )
-                return result.returncode == 0
-            else:
-                # Для других команд используем shlex для безопасного парсинга
-                import shlex
-                cmd_args = shlex.split(command)
-                subprocess.run(cmd_args, check=True)
-        except (subprocess.CalledProcessError, ValueError):
+                executable_name = command[6:]
+                return shutil.which(executable_name) is not None
+            # For other commands, use shlex for safe parsing
+            cmd_args = shlex.split(command)
+            subprocess.run(
+                cmd_args,
+                check=True,
+                capture_output=True,
+                timeout=10
+            )
+        except (subprocess.CalledProcessError, ValueError, FileNotFoundError, subprocess.TimeoutExpired):
             return False
 
         return True

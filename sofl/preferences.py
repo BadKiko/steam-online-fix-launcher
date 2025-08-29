@@ -271,7 +271,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
             }
         )
 
-        # Синхронизация переключателя темы с настройкой force-theme
+        # Synchronize theme switch with force-theme setting
         theme = shared.schema.get_string("force-theme")
         self.force_theme_switch.set_active(theme == "dark")
 
@@ -279,7 +279,7 @@ class SOFLPreferences(Adw.PreferencesDialog):
             shared.schema.set_string(
                 "force-theme", "dark" if row.get_active() else "light"
             )
-            # (опционально) сразу применить тему:
+            # (optional) apply theme immediately:
             from gi.repository import Adw
 
             style_manager = Adw.StyleManager.get_default()

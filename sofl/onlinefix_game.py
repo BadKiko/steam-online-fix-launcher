@@ -36,25 +36,25 @@ from gettext import gettext as _
 
 
 class OnlineFixGameData(GameData):
-    """Класс данных для игр Online-Fix с расширенной функциональностью"""
+    """Data class for Online-Fix games with extended functionality"""
 
     def get_play_button_label(self) -> str:
         """Return the label text for the play button"""
         return _("Play with Online-Fix")
 
     def _create_wine_prefix(self, game_exec: Path) -> str:
-        """Создает структуру префикса Wine для игры
+        """Creates Wine prefix structure for the game
 
         Args:
-            game_exec: Путь к исполняемому файлу игры
+            game_exec: Path to game executable
 
         Returns:
-            str: Путь к созданному префиксу
+            str: Path to created prefix
         """
         prefix_path = os.path.join(game_exec.parent, "OFME Prefix")
         os.makedirs(prefix_path, exist_ok=True)
 
-        # Создаем структуру префикса для совместимости с оригинальным кодом
+        # Create prefix structure for compatibility with original code
         pfx_user_path = os.path.join(
             prefix_path, "pfx", "drive_c", "users", "steamuser"
         )
@@ -64,7 +64,7 @@ class OnlineFixGameData(GameData):
         return prefix_path
 
     def launch(self) -> None:
-        """Запускает игру с Online-Fix"""
+        """Launches game with Online-Fix"""
         self.last_played = int(time())
         self.save()
         self.update()
@@ -73,29 +73,29 @@ class OnlineFixGameData(GameData):
         self._launch_with_direct_steam_api()
 
     def _launch_with_direct_steam_api(self) -> None:
-        """Запуск игры через Direct Steam API Runner"""
+        """Launch game through Direct Steam API Runner"""
         logging.info("Direct Steam API Runner")
 
-        # Проверяем путь к исполняемому файлу
+        # Check executable path
         game_exec = normalize_executable_path(self.executable)
         if not game_exec:
             self.log_and_toast(_("Invalid executable path"))
             return
 
-        # Определяем окружение
+        # Determine environment
         in_flatpak = os.path.exists("/.flatpak-info")
         host_home = SteamLauncher.get_host_home(in_flatpak)
 
-        # Проверяем, запущен ли Steam
+        # Check if Steam is running
         if not SteamLauncher.check_steam_running(in_flatpak):
             self.log_and_toast(_("Steam is not running"))
             return
 
-        # Получаем настройки Proton
+        # Get Proton settings
         proton_version = shared.schema.get_string("online-fix-proton-version")
         steam_home = os.path.join(host_home, ".local/share/Steam")
 
-        # Проверяем существование Proton
+        # Check Proton existence
         proton_path = os.path.join(
             steam_home, "compatibilitytools.d", proton_version, "proton"
         )
@@ -103,26 +103,26 @@ class OnlineFixGameData(GameData):
             self.log_and_toast(_("Proton version not found: {}").format(proton_version))
             return
 
-        # Создаем префикс Wine
+        # Create Wine prefix
         prefix_path = self._create_wine_prefix(game_exec)
         user_home = host_home if in_flatpak else os.path.expanduser("~")
 
-        # Подготавливаем переменные окружения
+        # Prepare environment variables
         env = SteamLauncher.prepare_environment(prefix_path, user_home)
 
-        # Ищем Steam Runtime если включен
+        # Find Steam Runtime if enabled
         steam_runtime_path = None
         if shared.schema.get_boolean("online-fix-use-steam-runtime"):
             steam_runtime_path = SteamLauncher.find_steam_runtime(steam_home, in_flatpak)
             if not steam_runtime_path:
-                # Проверяем стандартное расположение
+                # Check default location
                 default_runtime = os.path.join(steam_home, "ubuntu12_32", "steam-runtime", "run.sh")
                 if SteamLauncher._check_file_exists(default_runtime, in_flatpak):
                     steam_runtime_path = default_runtime
                 else:
                     logging.info("[SOFL] Steam Runtime not found")
 
-        # Строим команду запуска
+        # Build launch command
         args_before = shared.schema.get_string("online-fix-args-before")
         args_after = shared.schema.get_string("online-fix-args-after")
 
@@ -134,7 +134,7 @@ class OnlineFixGameData(GameData):
             args_after
         )
 
-        # Запускаем игру
+        # Launch game
         SteamLauncher.launch_game(cmd_argv, env, game_exec.parent, in_flatpak)
 
         self.create_toast(
@@ -144,27 +144,9 @@ class OnlineFixGameData(GameData):
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
 
-    def _run_game(self, cmd_argv: list, env: dict, game_exec: Path) -> None:
-        """Launch the game in any environment"""
-
-        # Создаем префикс Wine
-        prefix_path = self._create_wine_prefix(game_exec)
-        if not os.path.exists(prefix_path):
-            os.makedirs(prefix_path, exist_ok=True)
-
-        # Создаем структуру префикса для совместимости
-        pfx_user_path = os.path.join(
-            prefix_path, "pfx", "drive_c", "users", "steamuser"
-        )
-        for dir_name in ["AppData", "Saved Games", "Documents"]:
-            os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
-
-        # Запускаем игру через SteamLauncher
-        in_flatpak = os.path.exists("/.flatpak-info")
-        SteamLauncher.launch_game(cmd_argv, env, game_exec.parent, in_flatpak)
 
     def uninstall_game(self) -> None:
-        """Удаление игры с подтверждением"""
+        """Uninstall game with confirmation"""
         if "online-fix" not in self.source:
             self.log_and_toast(_("Cannot uninstall non-online-fix games"))
             return
@@ -184,7 +166,7 @@ class OnlineFixGameData(GameData):
             self.log_and_toast(_("Error: {}").format(str(e)))
 
     def _remove_from_list_only(self) -> None:
-        """Удаляет игру только из списка"""
+        """Removes game from list only"""
         self.log_and_toast(
             _("Game is not installed in Online-Fix directory, removing it from the list")
         )
@@ -193,7 +175,7 @@ class OnlineFixGameData(GameData):
         self.update()
 
     def _show_uninstall_confirmation(self, game_root: Path) -> None:
-        """Показывает диалог подтверждения удаления"""
+        """Shows uninstall confirmation dialog"""
         dialog = create_dialog(
             shared.win,
             _("Uninstall Game"),
@@ -205,7 +187,7 @@ class OnlineFixGameData(GameData):
         dialog.connect("response", lambda d, r: self._handle_uninstall_response(r, game_root))
 
     def _handle_uninstall_response(self, response: str, game_root: Path) -> None:
-        """Обрабатывает ответ пользователя в диалоге удаления"""
+        """Handles user response in uninstall dialog"""
         if response != "uninstall":
             return
 

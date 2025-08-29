@@ -182,17 +182,22 @@ class InstallDialog(Adw.Dialog):
         self.file_chooser.open(None, None, self.on_file_chooser_response)
 
     def on_file_chooser_response(self, dialog, result):
-        """Обработчик выбора файла в файловом диалоге"""
+        """File chooser response handler"""
         try:
             file = self.file_chooser.open_finish(result)
             if file:
                 path = file.get_path()
 
-                # Показываем прогресс и устанавливаем путь
-                self.show_progress(True, "Checking file...")
-                self.game_path.set_text(path)
+                # Check if path is valid
+                if not path:
+                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    return
 
-                # Асинхронно проверяем файл
+                # Show progress and set path
+                self.show_progress(True, "Checking file...")
+                self.game_path.set_text(self.format_path_for_display(path))
+
+                # Check file asynchronously
                 self.check_file_async(path)
 
         except GLib.Error as error:
@@ -200,7 +205,7 @@ class InstallDialog(Adw.Dialog):
             self.show_toast(f"Error accessing file: {error.message}")
 
     def check_file_async(self, path: str) -> None:
-        """Асинхронная проверка игрового файла"""
+        """Asynchronous game file verification"""
         self.show_progress(True, "Checking game file...")
 
         def check_task():
@@ -218,7 +223,7 @@ class InstallDialog(Adw.Dialog):
                 self.show_toast(f"Error accessing file: {str(e)}")
                 return False
 
-            # Проверяем формат файла
+            # Check file format
             if path.lower().endswith(".rar"):
                 return self._check_rar_archive(path)
             elif path.lower().endswith(".exe"):
@@ -236,11 +241,11 @@ class InstallDialog(Adw.Dialog):
         self.run_async(check_task, after_check)
 
     def _check_rar_archive(self, path: str) -> bool:
-        """Проверяет RAR архив Online-Fix"""
+        """Verifies Online-Fix RAR archive"""
         self.show_progress(True, "Checking archive...")
 
         if self.verify_rar_password(path):
-            # Извлекаем название игры из имени файла
+            # Extract game title from filename
             self.extract_game_title(os.path.basename(path))
             self.show_toast("Confirmed: This is an Online-Fix game")
             return True
@@ -267,11 +272,11 @@ class InstallDialog(Adw.Dialog):
         return path
 
     def verify_rar_password(self, path: str) -> bool:
-        """Проверяет пароль RAR архива Online-Fix"""
+        """Verifies Online-Fix RAR archive password"""
         return ArchiveVerifier.verify_archive_password(path)
 
     def extract_game_title(self, filename):
-        """Извлекает название игры из имени файла"""
+        """Extracts game title from filename"""
         game_title = ArchiveVerifier.extract_game_title(filename)
         if game_title:
             self.game_title.set_text(game_title)

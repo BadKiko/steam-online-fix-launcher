@@ -56,7 +56,7 @@ class Game(Gtk.Box):
     filtered: bool = False
     game_cover: GameCover = None
     
-    # Это виджет, который использует данные игры из data
+    # This is a widget that uses game data from data
     data: GameData = None
 
     def __init__(self, data: GameData, **kwargs: Any) -> None:
@@ -65,7 +65,7 @@ class Game(Gtk.Box):
         self.app = shared.win.get_application()
         self.data = data
         
-        # Подключаем сигналы от data
+        # Connect signals from data
         self.data.connect("update-ready", self.on_update_ready)
         self.data.connect("save-ready", self.on_save_ready)
         self.data.connect("toast", self.on_toast)
@@ -81,21 +81,21 @@ class Game(Gtk.Box):
 
         shared.schema.connect("changed", self.schema_changed)
         
-        # Инициализируем UI на основе данных
+        # Initialize UI based on data
         self.title.set_label(self.data.name)
 
     def on_update_ready(self, data: GameData, _args: Any) -> None:
-        """Обрабатывает сигнал о необходимости обновления"""
-        # Обновляем UI на основе данных
+        """Handles signal for update need"""
+        # Update UI based on data
         self.title.set_label(self.data.name)
         self.emit("update-ready", {})
         
     def on_save_ready(self, data: GameData, _args: Any) -> None:
-        """Обрабатывает сигнал о необходимости сохранения"""
+        """Handles signal for save need"""
         self.emit("save-ready", {})
         
     def on_toast(self, data: GameData, message: str) -> None:
-        """Обрабатывает сигнал о необходимости показать уведомление"""
+        """Handles signal for notification need"""
         toast = Adw.Toast.new(message)
         toast.set_priority(Adw.ToastPriority.HIGH)
         toast.set_use_markup(False)
@@ -138,7 +138,7 @@ class Game(Gtk.Box):
     def save_ready(self, _additional_data):  # type: ignore
         """Signal emitted when the game needs saving"""
         
-    # Методы делегирования к data
+    # Delegation methods to data
     @property
     def game_id(self) -> str:
         return self.data.game_id
@@ -199,7 +199,7 @@ class Game(Gtk.Box):
     def blacklisted(self) -> bool:
         return self.data.blacklisted
     
-    # Делегируем методы к data
+    # Delegate methods to data
     def launch(self) -> None:
         self.data.launch()
     

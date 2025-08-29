@@ -268,15 +268,15 @@ class SOFLWindow(Adw.ApplicationWindow):
         style_manager.connect("notify::dark", self.set_details_view_opacity)
         style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
 
-        # Загружаем сохраненную тему
+        # Load saved theme
         saved_theme = shared.schema.get_string("force-theme")
         if saved_theme == "dark":
             style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
         elif saved_theme == "light":
             style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
-        # В остальных случаях оставляем системную тему
+        # In other cases leave system theme
 
-        # Добавляем действие для переключения темы
+        # Add action for theme switching
         action = Gio.SimpleAction.new_stateful(
             "toggle_theme", None, GLib.Variant.new_boolean(style_manager.get_dark())
         )
@@ -562,13 +562,13 @@ class SOFLWindow(Adw.ApplicationWindow):
     def on_toggle_theme_action(
         self, action: Gio.SimpleAction, state: GLib.Variant
     ) -> None:
-        """Обработчик переключения темы"""
+        """Theme toggle handler"""
         style_manager = Adw.StyleManager.get_default()
         is_dark = state.get_boolean()
         style_manager.set_color_scheme(
             Adw.ColorScheme.FORCE_DARK if is_dark else Adw.ColorScheme.FORCE_LIGHT
         )
-        # Сохраняем выбранную тему
+        # Save selected theme
         shared.schema.set_string("force-theme", "dark" if is_dark else "light")
-        # Обновляем прозрачность для детального вида
+        # Update opacity for details view
         self.set_details_view_opacity()

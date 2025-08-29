@@ -103,7 +103,7 @@ class DetailsDialog(Adw.Dialog):
 
         if self.install_mode:
             self.set_title(_("Install Game"))
-            # В режиме установки делаем все поля редактируемыми
+            # In install mode make all fields editable
             self.name.set_sensitive(True)
             self.developer.set_sensitive(True)
             self.executable.set_sensitive(True)
@@ -302,7 +302,7 @@ class DetailsDialog(Adw.Dialog):
 
         self.game_cover.pictures.remove(self.cover)
 
-        # В режиме установки не показываем страницу деталей
+        # In install mode don't show details page
         if not self.install_mode:
             self.close()
             shared.win.show_details_page(self.game)

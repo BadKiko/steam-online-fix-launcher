@@ -28,7 +28,7 @@ from sofl import shared
 
 
 def run_executable(executable) -> None:
-    """Безопасно запускает исполняемый файл"""
+    """Safely launches executable file"""
     import shlex
 
     executable_path = normalize_executable_path(executable)
@@ -37,13 +37,13 @@ def run_executable(executable) -> None:
         logging.error("Invalid executable path: %s", executable)
         return
 
-    # Если executable - это строка с аргументами, безопасно распарсим её
+    # If executable is a string with arguments, safely parse it
     if isinstance(executable, str) and " " in str(executable):
         try:
-            # Пробуем распарсить как команду с аргументами
+            # Try to parse as command with arguments
             cmd_args = shlex.split(str(executable))
             if len(cmd_args) > 1:
-                # Есть аргументы - используем их
+                # There are arguments - use them
                 logging.info("Launching command with args: %s", cmd_args)
                 subprocess.Popen(
                     cmd_args,
@@ -54,10 +54,10 @@ def run_executable(executable) -> None:
                 )
                 return
         except ValueError:
-            # Если не удалось распарсить, продолжаем с путем
+            # If parsing failed, continue with path
             pass
 
-    # Запускаем только исполняемый файл без аргументов
+    # Launch executable file without arguments only
     logging.info("Launching `%s`", executable_path)
     subprocess.Popen(
         str(executable_path),

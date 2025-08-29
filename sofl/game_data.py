@@ -34,8 +34,8 @@ from gettext import gettext as _
 
 class GameData(GObject.Object):
     """
-    Базовый класс для хранения данных и логики игры.
-    Этот класс не содержит элементов пользовательского интерфейса.
+    Base class for storing game data and logic.
+    This class does not contain user interface elements.
     """
 
     added: int
@@ -51,7 +51,7 @@ class GameData(GObject.Object):
     blacklisted: bool = False
     version: int = 0
 
-    # Сигналы для коммуникации с виджетом
+    # Signals for communication with widget
     __gsignals__ = {
         "update-ready": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "save-ready": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
@@ -85,15 +85,15 @@ class GameData(GObject.Object):
             setattr(self, key, value)
 
     def update(self) -> None:
-        """Сигнализирует о необходимости обновления интерфейса"""
+        """Signals the need for interface update"""
         self.emit("update-ready", {})
 
     def save(self) -> None:
-        """Сигнализирует о необходимости сохранения данных"""
+        """Signals the need for data saving"""
         self.emit("save-ready", {})
 
     def create_toast(self, message: str) -> None:
-        """Сигнализирует о необходимости показать уведомление"""
+        """Signals the need to show notification"""
         self.emit("toast", message)
 
     def get_play_button_label(self) -> str:

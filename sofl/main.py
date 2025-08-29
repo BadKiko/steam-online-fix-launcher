@@ -49,7 +49,7 @@ from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
 
-# Импорт необходим для доступа к классу через globals() в методе get_source_name
+# Import required for access to class through globals() in get_source_name method
 from sofl.importer.onlinefix_source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences

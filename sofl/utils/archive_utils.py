@@ -26,13 +26,13 @@ from typing import Optional
 
 
 class ArchiveVerifier:
-    """Утилиты для проверки и верификации архивов"""
+    """Utilities for checking and verifying archives"""
 
     ONLINE_FIX_PASSWORD = "online-fix.me"
 
     @staticmethod
     def verify_rar_password_quick(path: str) -> bool:
-        """Быстрая проверка пароля RAR архива через unrar"""
+        """Quick RAR archive password verification via unrar"""
         try:
             unrar_path = ArchiveVerifier._get_unrar_path()
             if not unrar_path:
@@ -64,7 +64,7 @@ class ArchiveVerifier:
 
     @staticmethod
     def verify_rar_password_fallback(path: str) -> bool:
-        """Проверка пароля RAR архива через rarfile (fallback)"""
+        """RAR archive password verification via rarfile (fallback)"""
         try:
             with rarfile.RarFile(path) as rf:
                 rf.setpassword(ArchiveVerifier.ONLINE_FIX_PASSWORD)
@@ -74,10 +74,10 @@ class ArchiveVerifier:
                     logging.warning("Archive is empty")
                     return False
 
-                # Проверяем пароль, пытаясь прочитать первый файл
+                # Check password by trying to read the first file
                 try:
                     with rf.open(info_list[0]) as f:
-                        f.read(1)  # Читаем хотя бы 1 байт
+                        f.read(1)  # Read at least 1 byte
                     logging.info("Archive verified successfully via rarfile")
                     return True
                 except rarfile.PasswordRequired:
@@ -96,26 +96,26 @@ class ArchiveVerifier:
 
     @staticmethod
     def verify_archive_password(path: str) -> bool:
-        """Проверяет пароль архива Online-Fix"""
+        """Verifies Online-Fix archive password"""
         if not path.lower().endswith(".rar"):
             return False
 
-        # Сначала пробуем быстрый метод через unrar
+        # First try quick method via unrar
         if ArchiveVerifier.verify_rar_password_quick(path):
             return True
 
-        # Если не получилось, используем rarfile
+        # If not successful, use rarfile
         logging.info("Using rarfile fallback for archive verification")
         return ArchiveVerifier.verify_rar_password_fallback(path)
 
     @staticmethod
     def _get_unrar_path() -> Optional[str]:
-        """Получает путь к unrar"""
+        """Gets unrar path"""
         return rarfile.UNRAR_TOOL if rarfile.UNRAR_TOOL else shutil.which("unrar")
 
     @staticmethod
     def extract_game_title(filename: str) -> str:
-        """Извлекает название игры из имени файла"""
+        """Extracts game title from filename"""
         GAME_TITLE_REGEX = r"(^.*?)\.v"
         match = re.search(GAME_TITLE_REGEX, filename)
         if match:
