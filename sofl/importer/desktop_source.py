@@ -178,8 +178,22 @@ class DesktopSourceIterable(SourceIterable):
 
     def check_command(self, command) -> bool:
         try:
-            subprocess.run(command, shell=True, check=True)
-        except subprocess.CalledProcessError:
+            # Безопасная альтернатива shell=True - используем which напрямую
+            if command.startswith("which "):
+                executable_name = command[6:]  # Убираем "which "
+                result = subprocess.run(
+                    ["which", executable_name],
+                    capture_output=True,
+                    text=True,
+                    check=False
+                )
+                return result.returncode == 0
+            else:
+                # Для других команд используем shlex для безопасного парсинга
+                import shlex
+                cmd_args = shlex.split(command)
+                subprocess.run(cmd_args, check=True)
+        except (subprocess.CalledProcessError, ValueError):
             return False
 
         return True

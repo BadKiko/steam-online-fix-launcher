@@ -28,12 +28,39 @@ from sofl import shared
 
 
 def run_executable(executable) -> None:
-    executable = normalize_executable_path(executable)
-    logging.info("Launching `%s`", executable)
+    """Безопасно запускает исполняемый файл"""
+    import shlex
 
-    # pylint: disable=consider-using-with
+    executable_path = normalize_executable_path(executable)
+
+    if not executable_path:
+        logging.error("Invalid executable path: %s", executable)
+        return
+
+    # Если executable - это строка с аргументами, безопасно распарсим её
+    if isinstance(executable, str) and " " in str(executable):
+        try:
+            # Пробуем распарсить как команду с аргументами
+            cmd_args = shlex.split(str(executable))
+            if len(cmd_args) > 1:
+                # Есть аргументы - используем их
+                logging.info("Launching command with args: %s", cmd_args)
+                subprocess.Popen(
+                    cmd_args,
+                    cwd=shared.home,
+                    shell=False,
+                    start_new_session=True,
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,  # type: ignore
+                )
+                return
+        except ValueError:
+            # Если не удалось распарсить, продолжаем с путем
+            pass
+
+    # Запускаем только исполняемый файл без аргументов
+    logging.info("Launching `%s`", executable_path)
     subprocess.Popen(
-        executable,
+        str(executable_path),
         cwd=shared.home,
         shell=False,
         start_new_session=True,

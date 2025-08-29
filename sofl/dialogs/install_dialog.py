@@ -21,12 +21,7 @@
 
 import os
 import re
-import rarfile
-import subprocess
-import tempfile
 import logging
-import threading
-import shutil
 from pathlib import Path
 from sys import platform
 from typing import Any, Optional, Callable
@@ -39,6 +34,7 @@ from sofl.game import Game
 from sofl.game_factory import GameFactory
 from sofl.installer.online_fix_installer import OnlineFixInstaller
 from sofl.details_dialog import DetailsDialog
+from sofl.utils.archive_utils import ArchiveVerifier
 
 
 # Constants
@@ -185,84 +181,71 @@ class InstallDialog(Adw.Dialog):
         self.file_chooser.open(None, None, self.on_file_chooser_response)
 
     def on_file_chooser_response(self, dialog, result):
+        """Обработчик выбора файла в файловом диалоге"""
         try:
             file = self.file_chooser.open_finish(result)
             if file:
-                original_path = file.get_path()
-                path = original_path
+                path = file.get_path()
 
-                # Show progress in UI
+                # Показываем прогресс и устанавливаем путь
                 self.show_progress(True, "Checking file...")
-
-                # Format path for display
                 self.game_path.set_text(path)
 
-                # Asynchronously check file
+                # Асинхронно проверяем файл
                 self.check_file_async(path)
 
         except GLib.Error as error:
             self.log_message(f"Error accessing file: {error.message}", logging.ERROR)
             self.show_toast(f"Error accessing file: {error.message}")
-            return
 
     def check_file_async(self, path: str) -> None:
-        """Asynchronous game file check
-
-        Args:
-            path: Path to the file
-        """
+        """Асинхронная проверка игрового файла"""
         self.show_progress(True, "Checking game file...")
 
         def check_task():
             file = Gio.File.new_for_path(path)
+            if not file.query_exists():
+                self.log_message(f"File does not exist: {path}", logging.ERROR)
+                self.show_toast("File does not exist")
+                return False
+
             try:
-                if not file.query_exists():
-                    self.log_message(f"File does not exist: {path}", logging.ERROR)
-                    self.show_toast("File does not exist")
-                    return False
+                file_stream = file.read()
+                file_stream.close()
+            except Exception as e:
+                self.log_message(f"Error accessing file: {str(e)}", logging.ERROR)
+                self.show_toast(f"Error accessing file: {str(e)}")
+                return False
 
-                # Check file
-                try:
-                    file_stream = file.read()
-                    file_stream.close()
-
-                    # Optimized archive check
-                    if path.lower().endswith(".rar"):
-                        self.show_progress(True, "Checking archive...")
-
-                        # Quick archive check - just open it with password without extracting
-                        if self.verify_rar_password(path):
-                            # Extract game title from filename
-                            self.extract_game_title(os.path.basename(path))
-                            self.show_toast("Confirmed: This is an Online-Fix game")
-                            return True
-                        else:
-                            self.show_toast("Not an Online-Fix game or invalid archive")
-                            return False
-
-                    elif path.lower().endswith(".exe"):
-                        self.log_message("EXE files are not supported yet")
-                        self.show_toast("EXE files are not supported yet")
-                        return False
-                    else:
-                        self.log_message("Unsupported file format")
-                        self.show_toast("Unsupported file format")
-                        return False
-                except Exception as e:
-                    self.log_message(f"Error checking file: {str(e)}", logging.ERROR)
-                    self.show_toast(f"Error checking file: {str(e)}")
-                    return False
-            except GLib.Error as error:
-                self.log_message(
-                    f"Error accessing file: {error.message}", logging.ERROR
-                )
-                self.show_toast(f"Error accessing file: {error.message}")
+            # Проверяем формат файла
+            if path.lower().endswith(".rar"):
+                return self._check_rar_archive(path)
+            elif path.lower().endswith(".exe"):
+                self.log_message("EXE files are not supported yet")
+                self.show_toast("EXE files are not supported yet")
+                return False
+            else:
+                self.log_message("Unsupported file format")
+                self.show_toast("Unsupported file format")
                 return False
 
         def after_check(result):
             self.apply_button.set_sensitive(bool(result))
 
         self.run_async(check_task, after_check)
+
+    def _check_rar_archive(self, path: str) -> bool:
+        """Проверяет RAR архив Online-Fix"""
+        self.show_progress(True, "Checking archive...")
+
+        if self.verify_rar_password(path):
+            # Извлекаем название игры из имени файла
+            self.extract_game_title(os.path.basename(path))
+            self.show_toast("Confirmed: This is an Online-Fix game")
+            return True
+        else:
+            self.show_toast("Not an Online-Fix game or invalid archive")
+            return False
 
     def on_path_changed(self, entry, pspec):
         path = self.game_path.get_text()
@@ -283,94 +266,13 @@ class InstallDialog(Adw.Dialog):
         return path
 
     def verify_rar_password(self, path: str) -> bool:
-        """Quick verification of password-protected archive without extraction
-
-        Args:
-            path: Path to the file
-
-        Returns:
-            bool: True if the archive is valid and opens with password, otherwise False
-        """
-        try:
-            # Select unrar path: use rarfile.UNRAR_TOOL if set else shutil.which("unrar")
-            unrar_path = (
-                rarfile.UNRAR_TOOL if rarfile.UNRAR_TOOL else shutil.which("unrar")
-            )
-
-            # Method 1: Try unrar first (fastest)
-            if unrar_path:
-                self.log_message("Quick archive verification via unrar")
-                try:
-                    result = subprocess.run(
-                        [unrar_path, "t", "-p" + ONLINE_FIX_PASSWORD, "-idp", path],
-                        capture_output=True,
-                        text=True,
-                        check=False,
-                        timeout=10,  # Timeout in seconds
-                    )
-
-                    if result.returncode == 0:
-                        self.log_message("Archive passed verification via unrar")
-                        return True
-                    else:
-                        self.log_message(
-                            f"Archive failed verification via unrar (exit code {result.returncode}): {result.stderr}"
-                        )
-                        # Don't return False immediately, try rarfile fallback
-                except subprocess.TimeoutExpired:
-                    self.log_message("Archive verification took too long, cancelling")
-                    return False
-                except Exception as e:
-                    self.log_message(f"Error during verification via unrar: {str(e)}")
-                    # Continue to rarfile fallback
-            else:
-                self.log_message("unrar binary not found, using rarfile fallback")
-
-            # Method 2: Use rarfile for verification (fallback)
-            self.log_message("Checking archive via rarfile")
-            try:
-                with rarfile.RarFile(path) as rf:
-                    rf.setpassword(ONLINE_FIX_PASSWORD)
-                    # Get file list
-                    info_list = rf.infolist()
-
-                    # Verify password correctness by trying to read from first file
-                    if info_list:
-                        try:
-                            with rf.open(info_list[0]) as f:
-                                # Try to read at least 1 byte to force decryption
-                                f.read(1)
-                            self.log_message(
-                                "Archive verified successfully via rarfile"
-                            )
-                            return True
-                        except rarfile.PasswordRequired:
-                            self.log_message("Archive requires different password")
-                            return False
-                        except Exception as e:
-                            self.log_message(
-                                f"Failed to read archive content: {str(e)}"
-                            )
-                            return False
-                    else:
-                        self.log_message("Archive is empty")
-                        return False
-            except rarfile.PasswordRequired:
-                # If password required but not the one we specified, it's not an Online-Fix archive
-                self.log_message("Archive is protected by a different password")
-                return False
-            except Exception as e:
-                self.log_message(f"Error during verification via rarfile: {str(e)}")
-                return False
-        except Exception as e:
-            self.log_message(f"General error during archive verification: {str(e)}")
-            return False
+        """Проверяет пароль RAR архива Online-Fix"""
+        return ArchiveVerifier.verify_archive_password(path)
 
     def extract_game_title(self, filename):
-        """Extracts game title from filename"""
-        match = re.search(GAME_TITLE_REGEX, filename)
-        if match:
-            game_title = match.group(1).replace(".", " ")
+        """Извлекает название игры из имени файла"""
+        game_title = ArchiveVerifier.extract_game_title(filename)
+        if game_title:
             self.game_title.set_text(game_title)
 
     def show_toast(self, message):
