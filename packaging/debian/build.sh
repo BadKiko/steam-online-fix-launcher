@@ -19,7 +19,7 @@ echo "Installing required dependencies..."
 sudo apt update
 
 # Check and install required tools
-REQUIRED_TOOLS="dpkg-deb meson ninja fakeroot"
+REQUIRED_TOOLS="dpkg-deb meson ninja"
 for tool in $REQUIRED_TOOLS; do
     if ! command -v $tool &> /dev/null; then
         echo "Installing $tool..."
@@ -43,8 +43,8 @@ if [[ "$OUTPUT_DIR" != /* ]]; then
 fi
 OUTPUT_DIR="$(mkdir -p "$OUTPUT_DIR" && cd "$OUTPUT_DIR" && pwd)"
 
-rm -rf "$PROJECT_ROOT/$BUILD_DIR"
-rm -f "$OUTPUT_DIR"/*.deb
+rm -rf "${PROJECT_ROOT:?}/${BUILD_DIR:?}"
+rm -f "${OUTPUT_DIR:?}"/*.deb
 
 # Build the application using meson
 echo "Building application with Meson..."

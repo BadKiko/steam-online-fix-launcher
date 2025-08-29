@@ -127,13 +127,21 @@ if [ "$(id -u)" -eq 0 ] && [ -n "$BUILD_USER" ]; then
     chown -R "$BUILD_USER":"$BUILD_USER" "$PROJECT_DIR" || echo "Warning: Could not change ownership of project directory"
 fi
 
+# Configure makepkg integrity check behavior
+# Set ALLOW_SKIP_INTEG=true to disable integrity checks (not recommended for production)
+SKIP_INTEG_FLAG=""
+if [ "${ALLOW_SKIP_INTEG:-false}" = "true" ]; then
+    SKIP_INTEG_FLAG="--skipinteg"
+    echo "Warning: Package integrity checks disabled via ALLOW_SKIP_INTEG=true"
+fi
+
 # Run makepkg as unprivileged user
 if [ "$(id -u)" -eq 0 ] && [ "$BUILD_USER" != "root" ]; then
     # Run makepkg from the working directory so the edited PKGBUILD is used
-    runuser -u "$BUILD_USER" -- bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    runuser -u "$BUILD_USER" -- bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm $SKIP_INTEG_FLAG"
 else
     # Non-root case: run makepkg from the working directory
-    bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm --skipinteg"
+    bash -c "cd '$BUILD_WORK_DIR' && export SRCDEST='$SRCDEST' && export PKGDEST='$PKGDEST' && export PACKAGER='$PACKAGER' && export BUILDDIR='$BUILDDIR' && makepkg -f --noconfirm $SKIP_INTEG_FLAG"
 fi
 
 echo "Arch Linux package built successfully!"

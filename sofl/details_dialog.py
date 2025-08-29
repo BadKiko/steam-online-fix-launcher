@@ -352,6 +352,11 @@ class DetailsDialog(Adw.Dialog):
             create_dialog(self, _("Error"), _("No valid path selected"))
             return
 
+        def show_error_dialog(title: str, message: str) -> bool:
+            """Wrapper function to show error dialog on main thread"""
+            create_dialog(self, title, message)
+            return False  # Remove from idle queue after execution
+
         def thread_func() -> None:
             nonlocal path
             new_path = None
@@ -365,9 +370,9 @@ class DetailsDialog(Adw.Dialog):
             except UnidentifiedImageError:
                 pass
             except FileNotFoundError as e:
-                create_dialog(self, _("Error"), f"File not found: {str(e)}")
+                GLib.idle_add(show_error_dialog, _("Error"), f"File not found: {str(e)}")
             except Exception as e:
-                create_dialog(self, _("Error"), f"Error opening image: {str(e)}")
+                GLib.idle_add(show_error_dialog, _("Error"), f"Error opening image: {str(e)}")
 
             if not new_path:
                 try:
@@ -377,7 +382,7 @@ class DetailsDialog(Adw.Dialog):
                         )
                     )
                 except Exception as e:
-                    create_dialog(self, _("Error"), f"Error creating cover: {str(e)}")
+                    GLib.idle_add(show_error_dialog, _("Error"), f"Error creating cover: {str(e)}")
 
             if new_path:
                 self.game_cover.new_cover(new_path)

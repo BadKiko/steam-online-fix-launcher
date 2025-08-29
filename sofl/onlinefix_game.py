@@ -176,26 +176,29 @@ class OnlineFixGameData(GameData):
             "STEAM_COMPAT_CLIENT_INSTALL_PATH": f"{user_home}/.steam/steam",
         }
 
-        # Опционально добавляем Steam Overlay
+        # Optional: Add Steam Overlay
         use_steam_overlay = shared.schema.get_boolean("online-fix-use-steam-overlay")
         if use_steam_overlay and not in_flatpak:
-            # Steam Overlay не работает в Flatpak из-за ограничений sandbox
-            env["LD_PRELOAD"] = (
-                f":{user_home}/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so:{user_home}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so"
-            )
+
+            existing_preload = env.get("LD_PRELOAD", "")
+            new_preload_paths = f"{user_home}/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so:{user_home}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so"
+
+            preload_parts = [part for part in [existing_preload, new_preload_paths] if part]
+            env["LD_PRELOAD"] = ":".join(preload_parts)
+
             logging.info(
                 f"[SOFL] Steam Overlay enabled with LD_PRELOAD={env['LD_PRELOAD']}"
             )
         elif use_steam_overlay and in_flatpak:
             logging.info("[SOFL] Steam Overlay disabled in Flatpak environment")
 
-        # Опционально используем Steam Runtime
+        # Optional: Use Steam Runtime
         use_steam_runtime = shared.schema.get_boolean("online-fix-use-steam-runtime")
         steam_runtime_path = ""
         if use_steam_runtime:
-            # Пытаемся найти Steam Runtime в библиотеках Steam, как в оригинальном коде
+            # Try to find Steam Runtime in Steam libraries, as in the original code
             try:
-                # Путь к файлу libraryfolders.vdf
+                # Path to libraryfolders.vdf
                 library_folders_path = os.path.join(
                     user_home, ".steam/steam/steamapps/libraryfolders.vdf"
                 )
@@ -231,7 +234,7 @@ class OnlineFixGameData(GameData):
                         with open(library_folders_path, "r") as f:
                             library_folders_data = vdf.load(f)
 
-                # Ищем SteamLinuxRuntime_sniper в библиотеках
+                # Search for SteamLinuxRuntime_sniper in Steam libraries
                 if library_folders_data and "libraryfolders" in library_folders_data:
                     for folder_id, folder_data in library_folders_data[
                         "libraryfolders"
@@ -269,13 +272,13 @@ class OnlineFixGameData(GameData):
             except Exception as e:
                 logging.error(f"[SOFL] Error finding Steam Runtime: {str(e)}")
 
-            # Если не нашли, используем стандартный путь
+            # If not found, use standard path
             if not steam_runtime_path:
                 steam_runtime_path = os.path.join(
                     steam_home, "ubuntu12_32", "steam-runtime", "run.sh"
                 )
 
-                # Проверяем существование файла (учитываем Flatpak среду)
+                # Check if file exists (consider Flatpak environment)
                 try:
                     if in_flatpak:
                         check_proc = subprocess.run(
@@ -298,13 +301,13 @@ class OnlineFixGameData(GameData):
                     steam_runtime_path = ""
                     logging.info("[SOFL] Steam Runtime not found at standard location")
 
-        # Формируем команду запуска
-        cmd = f'"{proton_path}" run "{game_exec_str}"'
+        # Form the launch command with proper escaping
+        cmd = f"{shlex.quote(proton_path)} run {shlex.quote(game_exec_str)}"
 
         if steam_runtime_path:
-            cmd = f'"{steam_runtime_path}" {cmd}'
+            cmd = f"{shlex.quote(steam_runtime_path)} {cmd}"
 
-        # Добавляем аргументы перед и после исполняемого файла
+        # Add arguments before and after the executable
         args_before = shared.schema.get_string("online-fix-args-before")
         args_after = shared.schema.get_string("online-fix-args-after")
 
@@ -313,7 +316,7 @@ class OnlineFixGameData(GameData):
         if args_after:
             cmd = f"{cmd} {args_after}"
 
-        # Запускаем игру
+        # Launch the game
         self._run_game(cmd, env, game_exec)
 
         self.create_toast(
@@ -324,13 +327,13 @@ class OnlineFixGameData(GameData):
             shared.win.get_application().quit()
 
     def _run_game(self, cmd: str, env: dict, game_exec: Path) -> None:
-        """Запуск игры в любом окружении"""
-        # Создаем директорию для префикса
+        """Launch the game in any environment"""
+        # Create the prefix directory
         prefix_path = self._create_wine_prefix(game_exec)
         if not os.path.exists(prefix_path):
             os.makedirs(prefix_path, exist_ok=True)
 
-        # Создаем структуру префикса для совместимости
+        # Create the prefix structure for compatibility
         pfx_user_path = os.path.join(
             prefix_path, "pfx", "drive_c", "users", "steamuser"
         )
@@ -338,31 +341,30 @@ class OnlineFixGameData(GameData):
             os.makedirs(os.path.join(pfx_user_path, dir_name), exist_ok=True)
 
         if os.path.exists("/.flatpak-info"):
-            # В Flatpak среде запускаем команду на хосте через flatpak-spawn
+            # In Flatpak environment, run the command on the host via flatpak-spawn
             logging.debug(f"[SOFL] Raw environment dict: {env}")
 
-            # Преобразуем переменные окружения в формат --env=KEY=VALUE
+            # Convert environment variables to --env=KEY=VALUE format
             env_args = []
             for key, value in env.items():
-                # Пропускаем пустые значения и None
+                # Skip empty values and None
                 str_value = str(value) if value is not None else ""
                 if str_value.strip():
-                    # Экранируем значение для безопасной передачи
-                    escaped_value = str_value.replace('"', '\\"').replace("$", "\\$")
-                    env_args.append(f"--env={key}={escaped_value}")
-                    logging.debug(f"[SOFL] Adding env var: {key}={escaped_value}")
+                    # No escaping needed for flatpak-spawn (it parses args directly)
+                    env_args.append(f"--env={key}={str_value}")
+                    logging.debug(f"[SOFL] Adding env var: {key}={repr(str_value)}")
                 else:
                     logging.debug(f"[SOFL] Skipping empty env var: {key}={repr(value)}")
 
             logging.debug(f"[SOFL] Environment variables to pass: {env_args}")
 
-            # Добавляем текущую рабочую директорию
+            # Add the current working directory
             game_dir = str(game_exec.parent)
 
-            # Формируем команду
+            # Form the command with proper escaping
             if game_dir:
                 # Modify cmd to include cd command
-                cmd = f"cd '{game_dir}' && {cmd}"
+                cmd = f"cd {shlex.quote(game_dir)} && {cmd}"
 
             full_cmd = ["flatpak-spawn", "--host"] + env_args + ["bash", "-c", cmd]
 
@@ -377,7 +379,7 @@ class OnlineFixGameData(GameData):
             except Exception as e:
                 self.log_and_toast(_("Failed to launch game: {}").format(str(e)))
         else:
-            # В нативной среде запускаем команду обычным способом
+            # In native environment, run the command normally
             full_cmd = ["bash", "-c", cmd]
 
             try:

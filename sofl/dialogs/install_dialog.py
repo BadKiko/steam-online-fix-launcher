@@ -529,9 +529,9 @@ class InstallDialog(Adw.Dialog):
                 try:
                     numbers.append(int(suffix))
                 except ValueError:
-                    self.logger.warning(f"Skipping non-numeric game ID: {game_id}")
+                    logger.warning(f"Skipping non-numeric game ID: {game_id}")
             else:
-                self.logger.warning(
+                logger.warning(
                     f"Skipping game ID with non-numeric suffix: {game_id}"
                 )
 
@@ -552,7 +552,10 @@ class InstallDialog(Adw.Dialog):
         """
         executable_path = ""
         if executable:
-            executable_path = str(Path(install_path) / executable)
+            if Path(executable).is_absolute():
+                executable_path = str(executable)
+            else:
+                executable_path = str(Path(install_path) / executable)
 
         return GameFactory.create_game(
             {
