@@ -11,8 +11,6 @@
 #   full-clean - Remove all build artifacts and caches
 #   dev        - Full development cycle: build + install + run
 #
-# Options:
-#   FAST=1     - Use fast mode (skip some checks, useful for development)
 
 set -euo pipefail
 
@@ -30,12 +28,7 @@ DIST_FILE="$DIST_DIR/$APP_ID.flatpak"
 do_build() {
     echo "Building Flatpak package..."
     mkdir -p "$DIST_DIR"
-    # Use fast mode if FAST=1 environment variable is set
-    if [ "${FAST:-0}" = "1" ]; then
-        ./build.sh "$VERSION" "$DIST_DIR" fast
-    else
-        ./build.sh "$VERSION" "$DIST_DIR"
-    fi
+    ./build.sh "$VERSION" "$DIST_DIR" fast
 }
 
 do_install() {

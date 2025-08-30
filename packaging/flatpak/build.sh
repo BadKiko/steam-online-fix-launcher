@@ -36,6 +36,7 @@ elif [ "$DEVELOPMENT" = true ]; then
     echo "Building Flatpak package for $PROJECT_NAME (DEVELOPMENT) version $VERSION..."
 elif [ "$FAST_MODE" = true ]; then
     echo "Building Flatpak package for $PROJECT_NAME (FAST MODE) version $VERSION..."
+    echo "WARNING: Fast mode requires all dependencies (flatpak, flatpak-builder, runtimes) to be pre-installed!"
 else
     echo "Building Flatpak package for $PROJECT_NAME version $VERSION..."
 fi
@@ -70,7 +71,7 @@ if [ "$FAST_MODE" = false ]; then
     echo "Updating remotes..."
     flatpak update --appstream --user || true
 else
-    echo "Fast mode: Skipping flatpak setup and remote updates..."
+    echo "Fast mode: Skipping all internet-dependent operations (flatpak setup, remote updates, runtime installation)..."
 fi
 
 # Check and install required runtimes
@@ -93,7 +94,7 @@ if [ "$FAST_MODE" = false ]; then
         echo "org.gnome.Sdk//48 already installed"
     fi
 else
-    echo "Fast mode: Skipping runtime checks..."
+    echo "Fast mode: Skipping runtime installation..."
 fi
 
 # blueprint-compiler is now available from the host system via flatpak manifest
@@ -118,12 +119,23 @@ fi
 
 # Build the flatpak with better error handling
 echo "Building Flatpak (branch: $BRANCH) using manifest: $MANIFEST_FILE..."
-if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse flatpak-build "$MANIFEST_FILE"; then
+
+# Build flags - remove internet-dependent options in fast mode
+if [ "$FAST_MODE" = true ]; then
+    echo "Fast mode: Building without internet dependencies..."
+    BUILD_FLAGS="--force-clean --user --disable-rofiles-fuse --ccache"
+    REPO_FLAGS="--repo=$REPO_NAME --default-branch=$BRANCH"
+else
+    BUILD_FLAGS="--force-clean --user --install-deps-from=flathub --disable-rofiles-fuse --ccache"
+    REPO_FLAGS="--repo=$REPO_NAME --default-branch=$BRANCH"
+fi
+
+if ! flatpak-builder $BUILD_FLAGS $REPO_FLAGS flatpak-build "$MANIFEST_FILE"; then
     echo "Error: Flatpak build failed"
-    echo "Trying with ccache flag..."
-    if ! flatpak-builder --force-clean --user --repo=$REPO_NAME --default-branch=$BRANCH --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build "$MANIFEST_FILE"; then
-        echo "Build failed again, trying without repo option..."
-        flatpak-builder --force-clean --user --install-deps-from=flathub --disable-rofiles-fuse --ccache flatpak-build "$MANIFEST_FILE"
+    echo "Trying without repo option..."
+    if ! flatpak-builder $BUILD_FLAGS flatpak-build "$MANIFEST_FILE"; then
+        echo "Build failed again, trying basic build..."
+        flatpak-builder --force-clean --user --disable-rofiles-fuse flatpak-build "$MANIFEST_FILE"
     fi
 fi
 
@@ -162,7 +174,11 @@ fi
 # Optional: Install locally for testing (check third/fourth argument)
 if [ "${3:-}" == "install" ] || [ "${4:-}" == "install" ]; then
     echo "Installing locally..."
-    flatpak-builder --install --user flatpak-build "$MANIFEST_FILE"
+    if [ "$FAST_MODE" = true ]; then
+        flatpak-builder --install --user --disable-rofiles-fuse flatpak-build "$MANIFEST_FILE"
+    else
+        flatpak-builder --install --user --install-deps-from=flathub --disable-rofiles-fuse flatpak-build "$MANIFEST_FILE"
+    fi
 
     # If development mode, also run the application
     if [ "$DEVELOPMENT" = true ]; then

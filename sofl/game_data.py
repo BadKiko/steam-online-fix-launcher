@@ -114,7 +114,7 @@ class GameData(GObject.Object):
         self.save()
         self.update()
 
-        run_executable(normalize_executable_path(self.executable))
+        run_executable(self.executable)
 
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
