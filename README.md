@@ -22,7 +22,7 @@ _A launcher for games with Online-Fix support on Linux_
 
 ## 📝 About the Project
 
-**SOFL (Steam Online Fix Launcher)** is a powerful tool for easy launching and organizing games with **online-fix** support on Linux. The application is a full-featured game library manager that solves typical problems with launching pirated games with online functionality.
+**SOFL (Steam Online Fix Launcher)** is a powerful tool for easy launching and organizing games with **online-fix** support on Linux. The application is a full-featured game library manager that solves typical problems with launching games with online functionality.
 
 The project was created to simplify the lives of Linux users who want to play modern multiplayer games without having to manually configure environments, Wine prefixes, and Proton versions.
 
@@ -49,7 +49,7 @@ The project was created to simplify the lives of Linux users who want to play mo
 
 ### 🎮 Online Games Support
 
-- **Online-Fix** — specialized support for pirated games with online features
+- **Online-Fix** — specialized support for games with online features
 
 ### 🌐 Integrations
 
