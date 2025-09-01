@@ -1,5 +1,43 @@
 # SOFL Changelog
 
+## [v0.0.3.3a] - 2025-09-01
+
+### Major Changes
+
+- **Removed Umu Launcher Integration**: Completely removed Umu Launcher support and related Proton version settings
+- **Enhanced Stability**: Improved overall application stability and performance
+- **Build System Overhaul**: Refactored build configuration for better maintainability
+
+### Bug Fixes
+
+- Fixed various UI styling inconsistencies and layout issues
+- Resolved build process reliability problems
+- Fixed package dependency resolution issues
+- Improved error handling throughout the application
+
+### Documentation Improvements
+
+- **Enhanced README**: Completely rewritten with better project description, features, and installation instructions\
+- **Contributing Guidelines**: Created detailed CONTRIBUTING.md and CONTRIBUTING_RU.md with step-by-step instructions
+- **Project Structure**: Added clear code architecture overview and development requirements
+
+### Development Tools
+
+- **Build Scripts**: Enhanced Flatpak build scripts with stable/dev version support
+- **Development Scripts**: Added new development build scripts for faster iteration\
+
+### UI/UX Improvements
+
+- **Game Type Selection**: Added new "Game Type" combo row for distinguishing Online-Fix and Regular games
+- **Dialog Enhancements**: Improved details dialog and preferences dialog styling
+- **CSS Cleanup**: Better organized and documented stylesheets
+
+### Removed Features
+
+- Umu Launcher integration and Proton version settings
+- Outdated documentation files
+- Legacy configuration keys
+
 ## [v0.0.3.2a] - 2025-08-27
 
 - Fixed #26 @BadKiko
@@ -9,8 +47,7 @@
 
 - Fxed #24
 - Fixed online-fix removing
-- Added select on adding games 
-
+- Added select on adding games
 
 ## [v0.0.3] - 2025-08-25
 
