@@ -105,6 +105,12 @@ curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/dow
 
 A huge thank you to the [**@kra-mo/cartridges**](https://github.com/kra-mo/cartridges) project! Their excellent work has been a great inspiration and resource for our launcher.
 
+### 🤝 Contributing
+
+We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or helping with translations, your help is appreciated.
+
+📖 **[How to contribute](CONTRIBUTING.md)** — detailed guide for contributors
+
 ## 📜 License
 
 This project is licensed under **GPL-3.0**. See the [LICENSE](LICENSE) file for details.
