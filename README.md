@@ -1,68 +1,125 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/main/data/icons/hicolor/scalable/apps/org.badkiko.sofl.svg" alt="SOFL Logo" width="120" height="120">
+
+# SOFL
+
+## Steam Online Fix Launcher
+
+_A launcher for games with Online-Fix support on Linux_
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/BadKiko/steam-online-fix-launcher/main/data/icons/hicolor/scalable/apps/org.badkiko.sofl.svg" alt="SOFL Icon" height="150" />
-    <h1 align="center">SOFL</h1>
+  <a href="README_RU.md"><img src="https://img.shields.io/badge/🇷🇺-Russian-blue" alt="Russian"></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸-English-red" alt="English"></a>
 </p>
 
-<p align="center">
-    <a href="https://coderabbit.ai"><img src="https://img.shields.io/coderabbit/prs/github/BadKiko/steam-online-fix-launcher?utm_source=oss&utm_medium=github&utm_campaign=BadKiko%2Fsteam-online-fix-launcher&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" alt="CodeRabbit Reviews"></a>
+  <p align="center">
+    <a href="https://coderabbit.ai"><img src="https://img.shields.io/coderabbit/prs/github/BadKiko/steam-online-fix-launcher?utm_source=oss&utm_medium=github&utm_campaign=BadKiko%2Fsteam-online-fix-launcher&labelColor=171717&color=FF570A&label=CodeRabbit+Reviews" alt="CodeRabbit Reviews"></a>
     <a href="https://sonarcloud.io/summary/new_code?id=BadKiko_steam-online-fix-launcher"><img src="https://sonarcloud.io/api/project_badges/measure?project=BadKiko_steam-online-fix-launcher&metric=alert_status" alt="Quality Gate Status"></a>
-</p>
+    <a href="https://github.com/BadKiko/steam-online-fix-launcher/releases"><img src="https://img.shields.io/github/v/release/BadKiko/steam-online-fix-launcher?label=Latest%20Release" alt="Latest Release"></a>
+    <a href="https://github.com/BadKiko/steam-online-fix-launcher/blob/main/LICENSE"><img src="https://img.shields.io/github/license/BadKiko/steam-online-fix-launcher" alt="License"></a>
+  </p>
+</div>
 
-[Русская версия](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/docs/README_RU.md)
+## 📝 About the Project
 
-## 📝 Description
+**SOFL (Steam Online Fix Launcher)** is a powerful tool for easy launching and organizing games with **online-fix** support on Linux. The application is a full-featured game library manager that solves typical problems with launching games with online functionality.
 
-**Steam Online Fix Launcher (SOFL)** is a tool for easily launching and organizing online-fix games on Linux. The application is a full-featured library manager that solves common problems with launching pirated games with online functionality support.
+The project was created to simplify the lives of Linux users who want to play modern multiplayer games without having to manually configure environments, Wine prefixes, and Proton versions.
 
-## ✨ Key Features
+### 🎯 Key Benefits
 
-- 🚀 Easy launch of online-fix games without complex settings
-- 📚 Organization of all your games in one library
-- 🖼️ Automatic cover art from SteamGridDB
-- 🔄 Support for various types of online-fix games
-- 🔧 Automatic solution for common problems
-- 🔍 Integration with IGDB, ProtonDB, Lutris and other services
-- 📂 Import games from Steam, Heroic, Lutris and other launchers
+- **🎮 Unified library** of all your games in one place
+- **🔧 Automatic problem solving** for launching online games
+- **🎨 Modern interface** in GNOME style
+- **🌐 Full support** for multiple gaming platforms
+
+---
+
+## ✨ Features
+
+### 🎯 Core Functions
+
+- 🚀 **Easy launch** of online games without complex settings
+- 📚 **Library management** — all games in one place
+- 🖼️ **Automatic covers** from SteamGridDB
+- 🔄 **Support for various types** of online games
+- 🔧 **Automatic fixes** for typical problems
+- 🔍 **Integration with services** IGDB, ProtonDB, Lutris
+- 📂 **Game import** from Steam, Heroic, Lutris, Bottles, Itch, Legendary, RetroArch
+
+### 🎮 Online Games Support
+
+- **Online-Fix** — specialized support for games with online features
+
+### 🌐 Integrations
+
+- **SteamGridDB** — automatic cover downloads
+- **IGDB** — game information and ratings
+- **ProtonDB** — compatibility and community reviews
+- **Lutris** — integration with the largest Linux gaming platform
+- **Steam** — native Steam library support
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+### 🏠 Main Screen
+
+<img src="data/screenshots/1.png" alt="SOFL Main Screen" width="800">
+
+### 🎮 Game Card
+
+<img src="data/screenshots/2.png" alt="Game Library" width="800">
+
+---
+
+<div align="left">
 
 ## 🛠️ Installation
 
-🛠️Currently in development🛠️
+### 📦 From Official Repositories
 
-## 🤝 Project Merger
+#### Flatpak (recommended)
 
-We're excited to announce that **SOFL** and **Dark Cartridges** projects are merging into a single solution! This will create a more powerful and user-friendly tool for all Linux users.
+```bash
+# Install from Latest Release
+curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
+```
 
-## 📋 Requirements
+### ⚙️ Basic Setup
 
-- Linux (any modern distribution)
-- Steam with Proton installed
-- Wine/Proton
+1. **Online-Fix Games Path**: Specify the directory with your games
+2. **Proton Version**: Select the appropriate Proton version
+3. **Import Sources**: Enable the required gaming platforms
 
-## 🔧 For Developers
+## 🙏 Acknowledgments
 
-🔧 Soon 🔧
+### 👥 Development Team
 
-## 🙏 Acknowledgements
+- **[BadKiko](https://github.com/badkiko)** — lead developer and project founder
+- **[Niko-PRO](https://github.com/Niko-PRO)** — architecture and design
 
-A huge thank you to [@kra-mo/cartridges](https://github.com/kra-mo/cartridges) project! Their excellent work has been a great inspiration and resource for our launcher.
+### 🎯 Inspiration and Thanks
 
-## Roadmap & What’s Missing
+A huge thank you to the [**@kra-mo/cartridges**](https://github.com/kra-mo/cartridges) project! Their excellent work has been a great inspiration and resource for our launcher.
 
-* 🔄 FreeTP Auto-Installer: Automatically set up FreeTP games
-* 🔗 SteamGridDB Integration: Fetch cover art for your games automatically
-* 🐞 Bug Fixes and UI Polish: Improve stability and user experience
-* ❓ Online Integration with Online-Fix Servers: (Idea) Maybe something like Hydra for direct updates and news?
-* ❓ UI for SteamDeck: (Idea) Maybe something like RetroDeck but for pirates game?
-* 🛠️ Automatic Fixes for Common Online-Fix Errors: Implement scripted solutions for issues listed in [my manual guide](https://www.reddit.com/r/LinuxCrackSupport/comments/1cw7v8j/onlinefix_a_complete_guide_to_running_games_with/) (like Steam environment errors, missing DLLs, etc.)
-* 🚀 Automatic Steam Launch and Session End: Launch Steam automatically before starting games and close it after the session ends
-* 🎮 Runner Selection: Choose to launch games via Steam or [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
+### 🤝 Contributing
+
+We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or helping with translations, your help is appreciated.
+
+📖 **[How to contribute](CONTRIBUTING.md)** — detailed guide for contributors
 
 ## 📜 License
 
-This project is licensed under GPL-3.0. See the [LICENSE](LICENSE) file for details. 
+This project is licensed under **GPL-3.0**. See the [LICENSE](LICENSE) file for details.
 
-## Star History
+## 📊 Project Statistics
+
+<div align="center">
+
+### 🌟 Popularity Growth
 
 <a href="https://www.star-history.com/#BadKiko/steam-online-fix-launcher&Date">
  <picture>
@@ -71,4 +128,19 @@ This project is licensed under GPL-3.0. See the [LICENSE](LICENSE) file for deta
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
  </picture>
 </a>
+</div>
 
+---
+
+<div align="center">
+
+### 🎮 Join the Community!
+
+⭐ **Star the project** if you like it!  
+🐛 **Report a bug** or **suggest a feature** through [Issues](https://github.com/BadKiko/steam-online-fix-launcher/issues)
+
+---
+
+_SOFL — your reliable partner in the world of online games on Linux! 🚀_
+
+</div>

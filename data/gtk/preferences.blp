@@ -21,6 +21,10 @@ template $SOFLPreferences: Adw.PreferencesDialog {
         title: _("Cover Image Launches Game");
         subtitle: _("Swaps the behavior of the cover image and the play button");
       }
+
+      Adw.SwitchRow force_theme_switch {
+        title: _("Dark theme");
+      }
     }
 
     Adw.PreferencesGroup images_group {
@@ -440,19 +444,9 @@ template $SOFLPreferences: Adw.PreferencesDialog {
       title: _("Launcher Settings");
       description: _("Configure how games should be launched");
 
-      Adw.ComboRow online_fix_launcher_combo {
-        title: _("Launcher Type");
-        selected: 0;
-      }
-
       Adw.ComboRow online_fix_proton_combo {
         title: _("Proton Version");
-        tooltip-text: _("Version of Proton to use with Steam launcher");
-      }
-
-      Adw.ComboRow online_fix_umu_proton_combo {
-        title: _("UMU Proton Version");
-        tooltip-text: _("Version of Proton to use with UMU launcher");
+        tooltip-text: _("Version of Proton to use with launcher");
       }
 
       Adw.SwitchRow online_fix_auto_patch_switch {

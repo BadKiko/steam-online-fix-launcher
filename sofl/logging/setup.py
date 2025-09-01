@@ -94,14 +94,20 @@ def log_system_info() -> None:
 
     logging.debug("Starting %s v%s (%s)", shared.APP_ID, shared.VERSION, shared.PROFILE)
     logging.debug("Python version: %s", sys.version)
+    logging.debug("App version: %s", shared.VERSION)
     if os.getenv("FLATPAK_ID") == shared.APP_ID:
-        process = subprocess.run(
-            ("flatpak-spawn", "--host", "flatpak", "--version"),
-            capture_output=True,
-            encoding="utf-8",
-            check=False,
-        )
-        logging.debug("Flatpak version: %s", process.stdout.rstrip())
+        try:
+            process = subprocess.run(
+                ("flatpak", "--version"),
+                capture_output=True,
+                encoding="utf-8",
+                check=False,
+            )
+            logging.debug("Flatpak version: %s", process.stdout.rstrip())
+        except FileNotFoundError:
+            logging.debug(
+                "Flatpak not found in this environment; skipping version logging."
+            )
     logging.debug("Platform: %s", platform.platform())
     if os.name == "posix":
         for key, value in platform.uname()._asdict().items():

@@ -6,6 +6,7 @@
 # Development Environment
 # ============================================================================
 
+.local
 # Python
 __pycache__/
 *.py[cod]
@@ -194,3 +195,6 @@ docker-compose*.yml
 *key*
 *token*
 *password*
+
+__pycache__
+sofl/__pycache__

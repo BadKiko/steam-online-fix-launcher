@@ -5,7 +5,9 @@
 
 set -e
 
-PROJECT_DIR="/home/kiko/Work/steam-online-fix-launcher"
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 SCRIPTS_DIR="$PROJECT_DIR/scripts"
 
 # Get current version from meson.build
@@ -20,20 +22,14 @@ echo "Updating version to: $NEW_VERSION"
 # First, backup the original file
 cp "$PROJECT_DIR/meson.build" "$PROJECT_DIR/meson.build.backup"
 
-# Replace only the project version line (first version line after project()
-sed -i '1,/^)/ {
+# Replace only the project version line (first version line after project())
+sed -i "1,/^)/ {
     /^  version: / {
-        s/version: '\''[^'\'']+'\''/version: '\'''"$NEW_VERSION"''\''/
+        s/version: '[^']*'/version: '$NEW_VERSION'/
         b done
     }
     :done
-}' "$PROJECT_DIR/meson.build"
-
-# Update Flatpak manifest
-FLATPAK_MANIFEST="$PROJECT_DIR/packaging/flatpak/org.badkiko.sofl.yml"
-if [ -f "$FLATPAK_MANIFEST" ]; then
-    sed -i "s/tag: v[0-9]\+\.[0-9]\+\.[0-9]\+/tag: v$NEW_VERSION/g" "$FLATPAK_MANIFEST"
-fi
+}" "$PROJECT_DIR/meson.build"
 
 # Update Debian control
 DEBIAN_CONTROL="$PROJECT_DIR/packaging/debian/DEBIAN/control"

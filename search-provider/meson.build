@@ -1,13 +1,17 @@
 # Heavily inspired by https://gitlab.gnome.org/World/lollypop/-/blob/master/search-provider/meson.build
 
 service_dir = join_paths(get_option('datadir'), 'dbus-1', 'services')
-serarch_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
+search_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
 
 search_provider_id = app_id + '.SearchProvider'
+
+python = import('python').find_installation('python3')
 
 conf_data = configuration_data()
 conf_data.set('APP_ID', app_id)
 conf_data.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
+conf_data.set('PREFIX', get_option('prefix'))
+conf_data.set('PYTHON', python.full_path())
 
 search_provider_executable = configure_file(
     input: 'sofl-search-provider.in',

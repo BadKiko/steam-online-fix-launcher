@@ -48,7 +48,8 @@ from sofl.importer.legendary_source import LegendarySource
 from sofl.importer.lutris_source import LutrisSource
 from sofl.importer.retroarch_source import RetroarchSource
 from sofl.importer.steam_source import SteamSource
-# Импорт необходим для доступа к классу через globals() в методе get_source_name
+
+# Import required for access to class through globals() in get_source_name method
 from sofl.importer.onlinefix_source import OnlineFixSource
 from sofl.logging.setup import log_system_info, setup_logging
 from sofl.preferences import SOFLPreferences
@@ -263,8 +264,8 @@ class SOFLApplication(Adw.Application):
             else:
                 # Normal handling for sources without a hyphen
                 source_class_prefix = source_id.split("_")[0].title()
-                
-            name = globals()[f'{source_class_prefix}Source'].name
+
+            name = globals()[f"{source_class_prefix}Source"].name
         return name
 
     def on_about_action(self, *_args: Any) -> None:
@@ -286,6 +287,12 @@ class SOFLApplication(Adw.Application):
         about = Adw.AboutDialog.new_from_appdata(
             shared.PREFIX + "/" + shared.APP_ID + ".metainfo.xml", shared.VERSION
         )
+
+        try:
+            about.set_version(shared.VERSION)
+        except AttributeError:
+            pass
+        
         about.set_developers(
             (
                 "badkiko https://badkiko.page",
@@ -350,7 +357,7 @@ class SOFLApplication(Adw.Application):
     def on_install_game_action(self, *_args: Any) -> None:
         if InstallDialog.is_open:
             return
-        
+
         InstallDialog().present(shared.win)
 
     def on_import_action(self, *_args: Any) -> None:

@@ -27,14 +27,17 @@ from gi.repository import GObject
 from sofl import shared
 from sofl.utils.run_executable import run_executable
 
+from sofl.utils.path_utils import normalize_executable_path
+
 from gettext import gettext as _
+
 
 class GameData(GObject.Object):
     """
-    Базовый класс для хранения данных и логики игры.
-    Этот класс не содержит элементов пользовательского интерфейса.
+    Base class for storing game data and logic.
+    This class does not contain user interface elements.
     """
-    
+
     added: int
     executable: str
     game_id: str
@@ -47,47 +50,64 @@ class GameData(GObject.Object):
     removed: bool = False
     blacklisted: bool = False
     version: int = 0
-    
-    # Сигналы для коммуникации с виджетом
+
+    # Signals for communication with widget
     __gsignals__ = {
-        'update-ready': (GObject.SignalFlags.RUN_FIRST, None, (object,)),
-        'save-ready': (GObject.SignalFlags.RUN_FIRST, None, (object,)),
-        'toast': (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "update-ready": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        "save-ready": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
     }
-    
+
     def __init__(self, data: dict[str, Any]):
         super().__init__()
         self.version = shared.SPEC_VERSION
+
+        # Initialize default values for required attributes
+        self.name = data.get("name", _("Unknown Game"))
+        self.executable = data.get("executable", "")
+        self.game_id = data.get("game_id", "")
+        self.source = data.get("source", "")
+        self.added = data.get("added", int(time()))
+        self.hidden = data.get("hidden", False)
+        self.last_played = data.get("last_played", 0)
+        self.developer = data.get("developer", None)
+        self.removed = data.get("removed", False)
+        self.blacklisted = data.get("blacklisted", False)
+
         self.update_values(data)
         self.base_source = self.source.split("_")[0]
-    
+
     def update_values(self, data: dict[str, Any]) -> None:
         for key, value in data.items():
             # Convert executables to strings
             if key == "executable" and isinstance(value, list):
                 value = shlex.join(value)
             setattr(self, key, value)
-    
+
     def update(self) -> None:
-        """Сигнализирует о необходимости обновления интерфейса"""
+        """Signals the need for interface update"""
         self.emit("update-ready", {})
 
     def save(self) -> None:
-        """Сигнализирует о необходимости сохранения данных"""
+        """Signals the need for data saving"""
         self.emit("save-ready", {})
-    
+
     def create_toast(self, message: str) -> None:
-        """Сигнализирует о необходимости показать уведомление"""
+        """Signals the need to show notification"""
         self.emit("toast", message)
-    
+
     def get_play_button_label(self) -> str:
         """Return the label text for the play button"""
         return _("Play")
-    
+
     def get_play_button_icon(self) -> str:
         """Return the icon name for the play button"""
-        return "help-about-symbolic" if shared.schema.get_boolean("cover-launches-game") else "media-playback-start-symbolic"
-    
+        return (
+            "help-about-symbolic"
+            if shared.schema.get_boolean("cover-launches-game")
+            else "media-playback-start-symbolic"
+        )
+
     def launch(self) -> None:
         """Launch the game"""
         self.last_played = int(time())
@@ -101,7 +121,7 @@ class GameData(GObject.Object):
 
         # The variable is the title of the game
         self.create_toast(_("{} launched").format(self.name))
-    
+
     def toggle_hidden(self, toast: bool = True) -> None:
         """Toggle game hidden state"""
         self.hidden = not self.hidden
@@ -113,7 +133,7 @@ class GameData(GObject.Object):
             self.create_toast(
                 (_("{} hidden") if self.hidden else _("{} unhidden")).format(self.name)
             )
-    
+
     def remove_game(self) -> None:
         """Mark game as removed"""
         self.removed = True
@@ -122,7 +142,7 @@ class GameData(GObject.Object):
 
         # The variable is the title of the game
         self.create_toast(_("{} removed").format(self.name))
-        
+
     def get_cover_path(self) -> Optional[Path]:
         """Get the path to the game's cover image"""
         cover_path = shared.covers_dir / f"{self.game_id}.gif"
@@ -133,4 +153,4 @@ class GameData(GObject.Object):
         if cover_path.is_file():
             return cover_path  # type: ignore
 
-        return None 
+        return None

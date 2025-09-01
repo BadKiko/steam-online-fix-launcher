@@ -1,67 +1,149 @@
-# Contributing
+# 🤝 Contributing to SOFL
 
-## Code
+Hi! 👋 Thanks for wanting to help improve SOFL. Here's a simple guide to get started.
 
-Be sure to follow the [code style](#code-style) of the project.
+<p align="center">
+  <a href="CONTRIBUTING_RU.md"><img src="https://img.shields.io/badge/🇷🇺-Russian-blue" alt="Russian"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/🇺🇸-English-red" alt="English"></a>
+</p>
 
-### Adding a feature
-[Create an issue](https://github.com/BadKiko/steam-online-fix-launcher/issues/new) or join the [Discord](https://discord.gg/4KSFh3AmQR)/[Matrix](https://matrix.to/#/#sofl:matrix.org) to discuss it with the maintainers. We will provide additional guidance.
+---
 
-### Fixing a bug
-Fork the repository, make your changes, then create a pull request. Be sure to mention the GitHub issue you're fixing if one was already open.
+## 🚀 Quick Start
 
-## Translations
-### Weblate
-The project can be translated on [Weblate](https://hosted.weblate.org/engage/sofl/).
+### Fork and Clone
 
-### Manually
-1. Clone the repository.
-2. If it isn't already there, add your language to `/po/LINGUAS`.
-3. Create a new translation from the `/po/sofl.pot` file with a translation editor such as [Poedit](https://poedit.net/).
-4. Save the file as `[YOUR LANGUAGE CODE].po` to `/po/`.
-5. Create a pull request with your translations.
-
-# Building
-
-## GNOME Builder
-1. Install [GNOME Builder](https://flathub.org/apps/org.gnome.Builder).
-2. Click "Clone Repository" with `https://github.com/BadKiko/steam-online-fix-launcher.git` as the URL.
-3. Click on the build button (hammer) at the top.
-
-## For Windows
-1. Install [MSYS2](https://www.msys2.org/).
-2. From the MSYS2 shell, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
-3. Build it via Meson.
-
-## For macOS
-1. Install [Homebrew](https://brew.sh/).
-2. Using `brew` and `pip3`, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
-3. Build it via Meson.
-
-## Meson
 ```bash
-git clone https://github.com/BadKiko/steam-online-fix-launcher.git
-cd sofl
-meson setup build
-ninja -C build install
+# 1. Fork the repository on GitHub
+# 2. Clone your fork
+git clone https://github.com/YOUR_USERNAME/steam-online-fix-launcher.git
+cd steam-online-fix-launcher
+
+# 3. Create a working branch
+git checkout -b my-feature
+
+# 4. Run the application for development
+./scripts/dev.sh
 ```
 
-# Code style
+---
 
-All code is auto-formatted with [Black](https://github.com/psf/black) and linted with [Pylint](https://github.com/pylint-dev/pylint). Imports are sorted by [isort](https://github.com/pycqa/isort).
+## 🔄 Development
 
-VSCode extensions are available for all of these and you can set them up with the following `settings.json` configuration:
+### Creating a Pull Request
 
-```json
-"python.formatting.provider": "none",
-"[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    },
-},
-"isort.args":["--profile", "black"],
+1. **Make changes** in your code
+2. **Test** that everything works: `./scripts/dev.sh`
+3. **Commit changes**:
+   ```bash
+   git add .
+   git commit -m "Brief description of changes"
+   ```
+4. **Push to your fork**:
+   ```bash
+   git push origin my-feature
+   ```
+5. **Create a Pull Request** on GitHub
+
+### Simple Rules
+
+- Write clear commit messages
+- Test changes before submitting
+- Add a brief description for new features
+- Follow the existing code style
+
+---
+
+## 🐛 Bugs and Features
+
+### Report a Bug
+
+Use GitHub Issues with the template:
+
+- What were you doing?
+- What did you expect to see?
+- What happened instead?
+- Your system (Linux distribution, version)
+
+### Suggest a New Feature
+
+Describe in the Issue:
+
+- What will it do?
+- Why is it useful?
+- How should it work?
+
+---
+
+## 🛠️ Working with Code
+
+### Architecture
+
+```
+sofl/
+├── main.py          # Application launch
+├── window.py        # Main window
+├── game.py          # Games
+├── store/           # Data storage
+├── importer/        # Game import
+├── dialogs/         # Dialogs
+└── utils/           # Utilities
 ```
 
-For other code editors, you can install them via `pip` and invoke them from the command line.
+### Requirements
+
+- Python 3.10+
+- GTK4 + LibAdwaita
+- Meson for building
+
+---
+
+## 🌐 Translations
+
+### Add a New Language
+
+```bash
+# 1. Add language code to po/LINGUAS
+echo "ru" >> po/LINGUAS
+
+# 2. Create .po file
+msginit --input=po/sofl.pot --locale=ru --output=po/ru.po
+
+# 3. Translate in Poedit or text editor
+# 4. Create Pull Request
+```
+
+### Update Translations
+
+```bash
+meson compile sofl-pot -C builddir
+meson compile sofl-update-po -C builddir
+```
+
+---
+
+## 📝 Code and Commits
+
+### Code Style
+
+We use Black for formatting:
+
+- Maximum 88 characters per line
+- UTF-8 encoding
+- 4 spaces indentation
+
+### Commit Messages
+
+The project uses a tagging system for commits
+
+[AMR] - A-Added, M-Modified, R-Removed
+So when adding new files and editing old ones, there will be a tag before the commit [AM].
+Examples:
+
+- [A] added file `new_feature.py`
+- [M] changed file `README.md`
+- [R] removed file `old_script.py`
+
+## 🙏 Thanks
+
+Thanks for contributing to SOFL! Together we're making Linux better for gamers. 🎮

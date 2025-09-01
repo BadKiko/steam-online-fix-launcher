@@ -147,8 +147,11 @@ class SOFLWindow(Adw.ApplicationWindow):
                 Gtk.Image.new_from_icon_name(
                     "user-desktop-symbolic"
                     if (split_id := source_id.split("_")[0]) == "desktop"
-                    else "online-fix-source-symbolic" if source_id == "online-fix"
-                    else f"{split_id}-source-symbolic"
+                    else (
+                        "online-fix-source-symbolic"
+                        if source_id == "online-fix"
+                        else f"{split_id}-source-symbolic"
+                    )
                 )
             )
 
@@ -261,8 +264,24 @@ class SOFLWindow(Adw.ApplicationWindow):
         self.sidebar.connect("row-selected", self.row_selected)
 
         style_manager = Adw.StyleManager.get_default()
+        
         style_manager.connect("notify::dark", self.set_details_view_opacity)
         style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
+
+        # Load saved theme
+        saved_theme = shared.schema.get_string("force-theme")
+        if saved_theme == "dark":
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        elif saved_theme == "light":
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+        # In other cases leave system theme
+
+        # Add action for theme switching
+        action = Gio.SimpleAction.new_stateful(
+            "toggle_theme", None, GLib.Variant.new_boolean(style_manager.get_dark())
+        )
+        action.connect("activate", self.on_toggle_theme_action)
+        self.add_action(action)
 
         # Allow for a custom number of rows for the library
         if shared.schema.get_uint("library-rows"):
@@ -539,3 +558,17 @@ class SOFLWindow(Adw.ApplicationWindow):
 
     def on_close_action(self, *_args: Any) -> None:
         self.close()
+
+    def on_toggle_theme_action(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
+        """Theme toggle handler"""
+        style_manager = Adw.StyleManager.get_default()
+        is_dark = state.get_boolean()
+        style_manager.set_color_scheme(
+            Adw.ColorScheme.FORCE_DARK if is_dark else Adw.ColorScheme.FORCE_LIGHT
+        )
+        # Save selected theme
+        shared.schema.set_string("force-theme", "dark" if is_dark else "light")
+        # Update opacity for details view
+        self.set_details_view_opacity()

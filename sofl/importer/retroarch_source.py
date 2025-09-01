@@ -94,7 +94,7 @@ class RetroarchSourceIterable(SourceIterable):
                     logging.warning("Cannot find core for: %s", str(item["path"]))
                     bad_playlists.add(playlist_file.stem)
                     continue
-                # Используем безопасный алгоритм хеширования
+                # Use secure hashing algorithm
                 game_id = sha256(item["path"].encode("utf-8")).hexdigest()
 
                 values = {

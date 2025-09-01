@@ -29,7 +29,30 @@
 
 ```bash
 cd packaging/flatpak
+
+# Обычная сборка стабильной версии
 ./build.sh [version]
+
+# Быстрая сборка стабильной версии (без проверок)
+./build.sh [version] . fast
+
+# Сборка и установка стабильной версии
+./build.sh [version] . install
+
+# Быстрая сборка и установка стабильной версии
+./build.sh [version] . fast install
+
+# Сборка и установка dev версии
+./build.sh [version] . dev install
+
+# Быстрая сборка и установка dev версии
+./build.sh [version] . dev fast install
+
+# Быстрая сборка и запуск dev версии
+./build-dev.sh [version]
+
+# Максимально быстрая сборка и запуск dev версии
+./build-dev.sh [version] . fast
 ```
 
 #### Debian
@@ -82,6 +105,7 @@ cd packaging/arch
 ### Автоматические релизы
 
 При создании git тега (например, `v1.0.0`) автоматически:
+
 1. Собираются пакеты для всех платформ
 2. Создается GitHub релиз с прикрепленными пакетами
 3. Обновляется версия во всех файлах
@@ -93,16 +117,21 @@ cd packaging/arch
 ## Структура пакетов
 
 ### Flatpak
-- `org.badkiko.sofl.yml` - Manifest файл
-- `build.sh` - Скрипт сборки
+
+- `org.badkiko.sofl.yml` - Manifest файл для стабильной версии
+- `org.badkiko.sofl.Devel.yml` - Manifest файл для dev версии
+- `build.sh` - Скрипт сборки (поддерживает dev и fast режимы)
+- `build-dev.sh` - Скрипт быстрой сборки dev версии (с поддержкой fast режима)
 
 ### Debian
+
 - `DEBIAN/control` - Метаданные пакета
 - `DEBIAN/postinst` - Скрипт пост-установки
 - `DEBIAN/prerm` - Скрипт пред-удаления
 - `build.sh` - Скрипт сборки
 
 ### Arch Linux
+
 - `PKGBUILD` - Скрипт сборки для Arch
 - `build.sh` - Скрипт сборки
 
@@ -111,11 +140,20 @@ cd packaging/arch
 ### Flatpak
 
 ```bash
-# Локальная установка
+# Локальная установка стабильной версии
 flatpak install --user org.badkiko.sofl.flatpak
+
+# Локальная установка dev версии
+flatpak install --user org.badkiko.sofl.Devel.flatpak
 
 # Системная установка
 sudo flatpak install org.badkiko.sofl.flatpak
+
+# Запуск стабильной версии
+flatpak run org.badkiko.sofl
+
+# Запуск dev версии
+flatpak run org.badkiko.sofl.Devel
 ```
 
 ### Debian/Ubuntu
@@ -136,23 +174,27 @@ makepkg -si
 ## Требования для сборки
 
 ### Flatpak
+
 - flatpak-builder
 - org.gnome.Platform 47
 - org.gnome.Sdk 47
 
 ### Debian
+
 - dpkg-dev
 - meson
 - ninja-build
 - python3-gi и другие зависимости
 
 ### Arch Linux
+
 - makepkg (доступно на Arch Linux)
 - Для других систем создается source tarball
 
 ## Устранение проблем
 
 ### Flatpak
+
 ```bash
 # Очистить предыдущие сборки
 rm -rf flatpak-build sofl-repo
@@ -162,6 +204,7 @@ flatpak-builder --show-manifest org.badkiko.sofl.yml
 ```
 
 ### Debian
+
 ```bash
 # Проверить зависимости
 dpkg-checkbuilddeps
@@ -171,6 +214,7 @@ lintian sofl_VERSION.deb
 ```
 
 ### Arch Linux
+
 ```bash
 # Проверить PKGBUILD
 namcap PKGBUILD
@@ -186,6 +230,69 @@ makepkg -c
 1. **Flatpak** - загрузить на Flathub
 2. **Debian** - загрузить в PPA или репозиторий
 3. **Arch Linux** - загрузить в AUR
+
+## Разработка
+
+### Режимы сборки Flatpak
+
+Проект поддерживает два режима сборки Flatpak:
+
+#### Стабильная версия (`org.badkiko.sofl`)
+
+- Используется для релизов и production
+- Branch: `stable` (по умолчанию)
+
+#### Dev версия (`org.badkiko.sofl.Devel`)
+
+- Используется для разработки и тестирования
+- Branch: `devel`
+- Автоматически запускается после сборки
+
+### Быстрая разработка
+
+Для быстрой разработки используйте `build-dev.sh`:
+
+```bash
+cd packaging/flatpak
+
+# Быстрая сборка и запуск dev версии
+./build-dev.sh
+
+# Сборка с указанной версией
+./build-dev.sh 1.0.0-dev
+```
+
+### Ручная сборка dev версии
+
+```bash
+cd packaging/flatpak
+
+# Сборка dev версии через основной скрипт
+./build.sh dev . dev install
+```
+
+### Особенности dev режима
+
+- **Автоматический запуск**: После сборки приложение запускается автоматически
+- **Отдельный профиль**: Dev версия не конфликтует со стабильной
+- **Разные настройки**: Можно тестировать новые функции без влияния на стабильную версию
+
+### Fast режим для быстрой разработки
+
+Для максимальной скорости сборки используйте fast режим, который пропускает:
+
+- Установку flatpak и flatpak-builder
+- Настройку Flathub remote
+- Обновление remotes (сетевые операции)
+- Проверку и установку runtime/SDK
+
+```bash
+# Быстрая сборка dev версии
+./build-dev.sh dev . fast
+
+# Быстрая сборка стабильной версии
+./build.sh 1.0.0 . fast install
+```
 
 ## Поддержка
 

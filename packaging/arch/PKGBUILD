@@ -1,6 +1,6 @@
 # Maintainer: badkiko <badkiko@badkiko.page>
 pkgname=sofl
-pkgver=0.0.3
+pkgver=0.0.3.2a
 pkgrel=1
 pkgdesc="Steam Online Fix Launcher - Launch all your games"
 arch=('x86_64')
@@ -23,6 +23,7 @@ depends=(
     'gdk-pixbuf2'
     'glibc'
     'gcc-libs'
+    'python-rarfile'
 )
 makedepends=(
     'meson'
@@ -34,12 +35,10 @@ optdepends=(
     'lutris: For Lutris game integration'
     'heroic-games-launcher: For Heroic game integration'
 )
-source=("$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
 
 build() {
-    cd "$srcdir/steam-online-fix-launcher-$pkgver" || {
-        echo "Directory $srcdir/steam-online-fix-launcher-$pkgver not found"
+    cd "$srcdir/sofl-$pkgver" || {
+        echo "Directory $srcdir/sofl-$pkgver not found"
         ls -la "$srcdir"
         exit 1
     }
@@ -48,10 +47,10 @@ build() {
 }
 
 package() {
-    cd "$srcdir/steam-online-fix-launcher-$pkgver"
+    cd "$srcdir/sofl-$pkgver"
     meson install --destdir="$pkgdir" -C build
 
-    # Install additional files
-    install -Dm644 data/org.badkiko.sofl.desktop "$pkgdir/usr/share/applications/org.badkiko.sofl.desktop"
-    install -Dm644 data/org.badkiko.sofl.metainfo.xml "$pkgdir/usr/share/metainfo/org.badkiko.sofl.metainfo.xml"
+    # Vendor python 'vdf' module into /usr/share/sofl/vendor
+    install -d "$pkgdir/usr/share/sofl/vendor"
+    PYTHONUSERBASE="$pkgdir/usr/share/sofl/vendor" pip install --no-compile --no-cache-dir --no-input --disable-pip-version-check --no-warn-script-location --root "$pkgdir" --target "$pkgdir/usr/share/sofl/vendor" vdf
 }

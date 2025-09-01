@@ -22,22 +22,47 @@ import os
 import subprocess
 from shlex import quote
 
+from sofl.utils.path_utils import normalize_executable_path
+
 from sofl import shared
 
 
 def run_executable(executable) -> None:
-    args = (
-        "flatpak-spawn --host /bin/sh -c " + quote(executable)  # Flatpak
-        if os.getenv("FLATPAK_ID") == shared.APP_ID
-        else executable  # Others
-    )
+    """Safely launches executable file"""
+    import shlex
 
-    logging.info("Launching `%s`", str(args))
-    # pylint: disable=consider-using-with
+    executable_path = normalize_executable_path(executable)
+
+    if not executable_path:
+        logging.error("Invalid executable path: %s", executable)
+        return
+
+    # If executable is a string with arguments, safely parse it
+    if isinstance(executable, str) and " " in str(executable):
+        try:
+            # Try to parse as command with arguments
+            cmd_args = shlex.split(str(executable))
+            if len(cmd_args) > 1:
+                # There are arguments - use them
+                logging.info("Launching command with args: %s", cmd_args)
+                subprocess.Popen(
+                    cmd_args,
+                    cwd=shared.home,
+                    shell=False,
+                    start_new_session=True,
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,  # type: ignore
+                )
+                return
+        except ValueError:
+            # If parsing failed, continue with path
+            pass
+
+    # Launch executable file without arguments only
+    logging.info("Launching `%s`", executable_path)
     subprocess.Popen(
-        args,
+        str(executable_path),
         cwd=shared.home,
-        shell=True,
+        shell=False,
         start_new_session=True,
         creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,  # type: ignore
     )

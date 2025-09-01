@@ -17,6 +17,7 @@ install_subdir('dialogs', install_dir: moduledir)
 install_subdir('installer', install_dir: moduledir)
 install_data(
   [
+    '__init__.py',
     'application_delegate.py',
     'main.py',
     'window.py',
