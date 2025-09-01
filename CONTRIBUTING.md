@@ -2,6 +2,11 @@
 
 We welcome contributions to SOFL! Whether you're fixing bugs, adding features, improving documentation, or helping with translations, your help is appreciated.
 
+<p align="center">
+  <a href="CONTRIBUTING_RU.md"><img src="https://img.shields.io/badge/🇷🇺-Russian-blue" alt="Russian"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/🇺🇸-English-red" alt="English"></a>
+</p>
+
 ## 📖 Quick Start
 
 ### For Contributors
