@@ -186,18 +186,25 @@ class InstallDialog(Adw.Dialog):
         try:
             file = self.file_chooser.open_finish(result)
             if file:
-                path = file.get_path()
+                # Get path from file chooser
+                file_path = file.get_path()
+                if not file_path:
+                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    return
+
+                # Get absolute path immediately
+                path = os.path.abspath(file_path)
 
                 # Check if path is valid
                 if not path:
                     self.show_toast("Не удалось получить локальный путь для выбранного файла")
                     return
 
-                # Show progress and set path
+                # Show progress and set path for display (keep original path for operations)
                 self.show_progress(True, "Checking file...")
                 self.game_path.set_text(self.format_path_for_display(path))
 
-                # Check file asynchronously
+                # Check file asynchronously using absolute path
                 self.check_file_async(path)
 
         except GLib.Error as error:
@@ -254,8 +261,10 @@ class InstallDialog(Adw.Dialog):
             return False
 
     def on_path_changed(self, entry, pspec):
-        path = self.game_path.get_text()
-        if path:
+        path_text = self.game_path.get_text()
+        if path_text:
+            # Convert to absolute path for file operations
+            path = os.path.abspath(os.path.expanduser(path_text))
             self.check_file_async(path)
         else:
             self.show_toast("Specify a game file path to check")
@@ -340,12 +349,15 @@ class InstallDialog(Adw.Dialog):
             bool: True if input is valid, False otherwise
         """
         # Get archive path and game name
-        archive_path = self.game_path.get_text()
+        archive_path_text = self.game_path.get_text()
         game_name = self.game_title.get_text()
 
-        if not archive_path or not game_name:
+        if not archive_path_text or not game_name:
             self.show_toast("Select an archive and specify game name")
             return False
+
+        # Convert to absolute path for validation
+        archive_path = os.path.abspath(os.path.expanduser(archive_path_text))
 
         # Check if file exists
         if not os.path.exists(archive_path):
@@ -360,7 +372,9 @@ class InstallDialog(Adw.Dialog):
         Returns:
             tuple: (success, result, executable)
         """
-        archive_path = self.game_path.get_text()
+        # Convert path to absolute for installation
+        archive_path_text = self.game_path.get_text()
+        archive_path = os.path.abspath(os.path.expanduser(archive_path_text))
         game_name = self.game_title.get_text()
 
         def progress_update(progress, message):

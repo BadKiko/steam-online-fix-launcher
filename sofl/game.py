@@ -174,6 +174,10 @@ class Game(Gtk.Box):
     @property
     def removed(self) -> bool:
         return self.data.removed
+
+    @removed.setter
+    def removed(self, value: bool) -> None:
+        self.data.removed = value
     
     @property
     def developer(self) -> Optional[str]:
