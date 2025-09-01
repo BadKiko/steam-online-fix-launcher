@@ -85,7 +85,7 @@ _Лаунчер для игр с поддержкой Online-Fix на Linux_
 
 ```bash
 # Установка из Latest Release
-curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
+curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install --user -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
 ```
 
 ### ⚙️ Базовая настройка

@@ -85,7 +85,7 @@ The project was created to simplify the lives of Linux users who want to play mo
 
 ```bash
 # Install from Latest Release
-curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
+curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install --user -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
 ```
 
 ### ⚙️ Basic Setup
