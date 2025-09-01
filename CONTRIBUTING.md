@@ -1,67 +1,140 @@
-# Contributing
+# 🤝 Contributing to SOFL
 
-## Code
+We welcome contributions to SOFL! Whether you're fixing bugs, adding features, improving documentation, or helping with translations, your help is appreciated.
 
-Be sure to follow the [code style](#code-style) of the project.
+## 📖 Quick Start
 
-### Adding a feature
-[Create an issue](https://github.com/BadKiko/steam-online-fix-launcher/issues/new) or join the [Discord](https://discord.gg/4KSFh3AmQR)/[Matrix](https://matrix.to/#/#sofl:matrix.org) to discuss it with the maintainers. We will provide additional guidance.
+### For Contributors
 
-### Fixing a bug
-Fork the repository, make your changes, then create a pull request. Be sure to mention the GitHub issue you're fixing if one was already open.
+If you're new to contributing or want detailed guidance, check out our comprehensive [**Russian Contributor Guide**](CONTRIBUTING_RU.md) with step-by-step instructions.
 
-## Translations
-### Weblate
-The project can be translated on [Weblate](https://hosted.weblate.org/engage/sofl/).
+### For Developers
 
-### Manually
-1. Clone the repository.
-2. If it isn't already there, add your language to `/po/LINGUAS`.
-3. Create a new translation from the `/po/sofl.pot` file with a translation editor such as [Poedit](https://poedit.net/).
-4. Save the file as `[YOUR LANGUAGE CODE].po` to `/po/`.
-5. Create a pull request with your translations.
-
-# Building
-
-## GNOME Builder
-1. Install [GNOME Builder](https://flathub.org/apps/org.gnome.Builder).
-2. Click "Clone Repository" with `https://github.com/BadKiko/steam-online-fix-launcher.git` as the URL.
-3. Click on the build button (hammer) at the top.
-
-## For Windows
-1. Install [MSYS2](https://www.msys2.org/).
-2. From the MSYS2 shell, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
-3. Build it via Meson.
-
-## For macOS
-1. Install [Homebrew](https://brew.sh/).
-2. Using `brew` and `pip3`, install the required dependencies listed [here](https://github.com/BadKiko/steam-online-fix-launcher/blob/main/.github/workflows/ci.yml).
-3. Build it via Meson.
-
-## Meson
 ```bash
+# Clone and setup
 git clone https://github.com/BadKiko/steam-online-fix-launcher.git
-cd sofl
-meson setup build
-ninja -C build install
+cd steam-online-fix-launcher
+
+# Run in development mode
+./scripts/dev.sh
 ```
 
-# Code style
+## 🎯 Ways to Contribute
 
-All code is auto-formatted with [Black](https://github.com/psf/black) and linted with [Pylint](https://github.com/pylint-dev/pylint). Imports are sorted by [isort](https://github.com/pycqa/isort).
+### 🐛 Bug Fixes
 
-VSCode extensions are available for all of these and you can set them up with the following `settings.json` configuration:
+- Fork the repository
+- Create a branch: `git checkout -b fix/issue-description`
+- Make your changes
+- Test thoroughly
+- Create a Pull Request
+
+### ✨ New Features
+
+- [Create an issue](https://github.com/BadKiko/steam-online-fix-launcher/issues/new) to discuss
+- Join [Discord](https://discord.gg/4KSFh3AmQR) or [Matrix](https://matrix.to/#/#sofl:matrix.org)
+- Follow the standard development process
+
+### 🌐 Translations
+
+- **Weblate**: [Translate on Weblate](https://hosted.weblate.org/engage/sofl/)
+- **Manual**: Follow our [detailed translation guide](CONTRIBUTING_RU.md#переводы)
+
+### 📚 Documentation
+
+- Improve existing docs
+- Add new documentation
+- Translate docs to other languages
+
+## 🛠️ Development Setup
+
+### Quick Development
+
+```bash
+# Smart development mode (recommended)
+./scripts/dev.sh smart
+
+# Full cycle: setup + build + install + run
+./scripts/dev.sh all
+
+# Flatpak development
+cd packaging/flatpak && ./dev.sh dev
+```
+
+### Manual Setup
+
+```bash
+# System dependencies
+sudo apt install meson ninja-build blueprint-compiler
+sudo apt install libgtk-4-dev libadwaita-1-dev
+
+# Python dependencies
+pip install requests pillow rarfile vdf
+
+# Build
+meson setup builddir
+ninja -C builddir install
+```
+
+## 📝 Code Style
+
+We use automated code formatting:
+
+- **Black** for Python formatting
+- **isort** for import sorting
+- **Pylint** for linting
+
+### VSCode Configuration
 
 ```json
-"python.formatting.provider": "none",
-"[python]": {
+{
+  "python.formatting.provider": "none",
+  "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    },
-},
-"isort.args":["--profile", "black"],
+      "source.organizeImports": true
+    }
+  },
+  "isort.args": ["--profile", "black"]
+}
 ```
 
-For other code editors, you can install them via `pip` and invoke them from the command line.
+## 🔄 Development Workflow
+
+1. **Fork** the repository
+2. **Create** a feature branch
+3. **Make** your changes
+4. **Test** your changes
+5. **Commit** with clear messages
+6. **Push** to your fork
+7. **Create** a Pull Request
+
+## 📋 Pull Request Guidelines
+
+- Use descriptive titles
+- Reference related issues
+- Include screenshots for UI changes
+- Test on multiple environments
+- Update documentation if needed
+- Follow code style guidelines
+
+## 🆘 Need Help?
+
+- 📖 **[Detailed Russian Guide](CONTRIBUTING_RU.md)**
+- 💬 **Discord**: https://discord.gg/4KSFh3AmQR
+- 📧 **Matrix**: #sofl:matrix.org
+- 🐛 **Issues**: For bugs and feature requests
+
+## 🙏 Recognition
+
+Contributors are recognized in:
+
+- AUTHORS file
+- Release notes
+- Special acknowledgments section
+- Community events and giveaways
+
+---
+
+**Thank you for contributing to SOFL!** 🚀
