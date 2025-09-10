@@ -31,10 +31,13 @@ VERSION = "@VERSION@"
 
 if os.name == "nt":
     PKGDATADIR = os.path.join(os.path.dirname(__file__), "..", "share", "sofl")
+    PYTHONDIR = os.path.join(os.path.dirname(__file__), "..", "lib", "python3", "dist-packages")
 else:
     PKGDATADIR = "@pkgdatadir@"
     LOCALEDIR = "@localedir@"
+    PYTHONDIR = "@python_dir@"
 
+sys.path.insert(1, PYTHONDIR)
 sys.path.insert(1, PKGDATADIR)
 # Prefer vendored third-party libraries when present
 VENDOR_DIR = os.path.join(PKGDATADIR, "vendor")

@@ -34,9 +34,9 @@ modules:
     buildsystem: meson
     cleanup: ["*"]
     sources:
-      - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler
-        tag: v0.18.0
+      - type: archive
+        url: https://gitlab.gnome.org/jwestman/blueprint-compiler/-/archive/v0.18.0/blueprint-compiler-v0.18.0.tar.gz
+        sha256: 703c7ccd23cb6f77a8fe9c8cae0f91de9274910ca953de77135b6e79dbff1fc3
 
   - name: python3-modules
     buildsystem: simple

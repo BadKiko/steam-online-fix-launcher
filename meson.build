@@ -46,6 +46,7 @@ conf.set('TIFF_COMPRESSION', get_option('tiff_compression'))
 conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 conf.set('libexecdir', libexecdir)
+conf.set('python_dir', python_dir)
 
 subdir('data')
 subdir('sofl')

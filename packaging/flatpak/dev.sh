@@ -22,7 +22,7 @@ CACHE_DIR="$SCRIPT_DIR/.flatpak-builder"
 REPO_DIR="$SCRIPT_DIR/sofl-repo"
 
 APP_ID="org.badkiko.sofl"
-VERSION="0.0.3.2a"
+VERSION="0.0.3.3a"
 DIST_FILE="$DIST_DIR/$APP_ID.flatpak"
 
 do_build() {
