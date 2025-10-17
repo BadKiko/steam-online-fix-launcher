@@ -7,6 +7,7 @@
 - **Flatpak** - Универсальный формат для всех Linux дистрибутивов
 - **Debian (.deb)** - Для Debian, Ubuntu и производных
 - **Arch Linux** - PKGBUILD для сборки в Arch Linux
+- **Nix** - Для NixOS и систем с Nix package manager
 
 ## Быстрый старт
 
@@ -135,6 +136,11 @@ cd packaging/arch
 - `PKGBUILD` - Скрипт сборки для Arch
 - `build.sh` - Скрипт сборки
 
+### Nix
+
+- `../flake.nix` - Корневой файл flake
+- `package.nix` - Деривация пакета
+
 ## Установка пакетов
 
 ### Flatpak
@@ -171,6 +177,19 @@ sudo apt install -f  # Установить зависимости если ну
 makepkg -si
 ```
 
+### Nix
+
+```bash
+# Сборка и запуск
+nix run
+
+# Сборка пакета
+nix build
+
+# Оболочка разработки
+nix develop
+```
+
 ## Требования для сборки
 
 ### Flatpak
@@ -190,6 +209,11 @@ makepkg -si
 
 - makepkg (доступно на Arch Linux)
 - Для других систем создается source tarball
+
+### Nix
+
+- nix
+- nixpkgs
 
 ## Устранение проблем
 
@@ -230,6 +254,7 @@ makepkg -c
 1. **Flatpak** - загрузить на Flathub
 2. **Debian** - загрузить в PPA или репозиторий
 3. **Arch Linux** - загрузить в AUR
+4. **Nix** - добавить в Nixpkgs или использовать как flake
 
 ## Разработка
 
