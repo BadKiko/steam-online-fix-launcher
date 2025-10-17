@@ -24,8 +24,9 @@ pkgs.stdenv.mkDerivation {
     "-Dprofile=release"
     "-Dtiff_compression=webp"
   ];
-  postInstall = ''
-    wrapProgram $out/bin/sofl \
+  preFixup = ''
+    gappsWrapperArgs+=(
       --prefix PATH : ${pkgs.unrar}/bin
+    )
   '';
 }
