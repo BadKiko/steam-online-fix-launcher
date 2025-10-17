@@ -150,7 +150,6 @@ class Importer(ErrorProducer):
         self.import_dialog.force_close()
         return shared.win.get_visible_dialog() == self.import_dialog
 
-
     def monitor_import(self) -> bool:
         """Monitor import progress to update dialog and to trigger import cleanup
         once the work has finished"""

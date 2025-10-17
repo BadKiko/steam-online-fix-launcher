@@ -72,9 +72,11 @@ def convert_cover(
                 tmp_path = Path(Gio.File.new_tmp("XXXXXX.tiff")[0].get_path())
                 (image.resize(shared.image_size) if resize else image).save(
                     tmp_path,
-                    compression="tiff_adobe_deflate"
-                    if shared.schema.get_boolean("high-quality-images")
-                    else shared.TIFF_COMPRESSION,
+                    compression=(
+                        "tiff_adobe_deflate"
+                        if shared.schema.get_boolean("high-quality-images")
+                        else shared.TIFF_COMPRESSION
+                    ),
                 )
     except UnidentifiedImageError:
         try:

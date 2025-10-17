@@ -189,7 +189,9 @@ class InstallDialog(Adw.Dialog):
                 # Get path from file chooser
                 file_path = file.get_path()
                 if not file_path:
-                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    self.show_toast(
+                        "Не удалось получить локальный путь для выбранного файла"
+                    )
                     return
 
                 # Get absolute path immediately
@@ -197,7 +199,9 @@ class InstallDialog(Adw.Dialog):
 
                 # Check if path is valid
                 if not path:
-                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    self.show_toast(
+                        "Не удалось получить локальный путь для выбранного файла"
+                    )
                     return
 
                 # Show progress and set path for display (keep original path for operations)
@@ -453,9 +457,7 @@ class InstallDialog(Adw.Dialog):
                 except ValueError:
                     logger.warning(f"Skipping non-numeric game ID: {game_id}")
             else:
-                logger.warning(
-                    f"Skipping game ID with non-numeric suffix: {game_id}"
-                )
+                logger.warning(f"Skipping game ID with non-numeric suffix: {game_id}")
 
         game_number = max(numbers) + 1
         return f"{prefix}{game_number}"

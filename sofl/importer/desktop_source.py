@@ -184,13 +184,13 @@ class DesktopSourceIterable(SourceIterable):
                 return shutil.which(executable_name) is not None
             # For other commands, use shlex for safe parsing
             cmd_args = shlex.split(command)
-            subprocess.run(
-                cmd_args,
-                check=True,
-                capture_output=True,
-                timeout=10
-            )
-        except (subprocess.CalledProcessError, ValueError, FileNotFoundError, subprocess.TimeoutExpired):
+            subprocess.run(cmd_args, check=True, capture_output=True, timeout=10)
+        except (
+            subprocess.CalledProcessError,
+            ValueError,
+            FileNotFoundError,
+            subprocess.TimeoutExpired,
+        ):
             return False
 
         return True

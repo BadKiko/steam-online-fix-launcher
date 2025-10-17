@@ -370,9 +370,13 @@ class DetailsDialog(Adw.Dialog):
             except UnidentifiedImageError:
                 pass
             except FileNotFoundError as e:
-                GLib.idle_add(show_error_dialog, _("Error"), f"File not found: {str(e)}")
+                GLib.idle_add(
+                    show_error_dialog, _("Error"), f"File not found: {str(e)}"
+                )
             except Exception as e:
-                GLib.idle_add(show_error_dialog, _("Error"), f"Error opening image: {str(e)}")
+                GLib.idle_add(
+                    show_error_dialog, _("Error"), f"Error opening image: {str(e)}"
+                )
 
             if not new_path:
                 try:
@@ -382,7 +386,9 @@ class DetailsDialog(Adw.Dialog):
                         )
                     )
                 except Exception as e:
-                    GLib.idle_add(show_error_dialog, _("Error"), f"Error creating cover: {str(e)}")
+                    GLib.idle_add(
+                        show_error_dialog, _("Error"), f"Error creating cover: {str(e)}"
+                    )
 
             if new_path:
                 self.game_cover.new_cover(new_path)

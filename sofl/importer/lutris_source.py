@@ -79,7 +79,7 @@ class LutrisSourceIterable(SourceIterable):
                 "name": row[1],
                 "source": f"{self.source.source_id}_{row[3]}",
                 "game_id": self.source.game_id_format.format(
-                   runner=row[3], game_id=row[0]
+                    runner=row[3], game_id=row[0]
                 ),
                 "executable": self.source.make_executable(game_id=row[0]),
             }

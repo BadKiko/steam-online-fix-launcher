@@ -35,6 +35,7 @@ from sofl.utils.create_dialog import create_dialog
 
 from gettext import gettext as _
 
+
 # pylint: disable=too-many-instance-attributes
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/game.ui")
 class Game(Gtk.Box):
@@ -55,7 +56,7 @@ class Game(Gtk.Box):
     loading: int = 0
     filtered: bool = False
     game_cover: GameCover = None
-    
+
     # This is a widget that uses game data from data
     data: GameData = None
 
@@ -64,7 +65,7 @@ class Game(Gtk.Box):
 
         self.app = shared.win.get_application()
         self.data = data
-        
+
         # Connect signals from data
         self.data.connect("update-ready", self.on_update_ready)
         self.data.connect("save-ready", self.on_save_ready)
@@ -80,7 +81,7 @@ class Game(Gtk.Box):
         self.play_button.connect("clicked", self.main_button_clicked, True)
 
         shared.schema.connect("changed", self.schema_changed)
-        
+
         # Initialize UI based on data
         self.title.set_label(self.data.name)
 
@@ -89,11 +90,11 @@ class Game(Gtk.Box):
         # Update UI based on data
         self.title.set_label(self.data.name)
         self.emit("update-ready", {})
-        
+
     def on_save_ready(self, data: GameData, _args: Any) -> None:
         """Handles signal for save need"""
         self.emit("save-ready", {})
-        
+
     def on_toast(self, data: GameData, message: str) -> None:
         """Handles signal for notification need"""
         toast = Adw.Toast.new(message)
@@ -137,40 +138,40 @@ class Game(Gtk.Box):
     @GObject.Signal(name="save-ready", arg_types=[object])
     def save_ready(self, _additional_data):  # type: ignore
         """Signal emitted when the game needs saving"""
-        
+
     # Delegation methods to data
     @property
     def game_id(self) -> str:
         return self.data.game_id
-        
+
     @property
     def name(self) -> str:
         return self.data.name
-    
+
     @name.setter
     def name(self, value: str) -> None:
         self.data.name = value
-    
+
     @property
     def source(self) -> str:
         return self.data.source
-    
+
     @property
     def base_source(self) -> str:
         return self.data.base_source
-    
+
     @property
     def executable(self) -> str:
         return self.data.executable
-    
+
     @executable.setter
     def executable(self, value: str) -> None:
         self.data.executable = value
-    
+
     @property
     def hidden(self) -> bool:
         return self.data.hidden
-    
+
     @property
     def removed(self) -> bool:
         return self.data.removed
@@ -178,58 +179,58 @@ class Game(Gtk.Box):
     @removed.setter
     def removed(self, value: bool) -> None:
         self.data.removed = value
-    
+
     @property
     def developer(self) -> Optional[str]:
         return self.data.developer
-    
+
     @developer.setter
     def developer(self, value: Optional[str]) -> None:
         self.data.developer = value
-    
+
     @property
     def last_played(self) -> int:
         return self.data.last_played
-    
+
     @property
     def added(self) -> int:
         return self.data.added
-    
+
     @property
     def version(self) -> int:
         return self.data.version
-    
+
     @property
     def blacklisted(self) -> bool:
         return self.data.blacklisted
-    
+
     # Delegate methods to data
     def launch(self) -> None:
         self.data.launch()
-    
+
     def toggle_hidden(self, toast: bool = True) -> None:
         self.data.toggle_hidden(toast)
-    
+
     def remove_game(self) -> None:
         self.data.remove_game()
-    
+
     def uninstall_game(self) -> None:
         self.data.uninstall_game()
-    
+
     def get_play_button_label(self) -> str:
         return self.data.get_play_button_label()
-    
+
     def get_play_button_icon(self) -> str:
         return self.data.get_play_button_icon()
-    
+
     def get_cover_path(self) -> Optional[Path]:
         return self.data.get_cover_path()
-    
+
     def create_toast(self, message: str) -> None:
         self.data.create_toast(message)
-    
+
     def update(self) -> None:
         self.data.update()
-    
+
     def save(self) -> None:
         self.data.save()

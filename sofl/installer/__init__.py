@@ -19,4 +19,4 @@
 
 from sofl.installer.online_fix_installer import OnlineFixInstaller
 
-__all__ = ["OnlineFixInstaller"] 
+__all__ = ["OnlineFixInstaller"]

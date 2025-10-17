@@ -264,7 +264,7 @@ class SOFLWindow(Adw.ApplicationWindow):
         self.sidebar.connect("row-selected", self.row_selected)
 
         style_manager = Adw.StyleManager.get_default()
-        
+
         style_manager.connect("notify::dark", self.set_details_view_opacity)
         style_manager.connect("notify::high-contrast", self.set_details_view_opacity)
 

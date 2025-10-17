@@ -1,3 +1,3 @@
-# dialogs/__init__.py 
+# dialogs/__init__.py
 
-# dialogs module 
+# dialogs module

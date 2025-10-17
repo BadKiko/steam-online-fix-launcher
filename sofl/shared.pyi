@@ -26,14 +26,12 @@ from sofl.importer.importer import Importer
 from sofl.store.store import Store
 from sofl.window import SOFLWindow
 
-
 class AppState:
     DEFAULT: int
     LOAD_FROM_DISK: int
     IMPORT: int
     REMOVE_ALL_GAMES: int
     UNDO_REMOVE_ALL_GAMES: int
-
 
 APP_ID: str
 VERSION: str
@@ -66,7 +64,6 @@ local_appdata_dir: Path
 programfiles32_dir: Path
 
 app_support_dir: Path
-
 
 scale_factor: int
 image_size: int

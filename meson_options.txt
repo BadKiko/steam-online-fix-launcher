@@ -1,18 +1,12 @@
 option(
-  'profile',
-  type: 'combo',
-  choices: [
-    'release',
-    'development',
-  ],
-  value: 'release'
+    'profile',
+    type: 'combo',
+    choices: ['release', 'development'],
+    value: 'release',
 )
 option(
-  'tiff_compression',
-  type: 'combo',
-  choices: [
-    'webp',
-    'jpeg',
-  ],
-  value: 'webp'
+    'tiff_compression',
+    type: 'combo',
+    choices: ['webp', 'jpeg'],
+    value: 'webp',
 )

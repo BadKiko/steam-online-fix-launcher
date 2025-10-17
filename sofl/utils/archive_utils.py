@@ -39,7 +39,13 @@ class ArchiveVerifier:
                 return False
 
             result = subprocess.run(
-                [unrar_path, "t", "-p" + ArchiveVerifier.ONLINE_FIX_PASSWORD, "-idp", path],
+                [
+                    unrar_path,
+                    "t",
+                    "-p" + ArchiveVerifier.ONLINE_FIX_PASSWORD,
+                    "-idp",
+                    path,
+                ],
                 capture_output=True,
                 text=True,
                 check=False,

@@ -1,7 +1,11 @@
 # Heavily inspired by https://gitlab.gnome.org/World/lollypop/-/blob/master/search-provider/meson.build
 
 service_dir = join_paths(get_option('datadir'), 'dbus-1', 'services')
-search_provider_dir = join_paths(get_option('datadir'), 'gnome-shell', 'search-providers')
+search_provider_dir = join_paths(
+    get_option('datadir'),
+    'gnome-shell',
+    'search-providers',
+)
 
 search_provider_id = app_id + '.SearchProvider'
 
@@ -18,7 +22,7 @@ search_provider_executable = configure_file(
     output: app_id + '-search-provider',
     configuration: conf_data,
     install: true,
-    install_dir: get_option('bindir')
+    install_dir: get_option('bindir'),
 )
 
 service_file = configure_file(
@@ -26,7 +30,7 @@ service_file = configure_file(
     output: app_id + '.SearchProvider.service',
     configuration: conf_data,
     install: true,
-    install_dir: join_paths(get_option('datadir'), 'dbus-1/services')
+    install_dir: join_paths(get_option('datadir'), 'dbus-1/services'),
 )
 
 search_provider_file = configure_file(
@@ -34,5 +38,8 @@ search_provider_file = configure_file(
     output: search_provider_id + '.ini',
     configuration: conf_data,
     install: true,
-    install_dir: join_paths(get_option('datadir'), 'gnome-shell/search-providers')
+    install_dir: join_paths(
+        get_option('datadir'),
+        'gnome-shell/search-providers',
+    ),
 )

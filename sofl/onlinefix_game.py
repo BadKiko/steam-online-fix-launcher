@@ -99,7 +99,9 @@ class OnlineFixGameData(GameData):
         proton_path = os.path.join(
             steam_home, "compatibilitytools.d", proton_version, "proton"
         )
-        if not SteamLauncher.check_proton_exists(proton_version, steam_home, in_flatpak):
+        if not SteamLauncher.check_proton_exists(
+            proton_version, steam_home, in_flatpak
+        ):
             self.log_and_toast(_("Proton version not found: {}").format(proton_version))
             return
 
@@ -113,10 +115,14 @@ class OnlineFixGameData(GameData):
         # Find Steam Runtime if enabled
         steam_runtime_path = None
         if shared.schema.get_boolean("online-fix-use-steam-runtime"):
-            steam_runtime_path = SteamLauncher.find_steam_runtime(steam_home, in_flatpak)
+            steam_runtime_path = SteamLauncher.find_steam_runtime(
+                steam_home, in_flatpak
+            )
             if not steam_runtime_path:
                 # Check default location
-                default_runtime = os.path.join(steam_home, "ubuntu12_32", "steam-runtime", "run.sh")
+                default_runtime = os.path.join(
+                    steam_home, "ubuntu12_32", "steam-runtime", "run.sh"
+                )
                 if SteamLauncher._check_file_exists(default_runtime, in_flatpak):
                     steam_runtime_path = default_runtime
                 else:
@@ -127,11 +133,7 @@ class OnlineFixGameData(GameData):
         args_after = shared.schema.get_string("online-fix-args-after")
 
         cmd_argv = SteamLauncher.build_launch_command(
-            proton_path,
-            str(game_exec),
-            steam_runtime_path,
-            args_before,
-            args_after
+            proton_path, str(game_exec), steam_runtime_path, args_before, args_after
         )
 
         # Launch game
@@ -143,7 +145,6 @@ class OnlineFixGameData(GameData):
 
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
-
 
     def uninstall_game(self) -> None:
         """Uninstall game with confirmation"""
@@ -168,7 +169,9 @@ class OnlineFixGameData(GameData):
     def _remove_from_list_only(self) -> None:
         """Removes game from list only"""
         self.log_and_toast(
-            _("Game is not installed in Online-Fix directory, removing it from the list")
+            _(
+                "Game is not installed in Online-Fix directory, removing it from the list"
+            )
         )
         self.removed = True
         self.save()
@@ -184,7 +187,9 @@ class OnlineFixGameData(GameData):
             _("Uninstall"),
         )
         dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
-        dialog.connect("response", lambda d, r: self._handle_uninstall_response(r, game_root))
+        dialog.connect(
+            "response", lambda d, r: self._handle_uninstall_response(r, game_root)
+        )
 
     def _handle_uninstall_response(self, response: str, game_root: Path) -> None:
         """Handles user response in uninstall dialog"""

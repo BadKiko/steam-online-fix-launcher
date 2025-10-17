@@ -19,11 +19,12 @@
 
 from sofl.importer.source import Source, SourceIterable
 
+
 class OnlineFixSourceIterable(SourceIterable):
     """Iterator for Online-Fix games"""
-    
+
     source: "OnlineFixSource"
-    
+
     def __iter__(self):
         """Generator method producing games"""
         # Logic for iterating over Online-Fix games will go here
@@ -33,16 +34,16 @@ class OnlineFixSourceIterable(SourceIterable):
 
 class OnlineFixSource(Source):
     """Source for Online-Fix games"""
-    
+
     source_id = "online-fix"
     name = "Online-Fix"
     iterable_class = OnlineFixSourceIterable
     available_on = {"linux", "win32", "darwin"}  # Available on all platforms
-    
+
     def __init__(self) -> None:
         super().__init__()
         self.locations = []  # We have no special locations to check
-    
+
     def make_executable(self, *args, **kwargs) -> str:
         """Creates a command to launch the game"""
-        return kwargs.get("executable", "") 
+        return kwargs.get("executable", "")

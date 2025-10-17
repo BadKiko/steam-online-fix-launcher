@@ -292,7 +292,7 @@ class SOFLApplication(Adw.Application):
             about.set_version(shared.VERSION)
         except AttributeError:
             pass
-        
+
         about.set_developers(
             (
                 "badkiko https://badkiko.page",

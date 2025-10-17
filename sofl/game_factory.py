@@ -23,28 +23,29 @@ from sofl.game import Game
 from sofl.game_data import GameData
 from sofl.onlinefix_game import OnlineFixGameData
 
+
 class GameFactory:
     """Factory for creating the appropriate game type based on source"""
-    
+
     @staticmethod
     def create_game(data: dict[str, Any], **kwargs: Any) -> Game:
         """
         Create a game instance of the appropriate type.
-        
+
         Args:
             data: Dictionary with game data
             kwargs: Additional keyword arguments
-            
+
         Returns:
             An instance of Game with appropriate GameData
         """
         source = data.get("source", "")
-        
+
         # Create the appropriate GameData instance based on source
         if source == "online-fix" or source.startswith("online-fix_"):
             game_data = OnlineFixGameData(data)
         else:
             game_data = GameData(data)
-        
+
         # Create Game instance with appropriate GameData
-        return Game(game_data, **kwargs) 
+        return Game(game_data, **kwargs)

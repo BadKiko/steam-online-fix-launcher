@@ -71,7 +71,9 @@ class SteamLauncher:
         return os.path.expanduser("~")
 
     @staticmethod
-    def check_proton_exists(proton_version: str, steam_home: str, in_flatpak: bool = False) -> bool:
+    def check_proton_exists(
+        proton_version: str, steam_home: str, in_flatpak: bool = False
+    ) -> bool:
         """Checks Proton version existence"""
         proton_path = os.path.join(
             steam_home, "compatibilitytools.d", proton_version, "proton"
@@ -167,7 +169,9 @@ class SteamLauncher:
             existing_preload = env.get("LD_PRELOAD", "")
             new_preload_paths = f"{user_home}/.local/share/Steam/ubuntu12_32/gameoverlayrenderer.so:{user_home}/.local/share/Steam/ubuntu12_64/gameoverlayrenderer.so"
 
-            preload_parts = [part for part in [existing_preload, new_preload_paths] if part]
+            preload_parts = [
+                part for part in [existing_preload, new_preload_paths] if part
+            ]
             env["LD_PRELOAD"] = ":".join(preload_parts)
 
         return env
@@ -192,19 +196,28 @@ class SteamLauncher:
                 args_before_list = shlex.split(args_before)
                 cmd_argv = args_before_list + cmd_argv
             except ValueError as e:
-                logging.warning(f"[SOFL] Failed to parse args_before '{args_before}': {e}")
+                logging.warning(
+                    f"[SOFL] Failed to parse args_before '{args_before}': {e}"
+                )
 
         if args_after:
             try:
                 args_after_list = shlex.split(args_after)
                 cmd_argv.extend(args_after_list)
             except ValueError as e:
-                logging.warning(f"[SOFL] Failed to parse args_after '{args_after}': {e}")
+                logging.warning(
+                    f"[SOFL] Failed to parse args_after '{args_after}': {e}"
+                )
 
         return cmd_argv
 
     @staticmethod
-    def launch_game(cmd_argv: List[str], env: Dict[str, str], game_dir: Path, in_flatpak: bool = False) -> None:
+    def launch_game(
+        cmd_argv: List[str],
+        env: Dict[str, str],
+        game_dir: Path,
+        in_flatpak: bool = False,
+    ) -> None:
         """Launches game in appropriate environment"""
         if in_flatpak:
             # In Flatpak use flatpak-spawn
@@ -218,11 +231,25 @@ class SteamLauncher:
 
             # Add directory change
             if game_dir:
-                full_cmd = ["sh", "-c", f"cd {shlex.quote(str(game_dir))} && exec \"$@\"", "sh"] + full_cmd[1:]
+                full_cmd = [
+                    "sh",
+                    "-c",
+                    f'cd {shlex.quote(str(game_dir))} && exec "$@"',
+                    "sh",
+                ] + full_cmd[1:]
 
-            logging.info(f"[SOFL] Executing command via flatpak-spawn: {' '.join(shlex.quote(str(arg)) for arg in full_cmd)}")
+            logging.info(
+                f"[SOFL] Executing command via flatpak-spawn: {' '.join(shlex.quote(str(arg)) for arg in full_cmd)}"
+            )
             subprocess.Popen(full_cmd, start_new_session=True)
         else:
             # In native environment launch directly
-            logging.info(f"[SOFL] Executing command: {' '.join(shlex.quote(str(arg)) for arg in cmd_argv)}")
-            subprocess.Popen(cmd_argv, cwd=str(game_dir), env={**os.environ, **env}, start_new_session=True)
+            logging.info(
+                f"[SOFL] Executing command: {' '.join(shlex.quote(str(arg)) for arg in cmd_argv)}"
+            )
+            subprocess.Popen(
+                cmd_argv,
+                cwd=str(game_dir),
+                env={**os.environ, **env},
+                start_new_session=True,
+            )
