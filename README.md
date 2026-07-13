@@ -3,6 +3,19 @@
 
 # SOFL
 
+> [!WARNING]
+> # ⚠️ This project is no longer actively maintained
+>
+> **Steam Online Fix Launcher (SOFL) has entered maintenance mode and will no longer receive new features or major updates.**
+>
+> I am currently focusing all development efforts on **Arachnel** — a complete rewrite built from the ground up with a significantly better architecture, modern UI, improved performance, and many new features.
+>
+> **➡️ New project:** https://github.com/BadKiko/Arachnel
+>
+> If you're looking for the future of this launcher, **please use and follow Arachnel instead of SOFL.**
+>
+> Thank you to everyone who supported SOFL! ❤️
+
 ## Steam Online Fix Launcher
 
 _A launcher for games with Online-Fix support on Linux_
