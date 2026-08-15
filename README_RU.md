@@ -121,11 +121,11 @@ curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/dow
 
 ### 🌟 Рост популярности
 
-<a href="https://www.star-history.com/#BadKiko/steam-online-fix-launcher&Date">
+<a href="https://star-history.dera.page/#BadKiko/steam-online-fix-launcher&type=Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=BadKiko/steam-online-fix-launcher&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=BadKiko/steam-online-fix-launcher&type=Date" />
  </picture>
 </a>
 </div>
