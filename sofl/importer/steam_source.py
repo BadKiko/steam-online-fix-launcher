@@ -96,12 +96,14 @@ class SteamSourceIterable(SourceIterable):
             }
             game = GameFactory.create_game(values)
 
-            # Add official cover image
-            image_path = (
-                self.source.locations.data["librarycache"]
-                / appid
-                / "library_600x900.jpg"
-            )
+            # Add official cover image. Newer Steam clients keep it in a
+            # hashed subfolder and may name it library_capsule.jpg
+            app_cache = self.source.locations.data["librarycache"] / appid
+            image_path = app_cache / "library_600x900.jpg"
+            for pattern in ("library_600x900.jpg", "*/library_600x900.jpg", "*/library_capsule.jpg"):
+                if found := next(app_cache.glob(pattern), None):
+                    image_path = found
+                    break
             additional_data = {"local_image_path": image_path, "steam_appid": appid}
 
             yield (game, additional_data)
