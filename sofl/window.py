@@ -180,7 +180,7 @@ class SOFLWindow(Adw.ApplicationWindow):
 
             row.append(
                 games_no_label := Gtk.Label(
-                    label=games_no,
+                    label=str(games_no),
                     hexpand=True,
                     halign=Gtk.Align.END,
                 )
@@ -679,14 +679,14 @@ class SOFLWindow(Adw.ApplicationWindow):
         if self.running_processes:
             # Show running state
             self.status_indicator.set_visible(True)
-            self.status_label.set_text(_("Игра запущена"))
+            self.status_label.set_text(_("Game running"))
             self.stop_button.set_visible(True)
             self.status_bar.set_visible(True)
             self.status_separator.set_visible(True)
         else:
             # Show idle state
             self.status_indicator.set_visible(False)
-            self.status_label.set_text(_("Игра не запущена"))
+            self.status_label.set_text(_("No game running"))
             self.stop_button.set_visible(False)
             self.status_bar.set_visible(True)
             self.status_separator.set_visible(True)

@@ -32,3 +32,11 @@ sofl/importer/retroarch_source.py
 sofl/importer/steam_source.py
 
 sofl/store/managers/sgdb_manager.py
+sofl/dialogs/install_dialog.py
+sofl/game_data.py
+sofl/onlinefix_game.py
+sofl/installer/online_fix_installer.py
+sofl/proton/proton_manager.py
+sofl/preferences/proton_section.py
+data/gtk/install-dialog.blp
+data/gtk/proton_manager.blp

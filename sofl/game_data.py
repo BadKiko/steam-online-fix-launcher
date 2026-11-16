@@ -22,7 +22,7 @@ from pathlib import Path
 from time import time
 from typing import Any, Optional, Callable
 
-from gi.repository import GObject
+from gi.repository import Gio, GObject
 
 from sofl import shared
 from sofl.utils.run_executable import run_executable, run_executable_with_tracking
@@ -140,6 +140,14 @@ class GameData(GObject.Object):
             self.create_toast(
                 (_("{} hidden") if self.hidden else _("{} unhidden")).format(self.name)
             )
+
+    def uninstall_game(self) -> None:
+        """Hand Steam games to Steam's own uninstaller; other sources can't uninstall"""
+        if self.source == "steam":
+            appid = self.game_id.removeprefix("steam_")
+            Gio.AppInfo.launch_default_for_uri(f"steam://uninstall/{appid}", None)
+            return
+        self.create_toast(_("Uninstalling isn't supported for {}").format(self.name))
 
     def remove_game(self) -> None:
         """Mark game as removed"""

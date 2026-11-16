@@ -189,7 +189,7 @@ class InstallDialog(Adw.Dialog):
                 # Get path from file chooser
                 file_path = file.get_path()
                 if not file_path:
-                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    self.show_toast(_("Couldn't get a local path for the selected file"))
                     return
 
                 # Get absolute path immediately
@@ -197,7 +197,7 @@ class InstallDialog(Adw.Dialog):
 
                 # Check if path is valid
                 if not path:
-                    self.show_toast("Не удалось получить локальный путь для выбранного файла")
+                    self.show_toast(_("Couldn't get a local path for the selected file"))
                     return
 
                 # Show progress and set path for display (keep original path for operations)

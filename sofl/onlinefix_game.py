@@ -19,7 +19,9 @@
 
 import logging
 import os
+import shlex
 import shutil
+import sys
 from pathlib import Path
 from time import time
 from typing import Any, Optional
@@ -103,6 +105,10 @@ class OnlineFixGameData(GameData):
             self._show_steam_not_running_dialog(in_flatpak)
             return
 
+        if sys.platform == "win32":
+            self._launch_native_windows(game_exec)
+            return
+
         # Get Proton settings
         proton_version = shared.schema.get_string("online-fix-proton-version")
         steam_home = os.path.join(host_home, ".local/share/Steam")
@@ -175,6 +181,27 @@ class OnlineFixGameData(GameData):
         if shared.schema.get_boolean("exit-after-launch"):
             shared.win.get_application().quit()
 
+
+    def _launch_native_windows(self, game_exec: Path) -> None:
+        """Windows runs Online-Fix games natively, so no Proton or prefix"""
+        try:
+            cmd_argv = (
+                shlex.split(shared.schema.get_string("online-fix-args-before"))
+                + [str(game_exec)]
+                + shlex.split(shared.schema.get_string("online-fix-args-after"))
+            )
+            process = SteamLauncher.launch_game_with_tracking(cmd_argv, {}, game_exec.parent)
+        except (OSError, ValueError) as e:
+            self.log_and_toast(_("Failed to launch {}: {}").format(self.name, str(e)))
+            return
+
+        if hasattr(shared, 'win') and shared.win and process:
+            shared.win.on_game_launched(self, process)
+
+        self.create_toast(_("{} launched").format(self.name))
+
+        if shared.schema.get_boolean("exit-after-launch"):
+            shared.win.get_application().quit()
 
     def uninstall_game(self) -> None:
         """Uninstall game with confirmation"""
@@ -300,7 +327,9 @@ class OnlineFixGameData(GameData):
         if response == "start_steam":
             import subprocess
             try:
-                if in_flatpak:
+                if sys.platform == "win32":
+                    os.startfile("steam://open/main")
+                elif in_flatpak:
                     # Launch Steam through flatpak-spawn
                     subprocess.Popen(["flatpak-spawn", "--host", "steam"], start_new_session=True)
                 else:

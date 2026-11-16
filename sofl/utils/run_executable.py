@@ -27,9 +27,20 @@ from sofl.utils.path_utils import normalize_executable_path
 from sofl import shared
 
 
+def _start_url_on_windows(executable) -> bool:
+    """`start <url>` is a cmd builtin, not a program, so Popen can't run it"""
+    if os.name != "nt" or not str(executable).lower().startswith("start "):
+        return False
+    os.startfile(str(executable)[6:].strip())  # type: ignore[attr-defined]
+    return True
+
+
 def run_executable(executable) -> None:
     """Safely launches executable file"""
     import shlex
+
+    if _start_url_on_windows(executable):
+        return
 
     executable_path = normalize_executable_path(executable)
 
@@ -71,6 +82,9 @@ def run_executable(executable) -> None:
 def run_executable_with_tracking(executable):
     """Safely launches executable file and returns process for tracking"""
     import shlex
+
+    if _start_url_on_windows(executable):
+        return None
 
     executable_path = normalize_executable_path(executable)
 
