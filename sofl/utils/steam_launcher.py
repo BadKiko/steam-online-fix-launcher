@@ -19,6 +19,7 @@
 
 import os
 import subprocess
+import sys
 import logging
 import shlex
 import vdf
@@ -36,6 +37,14 @@ class SteamLauncher:
     def check_steam_running(in_flatpak: bool = False) -> bool:
         """Checks if Steam is running"""
         try:
+            if sys.platform == "win32":
+                result = subprocess.run(
+                    ["tasklist", "/FI", "IMAGENAME eq steam.exe", "/NH"],
+                    capture_output=True,
+                    text=True,
+                    creationflags=subprocess.CREATE_NO_WINDOW,
+                )
+                return "steam.exe" in result.stdout.lower()
             if in_flatpak:
                 result = subprocess.run(
                     ["flatpak-spawn", "--host", "pidof", "steam"],

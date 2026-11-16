@@ -51,9 +51,7 @@ conf.set('python_dir', python_dir)
 subdir('data')
 subdir('sofl')
 
-if host_machine.system() == 'windows'
-  subdir('build-aux/windows')
-else
+if host_machine.system() != 'windows'
   subdir('search-provider')
   subdir('po')
 endif

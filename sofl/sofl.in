@@ -31,7 +31,7 @@ VERSION = "@VERSION@"
 
 if os.name == "nt":
     PKGDATADIR = os.path.join(os.path.dirname(__file__), "..", "share", "sofl")
-    PYTHONDIR = os.path.join(os.path.dirname(__file__), "..", "lib", "python3", "dist-packages")
+    PYTHONDIR = os.path.join(os.path.dirname(__file__), "..", "lib", f"python{sys.version_info[0]}.{sys.version_info[1]}", "site-packages")
 else:
     PKGDATADIR = "@pkgdatadir@"
     LOCALEDIR = "@localedir@"

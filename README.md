@@ -101,6 +101,13 @@ The project was created to simplify the lives of Linux users who want to play mo
 curl -L https://github.com/badkiko/steam-online-fix-launcher/releases/latest/download/org.badkiko.sofl.flatpak -o /tmp/sofl.flatpak && flatpak install --user -y /tmp/sofl.flatpak && rm /tmp/sofl.flatpak
 ```
 
+### 🪟 Windows (experimental)
+
+On Windows, Online-Fix games run natively (no Proton/Wine). Build from source with [MSYS2](https://www.msys2.org):
+
+1. Open the **MSYS2 UCRT64** shell, `cd` into the repo and run `bash scripts/build-windows.sh`
+2. Start the app with `scriptsun-windows.bat`
+
 ### ⚙️ Basic Setup
 
 1. **Online-Fix Games Path**: Specify the directory with your games

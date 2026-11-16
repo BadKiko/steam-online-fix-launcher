@@ -220,6 +220,12 @@ class SOFLPreferences(Adw.PreferencesDialog):
         # Online-Fix setup
         self.setup_online_fix_settings()
 
+        # Windows runs games natively: Proton and Wine DLL overrides don't apply
+        if platform == "win32":
+            self.remove(self.proton_page)
+            self.online_fix_proton_combo.set_visible(False)
+            self.online_fix_dll_group.set_visible(False)
+
         def update_sgdb(*_args: Any) -> None:
             counter = 0
             games_len = len(shared.store)

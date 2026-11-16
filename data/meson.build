@@ -1,4 +1,6 @@
-blueprint_compiler = find_program('blueprint-compiler', required: true, dirs: ['/app/bin', '/usr/bin', '/run/host/usr/bin'])
+# Extra search dirs are POSIX paths, which meson rejects on Windows
+blueprint_dirs = host_machine.system() == 'windows' ? [] : ['/app/bin', '/usr/bin', '/run/host/usr/bin']
+blueprint_compiler = find_program('blueprint-compiler', required: true, dirs: blueprint_dirs)
 
 blueprints = custom_target(
   'blueprints',
