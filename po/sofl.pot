@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOFL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-05 14:01+0100\n"
+"POT-Creation-Date: 2026-11-16 01:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,51 +18,153 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: data/org.badkiko.sofl.desktop.in:3
-#: data/org.badkiko.sofl.metainfo.xml.in:9
-#: data/org.badkiko.sofl.metainfo.xml.in:40 data/gtk/window.blp:47
-#: data/gtk/window.blp:83
+#: data/org.badkiko.sofl.desktop.in:2 data/org.badkiko.sofl.metainfo.xml.in:10
+#: data/org.badkiko.sofl.metainfo.xml.in:41 data/gtk/window.blp:47
+#: data/gtk/window.blp:88
 msgid "SOFL"
 msgstr ""
 
-#: data/org.badkiko.sofl.desktop.in:4
+#: data/org.badkiko.sofl.desktop.in:3
 msgid "Game Launcher"
 msgstr ""
 
-#: data/org.badkiko.sofl.desktop.in:5
-#: data/org.badkiko.sofl.metainfo.xml.in:10
+#: data/org.badkiko.sofl.desktop.in:4 data/org.badkiko.sofl.metainfo.xml.in:11
 msgid "Launch all your games"
 msgstr ""
 
-#: data/org.badkiko.sofl.desktop.in:11
-msgid ""
-"gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
+#: data/org.badkiko.sofl.desktop.in:10
+msgid "gaming;launcher;steam;lutris;heroic;bottles;itch;flatpak;legendary;retroarch;"
 msgstr ""
 
-#: data/org.badkiko.sofl.metainfo.xml.in:12
-msgid ""
-"SOFL is a simple game launcher for all of your games. It has support "
-"for importing games from Steam, Lutris, Heroic and more with no login "
-"necessary. You can sort and hide games or download cover art from "
-"SteamGridDB."
+#: data/org.badkiko.sofl.gschema.xml.in:130
+msgid "Proton version for Steam launcher"
 msgstr ""
 
-#: data/org.badkiko.sofl.metainfo.xml.in:44 data/gtk/window.blp:320
-#: sofl/details_dialog.py:77
+#: data/org.badkiko.sofl.gschema.xml.in:131
+msgid "Version of Proton to use with Steam launcher (format: GE-ProtonX-Y)"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:135
+msgid "Auto apply patches"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:136 data/gtk/preferences.blp:465
+msgid "Automatically apply required patches for games"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:140
+msgid "DLL overrides"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:141
+msgid "DLL overrides for Wine/Proton in format: dll1=n,b;dll2=n,b"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:145
+msgid "Steam API patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:146
+msgid "Apply Steam API patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:150
+msgid "Network patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:151
+msgid "Apply network patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:155
+msgid "Anti-cheat patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:156
+msgid "Apply anti-cheat patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:160
+msgid "Steam AppID patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:161
+msgid "Apply Steam AppID patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:165
+msgid "SteamFix64 patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:166
+msgid "Apply SteamFix64 patch"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:170
+msgid "Use Steam Overlay"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:171
+msgid "Enable Steam Overlay when launching games directly"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:175
+msgid "Use Steam Runtime"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:176
+msgid "Use Steam Runtime when launching games directly"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:180
+msgid "Arguments before command"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:181
+msgid "Additional arguments to add before the launch command"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:185
+msgid "Arguments after command"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:186
+msgid "Additional arguments to add after the launch command"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:190
+msgid "Debug mode"
+msgstr ""
+
+#: data/org.badkiko.sofl.gschema.xml.in:191
+msgid "Enable Wine debug output"
+msgstr ""
+
+#: data/org.badkiko.sofl.metainfo.xml.in:13
+msgid ""
+"SOFL is a simple game launcher for all of your games. It has support for "
+"importing games from Steam, Lutris, Heroic and more with no login necessary. "
+"You can sort and hide games or download cover art from SteamGridDB."
+msgstr ""
+
+#: data/org.badkiko.sofl.metainfo.xml.in:45 data/gtk/window.blp:383
+#: sofl/details_dialog.py:86
 msgid "Game Details"
 msgstr ""
 
-#: data/org.badkiko.sofl.metainfo.xml.in:48
+#: data/org.badkiko.sofl.metainfo.xml.in:49
 msgid "Edit Game Details"
 msgstr ""
 
-#: data/org.badkiko.sofl.metainfo.xml.in:52 data/gtk/help-overlay.blp:19
-#: data/gtk/window.blp:543 sofl/details_dialog.py:279
-#: sofl/importer/importer.py:319 sofl/importer/importer.py:369
+#: data/org.badkiko.sofl.metainfo.xml.in:53 data/gtk/help-overlay.blp:19
+#: data/gtk/window.blp:617 sofl/details_dialog.py:375
+#: sofl/importer/importer.py:333 sofl/importer/importer.py:383
 msgid "Preferences"
 msgstr ""
 
-#: data/gtk/details-dialog.blp:15
+#. Add responses
+#: data/gtk/details-dialog.blp:15 sofl/preferences.py:1374
+#: sofl/onlinefix_game.py:318 data/gtk/install-dialog.blp:19
 msgid "Cancel"
 msgstr ""
 
@@ -82,49 +184,68 @@ msgstr ""
 msgid "Developer (optional)"
 msgstr ""
 
-#: data/gtk/details-dialog.blp:102
+#: data/gtk/details-dialog.blp:100
+msgid "Game Type"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:105
+msgid "Online-Fix Game"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:106
+msgid "Regular Game"
+msgstr ""
+
+#: data/gtk/details-dialog.blp:114
 msgid "Executable"
 msgstr ""
 
-#: data/gtk/details-dialog.blp:108
+#: data/gtk/details-dialog.blp:120 data/gtk/preferences.blp:445
+#: data/gtk/install-dialog.blp:49
 msgid "Select File"
 msgstr ""
 
-#: data/gtk/details-dialog.blp:119
+#: data/gtk/details-dialog.blp:131
 msgid "More Info"
 msgstr ""
 
-#: data/gtk/game.blp:101 data/gtk/game.blp:109 data/gtk/window.blp:444
+#: data/gtk/game.blp:101 data/gtk/game.blp:109 data/gtk/game.blp:117
+#: data/gtk/window.blp:507
 msgid "Edit"
 msgstr ""
 
-#: data/gtk/game.blp:102 sofl/window.py:359
+#: data/gtk/game.blp:102 data/gtk/game.blp:110 sofl/window.py:401
 msgid "Hide"
 msgstr ""
 
-#: data/gtk/game.blp:103 data/gtk/game.blp:111 data/gtk/window.blp:464
+#: data/gtk/game.blp:103 data/gtk/game.blp:119 data/gtk/preferences.blp:48
+#: data/gtk/window.blp:527
 msgid "Remove"
 msgstr ""
 
-#: data/gtk/game.blp:110 sofl/window.py:361
+#: data/gtk/game.blp:111 data/gtk/window.blp:538 sofl/onlinefix_game.py:242
+msgid "Uninstall"
+msgstr ""
+
+#: data/gtk/game.blp:118 sofl/window.py:403
 msgid "Unhide"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:9
+#: data/gtk/help-overlay.blp:11 data/gtk/preferences.blp:10
 msgid "General"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:207 data/gtk/window.blp:223
-#: data/gtk/window.blp:274 data/gtk/window.blp:290 data/gtk/window.blp:475
+#: data/gtk/help-overlay.blp:14 data/gtk/window.blp:212 data/gtk/window.blp:228
+#: data/gtk/window.blp:337 data/gtk/window.blp:353 data/gtk/window.blp:549
 msgid "Search"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:544
+#: data/gtk/help-overlay.blp:24 data/gtk/window.blp:618
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:29 sofl/game.py:103
-#: sofl/preferences.py:137 sofl/importer/importer.py:386
+#: data/gtk/help-overlay.blp:29 sofl/preferences.py:160
+#: sofl/importer/importer.py:404
 msgid "Undo"
 msgstr ""
 
@@ -132,11 +253,11 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:92 data/gtk/window.blp:187
+#: data/gtk/help-overlay.blp:39 data/gtk/window.blp:97 data/gtk/window.blp:192
 msgid "Toggle Sidebar"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:200 data/gtk/window.blp:267
+#: data/gtk/help-overlay.blp:44 data/gtk/window.blp:205 data/gtk/window.blp:330
 msgid "Main Menu"
 msgstr ""
 
@@ -144,192 +265,282 @@ msgstr ""
 msgid "Games"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:193 data/gtk/window.blp:551
+#: data/gtk/help-overlay.blp:53 data/gtk/window.blp:198 data/gtk/window.blp:625
 msgid "Add Game"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:58 data/gtk/preferences.blp:58
-#: data/gtk/window.blp:27 data/gtk/window.blp:555
+#: data/gtk/help-overlay.blp:58 data/gtk/window.blp:628
+#: sofl/details_dialog.py:110 data/gtk/install-dialog.blp:14
+msgid "Install Game"
+msgstr ""
+
+#: data/gtk/help-overlay.blp:63 data/gtk/preferences.blp:75
+#: data/gtk/window.blp:27 data/gtk/window.blp:631
 msgid "Import"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:63
+#: data/gtk/help-overlay.blp:68
 msgid "Show Hidden Games"
 msgstr ""
 
-#: data/gtk/help-overlay.blp:68
+#: data/gtk/help-overlay.blp:73
 msgid "Remove Game"
 msgstr ""
 
-#: data/gtk/preferences.blp:13 data/gtk/preferences.blp:62
-#: data/gtk/preferences.blp:365
+#: data/gtk/preferences.blp:14 data/gtk/preferences.blp:79
+#: data/gtk/preferences.blp:381
 msgid "Behavior"
 msgstr ""
 
-#: data/gtk/preferences.blp:16
+#: data/gtk/preferences.blp:17
 msgid "Exit After Launching Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:20
+#: data/gtk/preferences.blp:21
 msgid "Cover Image Launches Game"
 msgstr ""
 
-#: data/gtk/preferences.blp:21
+#: data/gtk/preferences.blp:22
 msgid "Swaps the behavior of the cover image and the play button"
 msgstr ""
 
-#: data/gtk/preferences.blp:26 sofl/details_dialog.py:91
+#: data/gtk/preferences.blp:26
+msgid "Dark theme"
+msgstr ""
+
+#: data/gtk/preferences.blp:31 sofl/details_dialog.py:119
 msgid "Images"
 msgstr ""
 
-#: data/gtk/preferences.blp:29
+#: data/gtk/preferences.blp:34
 msgid "High Quality Images"
 msgstr ""
 
-#: data/gtk/preferences.blp:30
+#: data/gtk/preferences.blp:35
 msgid "Save game covers losslessly at the cost of storage"
 msgstr ""
 
-#: data/gtk/preferences.blp:35
+#: data/gtk/preferences.blp:40
 msgid "Danger Zone"
 msgstr ""
 
-#: data/gtk/preferences.blp:39
+#: data/gtk/preferences.blp:43
 msgid "Remove All Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:65
+#: data/gtk/preferences.blp:58
+msgid "Reset App"
+msgstr ""
+
+#: data/gtk/preferences.blp:63
+msgid "Reset"
+msgstr ""
+
+#: data/gtk/preferences.blp:82
 msgid "Import Games Automatically"
 msgstr ""
 
-#: data/gtk/preferences.blp:69
+#: data/gtk/preferences.blp:86
 msgid "Remove Uninstalled Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:74
+#: data/gtk/preferences.blp:91
 msgid "Sources"
 msgstr ""
 
-#: data/gtk/preferences.blp:78 sofl/importer/steam_source.py:114
+#: data/gtk/preferences.blp:94 sofl/importer/steam_source.py:118
 msgid "Steam"
 msgstr ""
 
-#: data/gtk/preferences.blp:87 data/gtk/preferences.blp:114
-#: data/gtk/preferences.blp:149 data/gtk/preferences.blp:192
-#: data/gtk/preferences.blp:219 data/gtk/preferences.blp:246
-#: data/gtk/preferences.blp:273
+#: data/gtk/preferences.blp:103 data/gtk/preferences.blp:130
+#: data/gtk/preferences.blp:165 data/gtk/preferences.blp:208
+#: data/gtk/preferences.blp:235 data/gtk/preferences.blp:262
+#: data/gtk/preferences.blp:289
 msgid "Install Location"
 msgstr ""
 
-#: data/gtk/preferences.blp:105 data/gtk/window.blp:565
-#: sofl/importer/lutris_source.py:107
+#: data/gtk/preferences.blp:121 data/gtk/window.blp:641
+#: sofl/importer/lutris_source.py:108
 msgid "Lutris"
 msgstr ""
 
-#: data/gtk/preferences.blp:131
+#: data/gtk/preferences.blp:147
 msgid "Import Steam Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:135
+#: data/gtk/preferences.blp:151
 msgid "Import Flatpak Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:140 sofl/importer/heroic_source.py:355
+#: data/gtk/preferences.blp:156 sofl/importer/heroic_source.py:356
 msgid "Heroic"
 msgstr ""
 
-#: data/gtk/preferences.blp:166
+#: data/gtk/preferences.blp:182
 msgid "Import Epic Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:170
+#: data/gtk/preferences.blp:186
 msgid "Import GOG Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:174
+#: data/gtk/preferences.blp:190
 msgid "Import Amazon Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:178
+#: data/gtk/preferences.blp:194
 msgid "Import Sideloaded Games"
 msgstr ""
 
-#: data/gtk/preferences.blp:183 sofl/importer/bottles_source.py:86
+#: data/gtk/preferences.blp:199 sofl/importer/bottles_source.py:87
 msgid "Bottles"
 msgstr ""
 
-#: data/gtk/preferences.blp:210 sofl/importer/itch_source.py:81
+#: data/gtk/preferences.blp:226 sofl/importer/itch_source.py:82
 msgid "itch"
 msgstr ""
 
-#: data/gtk/preferences.blp:237 sofl/importer/legendary_source.py:97
+#: data/gtk/preferences.blp:253 sofl/importer/legendary_source.py:98
 msgid "Legendary"
 msgstr ""
 
-#: data/gtk/preferences.blp:264 sofl/importer/retroarch_source.py:142
+#: data/gtk/preferences.blp:280 sofl/importer/retroarch_source.py:141
 msgid "RetroArch"
 msgstr ""
 
-#: data/gtk/preferences.blp:291 sofl/importer/flatpak_source.py:143
+#: data/gtk/preferences.blp:307 sofl/importer/flatpak_source.py:148
 msgid "Flatpak"
 msgstr ""
 
 #. The location of the system-wide data directory
-#: data/gtk/preferences.blp:301
+#: data/gtk/preferences.blp:317
 msgid "System Location"
 msgstr ""
 
 #. The location of the user-specific data directory
-#: data/gtk/preferences.blp:319
+#: data/gtk/preferences.blp:335
 msgid "User Location"
 msgstr ""
 
-#: data/gtk/preferences.blp:336
+#: data/gtk/preferences.blp:352
 msgid "Import Game Launchers"
 msgstr ""
 
-#: data/gtk/preferences.blp:341 sofl/importer/desktop_source.py:215
+#: data/gtk/preferences.blp:357 sofl/importer/desktop_source.py:222
 msgid "Desktop Entries"
 msgstr ""
 
-#: data/gtk/preferences.blp:353 data/gtk/window.blp:563
+#: data/gtk/preferences.blp:369 data/gtk/window.blp:639
 msgid "SteamGridDB"
 msgstr ""
 
-#: data/gtk/preferences.blp:357
+#: data/gtk/preferences.blp:373
 msgid "Authentication"
 msgstr ""
 
-#: data/gtk/preferences.blp:360
+#: data/gtk/preferences.blp:376
 msgid "API Key"
 msgstr ""
 
-#: data/gtk/preferences.blp:368
+#: data/gtk/preferences.blp:384
 msgid "Use SteamGridDB"
 msgstr ""
 
-#: data/gtk/preferences.blp:369
+#: data/gtk/preferences.blp:385
 msgid "Download images when adding or importing games"
 msgstr ""
 
-#: data/gtk/preferences.blp:373
+#: data/gtk/preferences.blp:389
 msgid "Prefer Over Official Images"
 msgstr ""
 
-#: data/gtk/preferences.blp:377
+#: data/gtk/preferences.blp:393
 msgid "Prefer Animated Images"
 msgstr ""
 
-#: data/gtk/preferences.blp:383
+#: data/gtk/preferences.blp:399
 msgid "Update Covers"
 msgstr ""
 
-#: data/gtk/preferences.blp:384
+#: data/gtk/preferences.blp:400
 msgid "Fetch covers for games already in your library"
 msgstr ""
 
-#: data/gtk/preferences.blp:389
+#: data/gtk/preferences.blp:405
 msgid "Update"
+msgstr ""
+
+#: data/gtk/preferences.blp:420 data/gtk/preferences.blp:424
+#: data/gtk/proton_manager.blp:5
+msgid "Proton Manager"
+msgstr ""
+
+#: data/gtk/preferences.blp:425 data/gtk/proton_manager.blp:6
+msgid "Download and manage GE-Proton versions"
+msgstr ""
+
+#: data/gtk/preferences.blp:431
+msgid "Online-Fix"
+msgstr ""
+
+#: data/gtk/preferences.blp:435
+msgid "Installation"
+msgstr ""
+
+#: data/gtk/preferences.blp:436
+msgid "Set your installation settings for online-fix games"
+msgstr ""
+
+#: data/gtk/preferences.blp:439
+msgid "Default path"
+msgstr ""
+
+#: data/gtk/preferences.blp:455
+msgid "Launcher Settings"
+msgstr ""
+
+#: data/gtk/preferences.blp:456
+msgid "Configure how games should be launched"
+msgstr ""
+
+#: data/gtk/preferences.blp:459
+msgid "Proton Version"
+msgstr ""
+
+#: data/gtk/preferences.blp:460
+msgid "Version of Proton to use with launcher"
+msgstr ""
+
+#: data/gtk/preferences.blp:464
+msgid "Auto Apply Patches"
+msgstr ""
+
+#: data/gtk/preferences.blp:470 data/gtk/preferences.blp:474
+msgid "DLL Overrides"
+msgstr ""
+
+#: data/gtk/preferences.blp:471
+msgid "Configure DLL overrides for Wine/Proton"
+msgstr ""
+
+#: data/gtk/preferences.blp:475
+msgid "Format: dll1=n,b;dll2=n,b"
+msgstr ""
+
+#: data/gtk/preferences.blp:480
+msgid "Manual Patches"
+msgstr ""
+
+#: data/gtk/preferences.blp:481
+msgid "Configure manual patches for specific games"
+msgstr ""
+
+#: data/gtk/preferences.blp:484
+msgid "Steam AppID Patch"
+msgstr ""
+
+#: data/gtk/preferences.blp:488
+msgid "SteamFix64 Patch"
 msgstr ""
 
 #: data/gtk/window.blp:6 data/gtk/window.blp:14
@@ -345,7 +556,7 @@ msgid "No Games"
 msgstr ""
 
 #: data/gtk/window.blp:22
-msgid "Use the + button to add games"
+msgid "Use the + button to install or add games"
 msgstr ""
 
 #: data/gtk/window.blp:40
@@ -356,135 +567,153 @@ msgstr ""
 msgid "Games you hide will appear here"
 msgstr ""
 
-#: data/gtk/window.blp:76 data/gtk/window.blp:113 sofl/main.py:249
+#: data/gtk/window.blp:81 data/gtk/window.blp:118 sofl/main.py:256
 msgid "All Games"
 msgstr ""
 
-#: data/gtk/window.blp:140 sofl/main.py:251
+#: data/gtk/window.blp:145 sofl/main.py:258
 msgid "Added"
 msgstr ""
 
-#: data/gtk/window.blp:162
+#: data/gtk/window.blp:167
 msgid "Imported"
 msgstr ""
 
-#: data/gtk/window.blp:260
+#: data/gtk/window.blp:297 sofl/window.py:682
+msgid "Game running"
+msgstr ""
+
+#: data/gtk/window.blp:309
+msgid "Stop game"
+msgstr ""
+
+#: data/gtk/window.blp:323
 msgid "Hidden Games"
 msgstr ""
 
-#: data/gtk/window.blp:368
+#: data/gtk/window.blp:431 data/gtk/install-dialog.blp:59
 msgid "Game Title"
 msgstr ""
 
-#: data/gtk/window.blp:425
+#: data/gtk/window.blp:488 sofl/game_data.py:103
 msgid "Play"
 msgstr ""
 
-#: data/gtk/window.blp:502
+#: data/gtk/window.blp:576
 msgid "Sort"
 msgstr ""
 
-#: data/gtk/window.blp:505
+#: data/gtk/window.blp:579
 msgid "A-Z"
 msgstr ""
 
-#: data/gtk/window.blp:511
+#: data/gtk/window.blp:585
 msgid "Z-A"
 msgstr ""
 
-#: data/gtk/window.blp:517
+#: data/gtk/window.blp:591
 msgid "Newest"
 msgstr ""
 
-#: data/gtk/window.blp:523
+#: data/gtk/window.blp:597
 msgid "Oldest"
 msgstr ""
 
-#: data/gtk/window.blp:529
+#: data/gtk/window.blp:603
 msgid "Last Played"
 msgstr ""
 
-#: data/gtk/window.blp:536
+#: data/gtk/window.blp:610
 msgid "Show Hidden"
 msgstr ""
 
-#: data/gtk/window.blp:545
+#: data/gtk/window.blp:619
 msgid "About SOFL"
 msgstr ""
 
-#: data/gtk/window.blp:562
+#: data/gtk/window.blp:638
 msgid "IGDB"
 msgstr ""
 
-#: data/gtk/window.blp:564
+#: data/gtk/window.blp:640
 msgid "ProtonDB"
 msgstr ""
 
-#: data/gtk/window.blp:566
+#: data/gtk/window.blp:642
 msgid "HowLongToBeat"
 msgstr ""
 
 #. The variable is the title of the game
-#: sofl/main.py:226 sofl/game.py:125
+#: sofl/main.py:233 sofl/game_data.py:130 sofl/onlinefix_game.py:201
+#, python-brace-format
 msgid "{} launched"
 msgstr ""
 
 #. Translators: Replace this with Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog.
-#: sofl/main.py:291
+#: sofl/main.py:312
 msgid "translator-credits"
 msgstr ""
 
 #. The variable is the date when the game was added
-#: sofl/window.py:382
+#: sofl/window.py:427
+#, python-brace-format
 msgid "Added: {}"
 msgstr ""
 
-#: sofl/window.py:385
+#: sofl/window.py:430
 msgid "Never"
 msgstr ""
 
 #. The variable is the date when the game was last played
-#: sofl/window.py:389
+#: sofl/window.py:434
+#, python-brace-format
 msgid "Last played: {}"
 msgstr ""
 
-#: sofl/details_dialog.py:82
+#: sofl/window.py:689
+msgid "No game running"
+msgstr ""
+
+#: sofl/details_dialog.py:91
 msgid "Apply"
 msgstr ""
 
-#: sofl/details_dialog.py:88
+#: sofl/details_dialog.py:104
 msgid "Add New Game"
 msgstr ""
 
-#: sofl/details_dialog.py:89
+#: sofl/details_dialog.py:105
 msgid "Add"
 msgstr ""
 
-#: sofl/details_dialog.py:102
+#: sofl/details_dialog.py:130
 msgid "Executables"
 msgstr ""
 
 #. Translate this string as you would translate "file"
-#: sofl/details_dialog.py:117
+#: sofl/details_dialog.py:145
 msgid "file.txt"
 msgstr ""
 
 #. As in software
-#: sofl/details_dialog.py:119
+#: sofl/details_dialog.py:147
 msgid "program"
 msgstr ""
 
 #. Translate this string as you would translate "path to {}"
-#: sofl/details_dialog.py:124 sofl/details_dialog.py:126
+#: sofl/details_dialog.py:152 sofl/details_dialog.py:154
+#, python-brace-format
 msgid "C:\\path\\to\\{}"
 msgstr ""
 
 #. Translate this string as you would translate "path to {}"
-#: sofl/details_dialog.py:130 sofl/details_dialog.py:132
+#: sofl/details_dialog.py:158 sofl/details_dialog.py:160
+#, python-brace-format
 msgid "/path/to/{}"
 msgstr ""
 
-#: sofl/details_dialog.py:137
+#: sofl/details_dialog.py:165
+#, python-brace-format
 msgid ""
 "To launch the executable \"{}\", use the command:\n"
 "\n"
@@ -497,74 +726,355 @@ msgid ""
 "If the path contains spaces, make sure to wrap it in double quotes!"
 msgstr ""
 
-#: sofl/details_dialog.py:179 sofl/details_dialog.py:185
+#: sofl/details_dialog.py:207 sofl/details_dialog.py:213
 msgid "Couldn't Add Game"
 msgstr ""
 
-#: sofl/details_dialog.py:179 sofl/details_dialog.py:221
+#: sofl/details_dialog.py:207 sofl/details_dialog.py:270
 msgid "Game title cannot be empty."
 msgstr ""
 
-#: sofl/details_dialog.py:185 sofl/details_dialog.py:229
+#: sofl/details_dialog.py:213 sofl/details_dialog.py:278
 msgid "Executable cannot be empty."
 msgstr ""
 
-#: sofl/details_dialog.py:220 sofl/details_dialog.py:228
+#: sofl/details_dialog.py:269 sofl/details_dialog.py:277
 msgid "Couldn't Apply Preferences"
 msgstr ""
 
-#. The variable is the title of the game
-#: sofl/game.py:139
-msgid "{} hidden"
+#: sofl/details_dialog.py:397 sofl/details_dialog.py:401
+#: sofl/details_dialog.py:422 sofl/details_dialog.py:424
+#: sofl/details_dialog.py:434
+msgid "Error"
 msgstr ""
 
-#: sofl/game.py:139
-msgid "{} unhidden"
+#: sofl/details_dialog.py:397
+msgid "Error getting file path"
 msgstr ""
 
-#. The variable is the title of the game
-#: sofl/game.py:153
-msgid "{} removed"
+#: sofl/details_dialog.py:401
+msgid "No valid path selected"
 msgstr ""
 
-#: sofl/preferences.py:136
+#: sofl/preferences.py:159
 msgid "All games removed"
 msgstr ""
 
-#: sofl/preferences.py:188
+#: sofl/preferences.py:211
+#, python-brace-format
 msgid ""
 "An API key is required to use SteamGridDB. You can generate one {}here{}."
 msgstr ""
 
-#: sofl/preferences.py:203
+#: sofl/preferences.py:238
 msgid "Downloading covers…"
 msgstr ""
 
-#: sofl/preferences.py:222
+#: sofl/preferences.py:257
 msgid "Covers updated"
 msgstr ""
 
-#: sofl/preferences.py:370
+#: sofl/preferences.py:425
 msgid "Installation Not Found"
 msgstr ""
 
-#: sofl/preferences.py:371
+#: sofl/preferences.py:426
 msgid "Select a valid directory"
 msgstr ""
 
-#: sofl/preferences.py:407 sofl/importer/importer.py:317
+#: sofl/preferences.py:462 sofl/importer/importer.py:331
 msgid "Warning"
 msgstr ""
 
-#: sofl/preferences.py:441
+#: sofl/preferences.py:497
 msgid "Invalid Directory"
 msgstr ""
 
-#: sofl/preferences.py:447
+#: sofl/preferences.py:503
 msgid "Set Location"
 msgstr ""
 
-#: sofl/utils/create_dialog.py:33 sofl/importer/importer.py:318
+#: sofl/preferences.py:730 sofl/preferences/proton_section.py:24
+#: data/gtk/proton_manager.blp:10
+msgid "Installed Versions"
+msgstr ""
+
+#: sofl/preferences.py:731 sofl/preferences/proton_section.py:26
+msgid "Manage your downloaded Proton versions"
+msgstr ""
+
+#: sofl/preferences.py:735 sofl/preferences/proton_section.py:30
+#: data/gtk/proton_manager.blp:29
+msgid "Available Versions"
+msgstr ""
+
+#: sofl/preferences.py:736 sofl/preferences/proton_section.py:32
+msgid "Download the latest GE-Proton releases from GitHub"
+msgstr ""
+
+#: sofl/preferences.py:767 sofl/preferences/proton_section.py:58
+#: data/gtk/proton_manager.blp:16
+msgid "No Proton versions installed"
+msgstr ""
+
+#: sofl/preferences.py:814 sofl/preferences/proton_section.py:99
+#: data/gtk/proton_manager.blp:46
+msgid "Loading available versions..."
+msgstr ""
+
+#: sofl/preferences.py:857 sofl/preferences/proton_section.py:138
+msgid "No versions available"
+msgstr ""
+
+#: sofl/preferences.py:908 sofl/preferences/proton_section.py:182
+msgid "Failed to load versions. Check your internet connection."
+msgstr ""
+
+#: sofl/preferences.py:915 sofl/preferences/proton_section.py:189
+#: data/gtk/proton_manager.blp:59
+msgid "Retry"
+msgstr ""
+
+#: sofl/preferences.py:931 sofl/preferences/proton_section.py:206
+msgid "Installed"
+msgstr ""
+
+#: sofl/preferences.py:936 sofl/preferences/proton_section.py:210
+msgid "Delete this version"
+msgstr ""
+
+#: sofl/preferences.py:952
+msgid "Version Information"
+msgstr ""
+
+#: sofl/preferences.py:964
+msgid "Version:"
+msgstr ""
+
+#: sofl/preferences.py:976
+msgid "Location:"
+msgstr ""
+
+#: sofl/preferences.py:992
+msgid "Status:"
+msgstr ""
+
+#: sofl/preferences.py:998
+msgid "Installed and ready"
+msgstr ""
+
+#: sofl/preferences.py:1015 sofl/preferences.py:1269
+msgid "Actions"
+msgstr ""
+
+#: sofl/preferences.py:1027
+msgid "Open Folder"
+msgstr ""
+
+#: sofl/preferences.py:1035
+msgid "Test Version"
+msgstr ""
+
+#: sofl/preferences.py:1043
+msgid "Delete Version"
+msgstr ""
+
+#: sofl/preferences.py:1077
+msgid "Proton Version Location"
+msgstr ""
+
+#: sofl/preferences.py:1078
+#, python-brace-format
+msgid "Path: {}"
+msgstr ""
+
+#: sofl/preferences.py:1079 sofl/preferences.py:1098 sofl/preferences.py:1349
+msgid "OK"
+msgstr ""
+
+#: sofl/preferences.py:1083
+msgid "Version folder not found"
+msgstr ""
+
+#: sofl/preferences.py:1087
+msgid "Failed to open folder"
+msgstr ""
+
+#: sofl/preferences.py:1096
+msgid "Test Proton Version"
+msgstr ""
+
+#: sofl/preferences.py:1097
+#, python-brace-format
+msgid ""
+"This would test the Proton version {} by running a simple compatibility "
+"check. This feature is not yet implemented."
+msgstr ""
+
+#: sofl/preferences.py:1103
+msgid "Failed to test version"
+msgstr ""
+
+#: sofl/preferences.py:1119
+#, python-brace-format
+msgid "Size: {:.1f} MB"
+msgstr ""
+
+#: sofl/preferences.py:1126
+#, python-brace-format
+msgid "Released: {}"
+msgstr ""
+
+#: sofl/preferences.py:1130
+msgid "Available for download"
+msgstr ""
+
+#: sofl/preferences.py:1149
+msgid "Cancel download"
+msgstr ""
+
+#: sofl/preferences.py:1159
+msgid "Download and install this version"
+msgstr ""
+
+#: sofl/preferences.py:1186
+msgid "Version Details"
+msgstr ""
+
+#: sofl/preferences.py:1198
+msgid "Name:"
+msgstr ""
+
+#: sofl/preferences.py:1212
+msgid "Size:"
+msgstr ""
+
+#: sofl/preferences.py:1219
+#, python-brace-format
+msgid "{:.1f} MB"
+msgstr ""
+
+#: sofl/preferences.py:1227
+msgid "Released:"
+msgstr ""
+
+#: sofl/preferences.py:1247
+msgid "Downloads:"
+msgstr ""
+
+#: sofl/preferences.py:1253
+msgid "{:,}"
+msgstr ""
+
+#: sofl/preferences.py:1281
+msgid "Download & Install"
+msgstr ""
+
+#: sofl/preferences.py:1289
+msgid "View on GitHub"
+msgstr ""
+
+#: sofl/preferences.py:1297
+msgid "Copy Link"
+msgstr ""
+
+#: sofl/preferences.py:1315
+msgid "GitHub URL not available"
+msgstr ""
+
+#: sofl/preferences.py:1318
+msgid "Failed to open GitHub page"
+msgstr ""
+
+#: sofl/preferences.py:1347
+msgid "Download Link"
+msgstr ""
+
+#: sofl/preferences.py:1348
+#, python-brace-format
+msgid "Download URL: {}"
+msgstr ""
+
+#: sofl/preferences.py:1354
+msgid "Download link copied to clipboard"
+msgstr ""
+
+#: sofl/preferences.py:1356
+msgid "Download link not available"
+msgstr ""
+
+#: sofl/preferences.py:1360
+msgid "Failed to copy link"
+msgstr ""
+
+#: sofl/preferences.py:1369
+msgid "Delete Proton Version"
+msgstr ""
+
+#: sofl/preferences.py:1370
+#, python-brace-format
+msgid ""
+"Are you sure you want to delete {}? This action cannot be undone and you "
+"will need to download it again if needed."
+msgstr ""
+
+#: sofl/preferences.py:1375
+msgid "Delete"
+msgstr ""
+
+#: sofl/preferences.py:1389
+#, python-brace-format
+msgid "{} deleted"
+msgstr ""
+
+#: sofl/preferences.py:1393
+#, python-brace-format
+msgid "Failed to delete {}"
+msgstr ""
+
+#: sofl/preferences.py:1396
+msgid "Error deleting version"
+msgstr ""
+
+#: sofl/preferences.py:1410
+msgid "Extracting..."
+msgstr ""
+
+#: sofl/preferences.py:1423
+msgid "Starting..."
+msgstr ""
+
+#: sofl/preferences.py:1435 sofl/preferences.py:1442 sofl/preferences.py:1449
+msgid "Download cancelled by user"
+msgstr ""
+
+#: sofl/preferences.py:1453
+msgid "Download failed"
+msgstr ""
+
+#: sofl/preferences.py:1467
+msgid "Failed to start download"
+msgstr ""
+
+#: sofl/preferences.py:1473
+#, python-brace-format
+msgid "Version {} downloaded successfully"
+msgstr ""
+
+#: sofl/preferences.py:1492
+msgid "Download cancelled"
+msgstr ""
+
+#: sofl/preferences.py:1494
+msgid "Failed to download version"
+msgstr ""
+
+#: sofl/preferences.py:1496
+#, python-brace-format
+msgid "Download error: {}"
+msgstr ""
+
+#: sofl/utils/create_dialog.py:33 sofl/importer/importer.py:332
 msgid "Dismiss"
 msgstr ""
 
@@ -592,27 +1102,27 @@ msgstr ""
 msgid "Last Year"
 msgstr ""
 
-#: sofl/importer/importer.py:144
+#: sofl/importer/importer.py:283
 msgid "Importing Games…"
 msgstr ""
 
-#: sofl/importer/importer.py:337
+#: sofl/importer/importer.py:351
 msgid "The following errors occured during import:"
 msgstr ""
 
-#: sofl/importer/importer.py:366
+#: sofl/importer/importer.py:380
 msgid "No new games found"
 msgstr ""
 
-#. The variable is the number of games.
-#: sofl/importer/importer.py:379
+#: sofl/importer/importer.py:394
+#, python-brace-format
 msgid "{} game imported"
 msgid_plural "{} games imported"
 msgstr[0] ""
 msgstr[1] ""
 
-#. The variable is the number of games. This text comes after "{0} games imported".
-#: sofl/importer/importer.py:383
+#: sofl/importer/importer.py:400
+#, python-brace-format
 msgid ", {} removed"
 msgid_plural ", {} removed"
 msgstr[0] ""
@@ -620,29 +1130,32 @@ msgstr[1] ""
 
 #. The variable is the name of the source
 #: sofl/importer/location.py:34
+#, python-brace-format
 msgid "Select the {} cache directory."
 msgstr ""
 
 #. The variable is the name of the source
 #: sofl/importer/location.py:36
+#, python-brace-format
 msgid "Select the {} configuration directory."
 msgstr ""
 
 #. The variable is the name of the source
 #: sofl/importer/location.py:38
+#, python-brace-format
 msgid "Select the {} data directory."
 msgstr ""
 
-#: sofl/importer/retroarch_source.py:129
+#: sofl/importer/retroarch_source.py:128
 msgid "No RetroArch Core Selected"
 msgstr ""
 
 #. The variable is a newline separated list of playlists
-#: sofl/importer/retroarch_source.py:131
+#: sofl/importer/retroarch_source.py:130
 msgid "The following playlists have no default core:"
 msgstr ""
 
-#: sofl/importer/retroarch_source.py:133
+#: sofl/importer/retroarch_source.py:132
 msgid "Games with no core selected were not imported"
 msgstr ""
 
@@ -652,4 +1165,172 @@ msgstr ""
 
 #: sofl/store/managers/sgdb_manager.py:47
 msgid "Verify your API key in preferences"
+msgstr ""
+
+#: sofl/dialogs/install_dialog.py:192 sofl/dialogs/install_dialog.py:200
+msgid "Couldn't get a local path for the selected file"
+msgstr ""
+
+#. Initialize default values for required attributes
+#: sofl/game_data.py:66
+msgid "Unknown Game"
+msgstr ""
+
+#: sofl/game_data.py:102 sofl/onlinefix_game.py:46
+msgid "Play with Online-Fix"
+msgstr ""
+
+#: sofl/game_data.py:141
+#, python-brace-format
+msgid "{} hidden"
+msgstr ""
+
+#: sofl/game_data.py:141
+#, python-brace-format
+msgid "{} unhidden"
+msgstr ""
+
+#: sofl/game_data.py:150
+#, python-brace-format
+msgid "Uninstalling isn't supported for {}"
+msgstr ""
+
+#. The variable is the title of the game
+#: sofl/game_data.py:159
+#, python-brace-format
+msgid "{} removed"
+msgstr ""
+
+#: sofl/onlinefix_game.py:96
+msgid "Invalid executable path"
+msgstr ""
+
+#: sofl/onlinefix_game.py:136
+#, python-brace-format
+msgid "Failed to find Proton executable for version {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:178
+#, python-brace-format
+msgid "{} launched directly with Proton {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:195
+#, python-brace-format
+msgid "Failed to launch {}: {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:209
+msgid "Cannot uninstall non-online-fix games"
+msgstr ""
+
+#: sofl/onlinefix_game.py:224
+#, python-brace-format
+msgid "Error: {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:229
+msgid ""
+"Game is not installed in Online-Fix directory, removing it from the list"
+msgstr ""
+
+#: sofl/onlinefix_game.py:239
+msgid "Uninstall Game"
+msgstr ""
+
+#: sofl/onlinefix_game.py:240
+#, python-brace-format
+msgid "This will remove folder {}, and can't be undone."
+msgstr ""
+
+#: sofl/onlinefix_game.py:252
+#, python-brace-format
+msgid "{} started uninstalling"
+msgstr ""
+
+#: sofl/onlinefix_game.py:256
+#, python-brace-format
+msgid "{} uninstalled"
+msgstr ""
+
+#: sofl/onlinefix_game.py:258
+#, python-brace-format
+msgid "Error uninstalling {}: {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:314
+msgid "Steam is not running"
+msgstr ""
+
+#: sofl/onlinefix_game.py:315
+msgid ""
+"Steam must be running to play online-fix games. Would you like to start "
+"Steam?"
+msgstr ""
+
+#: sofl/onlinefix_game.py:319
+msgid "Start Steam"
+msgstr ""
+
+#: sofl/onlinefix_game.py:339
+msgid "Starting Steam..."
+msgstr ""
+
+#: sofl/onlinefix_game.py:341
+#, python-brace-format
+msgid "Failed to start Steam: {}"
+msgstr ""
+
+#: sofl/onlinefix_game.py:347
+msgid "Proton Not Available"
+msgstr ""
+
+#: sofl/onlinefix_game.py:348
+msgid ""
+"No Proton version is selected or installed. Please download and select a "
+"Proton version to run this game."
+msgstr ""
+
+#: sofl/onlinefix_game.py:350
+msgid "Open Proton Manager"
+msgstr ""
+
+#: data/gtk/install-dialog.blp:25
+msgid "Install"
+msgstr ""
+
+#: data/gtk/install-dialog.blp:43
+msgid "Game Path"
+msgstr ""
+
+#: data/gtk/install-dialog.blp:64
+msgid "Status"
+msgstr ""
+
+#: data/gtk/install-dialog.blp:65
+msgid "Select a game file to check"
+msgstr ""
+
+#: data/gtk/install-dialog.blp:93
+msgid "Loading..."
+msgstr ""
+
+#: data/gtk/proton_manager.blp:11
+msgid "Manage your installed Proton versions"
+msgstr ""
+
+#: data/gtk/proton_manager.blp:17
+msgid "Download a version to get started"
+msgstr ""
+
+#: data/gtk/proton_manager.blp:30
+msgid "Download the latest GE-Proton releases"
+msgstr ""
+
+#: data/gtk/proton_manager.blp:53
+msgid "Failed to load versions"
+msgstr ""
+
+#: data/gtk/proton_manager.blp:54
+msgid "Check your internet connection and try again"
 msgstr ""

@@ -32,6 +32,7 @@ VERSION = "@VERSION@"
 if os.name == "nt":
     PKGDATADIR = os.path.join(os.path.dirname(__file__), "..", "share", "sofl")
     PYTHONDIR = os.path.join(os.path.dirname(__file__), "..", "lib", f"python{sys.version_info[0]}.{sys.version_info[1]}", "site-packages")
+    LOCALEDIR = os.path.join(os.path.dirname(__file__), "..", "share", "locale")
 else:
     PKGDATADIR = "@pkgdatadir@"
     LOCALEDIR = "@localedir@"
@@ -48,6 +49,25 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 if system() == "Linux":
     locale.bindtextdomain("sofl", LOCALEDIR)
     locale.textdomain("sofl")
+    gettext.install("sofl", LOCALEDIR, names=['ngettext'])
+elif os.name == "nt":
+    import ctypes
+
+    # Windows sets no LANG/LANGUAGE, so take the UI language (e.g. pt_BR) from the OS
+    if not any(os.environ.get(v) for v in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG")):
+        lang_id = ctypes.windll.kernel32.GetUserDefaultUILanguage()
+        if lang := locale.windows_locale.get(lang_id):
+            os.environ["LANGUAGE"] = lang
+    # Python's locale module lacks bindtextdomain on Windows; GTK templates need it via libintl
+    try:
+        libintl = ctypes.CDLL("libintl-8.dll")
+        libintl.libintl_bindtextdomain(b"sofl", os.path.abspath(LOCALEDIR).encode())
+        libintl.libintl_bind_textdomain_codeset(b"sofl", b"UTF-8")
+        libintl.libintl_textdomain(b"sofl")
+    except (OSError, AttributeError):
+        pass
+    gettext.bindtextdomain("sofl", LOCALEDIR)
+    gettext.textdomain("sofl")  # for modules using `from gettext import gettext as _`
     gettext.install("sofl", LOCALEDIR, names=['ngettext'])
 else:
     gettext.install("sofl", names=['ngettext'])
